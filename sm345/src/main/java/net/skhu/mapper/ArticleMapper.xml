@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.skhu.mapper.ArticleMapper">
+
+	<select id="findAll" resultType="Article">
+    SELECT *
+    FROM article
+    WHERE board_id = #{board_id}
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT article (board_id, article_title, article_content, article_writer)
+    VALUES (#{board_id}, #{article_title}, #{article_content}, 201432023)
+  	</insert>
+    
+	<update id="update">
+    UPDATE article
+    SET board_id = #{board_id}, 
+      	article_title = #{article_title}, 
+      	article_content = #{article_content}, 
+      	article_writer = 201432023 
+    WHERE id = #{id}
+  	</update>
+
+	<delete id="delete">
+    DELETE FROM article WHERE id = #{id}
+  	</delete>
+
+
+
+</mapper>
