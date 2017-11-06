@@ -5,6 +5,7 @@ public class User {
 	String user_id;
 	String user_password;
 	int user_auth;
+	String user_name;
 
 	public String getUser_id() {
 		return user_id;
@@ -24,6 +25,13 @@ public class User {
 	public void setUser_auth(int user_auth) {
 		this.user_auth = user_auth;
 	}
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
 
 
 }

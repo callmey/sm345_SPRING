@@ -19,7 +19,7 @@ import net.skhu.mapper.UserMapper;
 import net.skhu.service.UserService;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("api/app/")
 public class SM_app_Controller {
 	@Autowired ArticleMapper articleMapper;
 	@Autowired UserService userService;
@@ -45,7 +45,7 @@ public class SM_app_Controller {
 					map.put("key", 0);
 					map.put("user_id", db_user.getUser_id());
 					map.put("user_auth", db_user.getUser_auth());
-					//map.put("user_name", db_user.getUser_nickname()); //studentmapper에서 이름추가하깅
+					map.put("user_name", db_user.getUser_name());
 					return map;
 				}
 				map.put("title", "비밀번호가 맞지 않습니다");
