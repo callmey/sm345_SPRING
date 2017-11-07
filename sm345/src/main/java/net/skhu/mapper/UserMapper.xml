@@ -9,5 +9,11 @@
     FROM user
     WHERE user_id = #{user_id}
     </select>
+    
+    <update id="update">
+    UPDATE user
+    SET user_password = #{user_password}
+    WHERE user_id = #{user_id}
+  	</update>
   
 </mapper>

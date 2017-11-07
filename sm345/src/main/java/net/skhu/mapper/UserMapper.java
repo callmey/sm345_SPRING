@@ -7,4 +7,5 @@ import net.skhu.dto.User;
 @Mapper
 public interface UserMapper {
     User selectByUserId(String user_id);
+    void update(User user);
 }
