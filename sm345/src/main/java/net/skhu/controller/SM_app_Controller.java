@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,6 +60,15 @@ public class SM_app_Controller {
 			return map;
 		}
 	}
+
+	//로그인기록조회
+	@RequestMapping("login_record/{u_id}")
+    public Map<String, Object> login_record(HttpServletRequest request, Model model, @PathVariable("u_id") String u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+    	boolean login_record = userMapper.selectByUserId(u_id).getLogin_record();
+    	Map<String, Object> map = new HashMap<String, Object>();
+        map.put("login_record", login_record);
+    	return map;
+    }
 
 	//최초 비밀번호 변경
 	@RequestMapping(value = "update_password", method = RequestMethod.POST)
