@@ -6,7 +6,7 @@ public class User {
 	String user_password;
 	int user_auth;
 	String user_name;
-	boolean login_record;
+	int login_record;
 
 	public String getUser_id() {
 		return user_id;
@@ -32,10 +32,10 @@ public class User {
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
-	public boolean getLogin_record() {
+	public int getLogin_record() {
 		return login_record;
 	}
-	public void setLogin_record(boolean login_record) {
+	public void setLogin_record(int login_record) {
 		this.login_record = login_record;
 	}
 

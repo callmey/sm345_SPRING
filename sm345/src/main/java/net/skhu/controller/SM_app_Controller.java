@@ -25,7 +25,7 @@ import net.skhu.mapper.UserMapper;
 import net.skhu.service.UserService;
 
 @RestController
-@RequestMapping("api/app/")
+@RequestMapping("api/")
 public class SM_app_Controller {
 	@Autowired ArticleMapper articleMapper;
 	@Autowired UserService userService;
@@ -64,30 +64,38 @@ public class SM_app_Controller {
 	//로그인기록조회
 	@RequestMapping("login_record/{u_id}")
     public Map<String, Object> login_record(HttpServletRequest request, Model model, @PathVariable("u_id") String u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
-    	boolean login_record = userMapper.selectByUserId(u_id).getLogin_record();
+    	int login_record = userMapper.selectByUserId(u_id).getLogin_record();
+    	System.out.println(login_record);
     	Map<String, Object> map = new HashMap<String, Object>();
         map.put("login_record", login_record);
     	return map;
     }
 
-	//최초 비밀번호 변경
-	@RequestMapping(value = "update_password", method = RequestMethod.POST)
+	//비밀번호 변경
+	@RequestMapping(value ="updatepassword", method = RequestMethod.POST)
 	public Map<String, Object> update_password(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
-		String new_password = userService.encryptPasswd(user.getUser_password());
+		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
 		user.setUser_password(new_password);
-		userMapper.update(user);
 		User db_user = userMapper.selectByUserId(user.getUser_id());
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("title", "로그인 되었습니다!");
-		map.put("user_id", db_user.getUser_id());
-		map.put("user_auth", db_user.getUser_auth());
-		map.put("user_name", db_user.getUser_name());
+		if(db_user.getLogin_record() == 1){ //로그인 기록이 있으면
+			userMapper.updateBeforelogin(user);
+			map.put("title", "비밀번호가 변경되었습니다");
+		}
+		else{
+			user.setLogin_record(1);
+			userMapper.updateBeforelogin(user);
+			map.put("title", "로그인 되었습니다!");
+			map.put("user_id", db_user.getUser_id());
+			map.put("user_auth", db_user.getUser_auth());
+			map.put("user_name", db_user.getUser_name());
+		}
 		return map;
 	}
 
 	//멘토신청
-	@RequestMapping(value = "insert_mentoroom", method = RequestMethod.POST)
-	public Map<String, Object> insert_mentoroom(Model model, @RequestBody Mentoroom mentoroom, HttpServletRequest request) throws UnsupportedEncodingException {
+	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
+	public Map<String, Object> mentoroom_create(Model model, @RequestBody Mentoroom mentoroom, HttpServletRequest request) throws UnsupportedEncodingException {
 
 		Date d = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

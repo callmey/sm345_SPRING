@@ -10,10 +10,12 @@
     WHERE user_id = #{user_id}
     </select>
     
-    <update id="update">
+    <update id="updateBeforelogin">
     UPDATE user
-    SET user_password = #{user_password}
+    SET user_password = #{user_password},
+    	login_record = #{login_record}
     WHERE user_id = #{user_id}
   	</update>
+  	
   
 </mapper>

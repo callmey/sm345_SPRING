@@ -1,29 +1,42 @@
 API 명세서
 
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
-1. api/list/:bid
-2. api/list/:bid/:aid
-3. api/list/:bid/create
-4. api/list/:bid/:aid/delete
-5. api/list/:bid/:aid/edit
-6. api/list/:bid/:aid/comment/create
-7. api/list/:bid/:aid/:cid/edit
-8. api/list/:bid/:aid/:cid/delete
+ api/list/:bid
+ api/list/:bid/:aid
+ api/list/:bid/create
+ api/list/:bid/:aid/delete
+ api/list/:bid/:aid/edit
+ api/list/:bid/:aid/comment/create
+ api/list/:bid/:aid/:cid/edit
+ api/list/:bid/:aid/:cid/delete
 
 -멘토방(rid->mentoroom_id)
-1. api/mentoroom - 멘토방목록
-2. api/mentoroom/create - 멘토신청
-3. api/mentoroom/:rid - 멘토방
-4. api/mentoroom/:rid/menti_join - 멘티신청
-5. api/mentoroom/:rid/menti_canceal - 멘티신청취소
-6. api/mentoroom/:rid/report/upload - 보고서 제출
-7. api/mentoroom/:rid/report/download - 보고서 다운로드
-8. api/mentoroom/:rid/confirm - 멘토신청승인
-9. api/mentoroom/:rid/reject - 멘토승인거절
+ api/mentoroom - 멘토방목록
+  -get방식. mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
+ 
+ api/mentoroom/create - 멘토신청
+  -post방식. 입력폼에 입력된 데이터를 mentoroom객체로 받아옴. 학기와 년도는 date타입으로 현재 시간을 받아와서 저장함.
+ 
+api/mentoroom/:rid - 멘토방
+api/mentoroom/:rid/menti_join - 멘티신청
+api/mentoroom/:rid/menti_canceal - 멘티신청취소
+api/mentoroom/:rid/report/upload - 보고서 제출
+api/mentoroom/:rid/report/download - 보고서 다운로드
+api/mentoroom/:rid/confirm - 멘토신청승인
+api/mentoroom/:rid/reject - 멘토승인거절
 
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
-1. api/admin/user/:auth - 사용자목록
-2. api/admin/room_info - 멘토방 설정
-3. api/admin/mentoroom - 멘토방 목록
-4. api/admin/report - 보고서목록
-5. api/admin/survey - 설문조사
+api/admin/user/:auth - 사용자목록
+api/admin/room_info - 멘토방 설정
+api/admin/mentoroom - 멘토방 목록
+api/admin/report - 보고서목록
+api/admin/survey - 설문조사
+
+-기타
+api/updatepassword - 비밀번호변경
+ -post방식. user객체에 변경할 비밀번호와 user_id를 받아옴.
+  login_record가 1이면 (로그인한적있음-메뉴에 비밀번호변경을 누른상태) 비밀번호를 변경하고,
+  login_record가 0이면 (로그인한적없음-최초로그인) 비밀번호 변경 후 user_id, user_auth, user_name을 담아서 보내줌
+  
+api/login - 로그인
+ -post방식. user객체에 비밀번호와 아이디를 받아옴. 저장되어있는 비밀번호와 입력한 비밀번호가 맞는지 확인 후 user_id, user_auth, user_name을 담아서 보내줌

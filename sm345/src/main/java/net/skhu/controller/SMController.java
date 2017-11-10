@@ -17,7 +17,7 @@ import net.skhu.dto.Article;
 import net.skhu.mapper.ArticleMapper;
 
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class SMController {
 
     @Autowired ArticleMapper articleMapper;
