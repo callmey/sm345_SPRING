@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Mentoroom;
@@ -123,5 +124,13 @@ public class SM_app_Controller {
 	public List<Mentoroom> mentoroomList(HttpServletRequest request, Model model) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		return mentoroomMapper.findAll();
 	}
+	
+	//사용자 목록
+    @RequestMapping("admin/user/{auth}")
+    public @ResponseBody List<User> list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
+        List<User> list = userMapper.findAll(auth);
+        model.addAttribute("list", list);
+        return list;
+    }
 
 }

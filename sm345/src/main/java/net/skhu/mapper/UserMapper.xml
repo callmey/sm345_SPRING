@@ -10,12 +10,25 @@
     WHERE user_id = #{user_id}
     </select>
     
+    <select id="selectByUserAuth" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth = #{user_auth}
+    </select>
+    
+    <select id="findAll" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth = #{user_auth}
+    </select>
+    
     <update id="updateBeforelogin">
     UPDATE user
     SET user_password = #{user_password},
     	login_record = #{login_record}
     WHERE user_id = #{user_id}
   	</update>
+  	
   	
   
 </mapper>

@@ -26,7 +26,7 @@ api/mentoroom/:rid/confirm - 멘토신청승인
 api/mentoroom/:rid/reject - 멘토승인거절
 
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
-api/admin/user/:auth - 사용자목록
+api/admin/user/:auth - 사용자목록 -> post형식. user_auth로 findAll. 
 api/admin/room_info - 멘토방 설정
 api/admin/mentoroom - 멘토방 목록
 api/admin/report - 보고서목록
