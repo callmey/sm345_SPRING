@@ -4,6 +4,12 @@
 
 <mapper namespace="net.skhu.mapper.UserMapper">
 
+	<select id="findAll" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth = #{user_auth}
+    </select>
+	
 	<select id="selectByUserId" resultType="User">
     SELECT *
     FROM user
@@ -22,5 +28,13 @@
     SET user_auth = 1
     WHERE user_id = #{user_id}
   	</update>
+  	
+  	<select id="selectByUserAuth" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth = #{user_auth}
+    </select>
+    
+    
   
 </mapper>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 API 명세서
 
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
@@ -38,7 +39,8 @@ api/mentoroom/:rid/report/download - 보고서 다운로드
 
 
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
-api/admin/user/:auth - 사용자목록
+ api/admin/user/:auth - 사용자목록
+  -get형식. user_auth로 findAll. 
 api/admin/room_info - 멘토방 설정
 
 api/admin/report - 보고서목록

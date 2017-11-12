@@ -184,6 +184,12 @@ public class SMController {
         return "게시글이 삭제되었습니다";
     }
 
+  //사용자 목록
+    @RequestMapping("admin/user/{auth}")
+    public @ResponseBody List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
+        List<User> list = userMapper.findAll(auth);
+        return list;
+    }
 
 
 }
