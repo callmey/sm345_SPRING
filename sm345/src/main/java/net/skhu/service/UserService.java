@@ -13,10 +13,11 @@ public class UserService {
 
 	@Autowired UserMapper userMapper;
 
-	public String validateBeforelogin(String user_id, String user_password) {
+	public String validateBeforelogin(int user_id, String user_password) {
 		String err = "";
+		String userId = String.valueOf(user_id);
 
-		if (user_id.isEmpty()) {
+		if (userId.isEmpty()) {
 			err = (err.length() > 0) ? err : err + " ";
 			err += "아이디를 입력하세요.";
 		}

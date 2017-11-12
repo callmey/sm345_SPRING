@@ -2,16 +2,16 @@ package net.skhu.dto;
 
 public class User {
 
-	String user_id;
+	int user_id;
 	String user_password;
 	int user_auth;
 	String user_name;
 	int login_record;
 
-	public String getUser_id() {
+	public int getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(String user_id) {
+	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
 	public String getUser_password() {

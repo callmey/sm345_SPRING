@@ -17,5 +17,10 @@
     WHERE user_id = #{user_id}
   	</update>
   	
+  	<update id="updateUserauth">
+    UPDATE user
+    SET user_auth = 1
+    WHERE user_id = #{user_id}
+  	</update>
   
 </mapper>

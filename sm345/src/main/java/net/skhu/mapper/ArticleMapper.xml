@@ -10,19 +10,29 @@
     WHERE board_id = #{board_id}
     </select>
     
+    <select id="findArticle" resultType="Article">
+    SELECT *
+    FROM article
+    WHERE id = #{id}
+    </select>
+    
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     INSERT article (board_id, article_title, article_content, article_writer)
-    VALUES (#{board_id}, #{article_title}, #{article_content}, 201432023)
+    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer})
   	</insert>
     
 	<update id="update">
     UPDATE article
-    SET board_id = #{board_id}, 
-      	article_title = #{article_title}, 
-      	article_content = #{article_content}, 
-      	article_writer = 201432023 
+    SET article_title = #{article_title}, 
+      	article_content = #{article_content}
     WHERE id = #{id}
   	</update>
+  	
+  	<update id="updateHit">
+    UPDATE article
+    SET article_hit = #{article_hit}+1
+   	WHERE id = #{id}    
+    </update>
 
 	<delete id="delete">
     DELETE FROM article WHERE id = #{id}

@@ -10,6 +10,8 @@ public class Mentoroom {
 	int team_year;
 	int team_semester;
 	int mento_id;
+	String mento_name;
+	int team_confirm;
 
 	public int getMentoroom_id() {
 		return mentoroom_id;
@@ -64,6 +66,18 @@ public class Mentoroom {
 	}
 	public void setMento_id(int mento_id) {
 		this.mento_id = mento_id;
+	}
+	public String getMento_name() {
+		return mento_name;
+	}
+	public void setMento_name(String mento_name) {
+		this.mento_name = mento_name;
+	}
+	public int getTeam_confirm() {
+		return team_confirm;
+	}
+	public void setTeam_confirm(int team_confirm) {
+		this.team_confirm = team_confirm;
 	}
 
 
