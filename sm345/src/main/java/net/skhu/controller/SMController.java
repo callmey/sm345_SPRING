@@ -214,7 +214,7 @@ public class SMController {
         return "멘토방 설정이 생성되었습니다";
     }
   	
- // 멘토방 설정 삭제
+    // 멘토방 설정 삭제
    	@RequestMapping(value="admin/room_info/delete", method = RequestMethod.POST)
    	public String delete(Model model, HttpServletRequest request) {
         mentoroominfoMapper.delete();
@@ -224,27 +224,27 @@ public class SMController {
     //쪽지함 목록
     @RequestMapping("message")
     public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
-        List<Message> list = messageMapper.selectByToId(u_id); 
+        List<Message> list = messageMapper.selectByToId(u_id);
         return list;
     }
-    
+
     //쪽지함 to_id -> user_name 설정
     @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
 	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
-		String to_id = userMapper.selectByUserName(u_id);
+		String to_name = userMapper.selectByUserName(u_id);
 		HashMap<String, Object> map = new HashMap<>();
-		map.put("user_name", to_id);
-		System.out.println("받는이 : "+ to_id);
+		map.put("user_name", to_name);
+		System.out.println("받는이 : "+ to_name);
 		return map;
     }
-    
+
     //쪽지함 생성
     @RequestMapping(value="message/create", method = RequestMethod.POST)
     public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
         messageMapper.insert(message);
         return "쪽지함이 등록되었습니다.";
     }
-    
+
     //쪽지함 삭제
     @RequestMapping(value="message/{m_id}/delete", method = RequestMethod.POST)
     public String delete(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {

@@ -3,7 +3,7 @@ package net.skhu.dto;
 import java.sql.Timestamp;
 
 public class Message {
-	
+
 	int id;
 	int to_id;
 	int from_id;
@@ -11,7 +11,7 @@ public class Message {
 	String message_content;
 	Timestamp timestamp;
 	String user_name;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -53,5 +53,5 @@ public class Message {
 	}
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
-	} 
+	}
 }
