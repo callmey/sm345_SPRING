@@ -19,7 +19,7 @@
     <select id="selectByUserName" resultType="String">
     SELECT user_name
     FROM user
-    WHERE to_id = #{user_id}
+    WHERE user_id = #{user_id}
     </select>
     
     <update id="updateBeforelogin">
