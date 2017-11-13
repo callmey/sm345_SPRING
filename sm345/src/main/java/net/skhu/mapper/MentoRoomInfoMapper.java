@@ -7,5 +7,5 @@ import net.skhu.dto.MentoRoomInfo;
 @Mapper
 public interface MentoRoomInfoMapper {
 	MentoRoomInfo findMentoRoomInfo();
-    void insert(MentoRoomInfo mentoroominfo);
+    void update(MentoRoomInfo mentoroominfo);
 }

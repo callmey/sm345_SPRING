@@ -137,22 +137,6 @@ public class SMController {
 	}
 
 	//멘토방 목록 (관리자)
-	@RequestMapping("mentoroom/{year}")
-	public List<Mentoroom> mentoroomList_admin(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
-		if(year == 0)
-			return mentoroomMapper.findAll();
-		else{
-		String y = String.valueOf(year);
-		int yyyy = Integer.parseInt(y.substring(0,4));
-		int s =  Integer.parseInt(y.substring(4,5));
-		System.out.println(yyyy+" "+s);
-		Mentoroom mentoroom = new Mentoroom();
-		mentoroom.setTeam_year(yyyy);
-		mentoroom.setTeam_semester(s);
-		return mentoroomMapper.findAllByYear(mentoroom);
-		}
-	}
-
 	@RequestMapping("mentoroom/{year}/1")
 	public List<Mentoroom> mentoroomList_admn(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		if(year == 0)
@@ -250,7 +234,7 @@ public class SMController {
   	// 멘토방 설정 수정
   	@RequestMapping(value="admin/room_info/edit", method = RequestMethod.POST)
     public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
-        mentoroominfoMapper.insert(mentoroominfo);
+        mentoroominfoMapper.update(mentoroominfo);
     }
 
    	//쪽지함 목록
