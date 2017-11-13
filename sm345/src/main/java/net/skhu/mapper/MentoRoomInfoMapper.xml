@@ -9,11 +9,11 @@
     </select>
     
     <insert id="insert">
-    INSERT MentoRoomInfo (mento_start, mento_end, menti_start, mento_end, max_mento, max_menti, meeting_number, meeting_period, survey_start, survey_end)
+    INSERT mentoRoomInfo (mento_start, mento_end, menti_start, mento_end, max_mento, max_menti, meeting_number, meeting_period, survey_start, survey_end)
     VALUES (#{mento_start}, #{mento_end}, #{menti_start}, #{menti_end}, #{max_mento}, #{max_menti}, #{meeting_number}, #{meeting_period}, #{survey_start}, #{survey_end})
   	</insert>
   	
   	<delete id="delete">
-    DELETE FROM MentoRoomInfo
+    DELETE FROM mentoRoomInfo
   	</delete>
 </mapper>
