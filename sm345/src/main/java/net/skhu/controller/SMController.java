@@ -221,8 +221,9 @@ public class SMController {
         return "멘토방 설정이 삭제되었습니다";
      }
     
-    //쪽지함 목록
-    @RequestMapping("message")
+    
+   	//쪽지함 목록
+    @RequestMapping("message/{u_id}")
     public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         List<Message> list = messageMapper.selectByToId(u_id);
         return list;
