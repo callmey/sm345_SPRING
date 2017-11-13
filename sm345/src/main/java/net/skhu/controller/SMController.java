@@ -100,6 +100,7 @@ public class SMController {
 	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
 	public Map<String, Object> mentoroom_create(Model model, @RequestBody Mentoroom mentoroom, HttpServletRequest request) throws UnsupportedEncodingException {
 
+		System.out.println("실행은되냐");
 		Date d = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    String date = sdf.format(d);
