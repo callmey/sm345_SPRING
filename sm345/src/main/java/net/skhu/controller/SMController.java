@@ -208,6 +208,13 @@ public class SMController {
     public void delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
         articleMapper.delete(a_id);
     }
+
+    //답변 완료
+    @RequestMapping(value="list/{b_id}/{a_id}/answer")
+    public void answer(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+        articleMapper.updateAnswer(a_id);
+    }
+
 /*
     //댓글 생성
     @RequestMapping(value="list/3/{a_id}/create", method = RequestMethod.POST)

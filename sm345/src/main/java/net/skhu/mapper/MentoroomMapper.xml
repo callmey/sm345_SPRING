@@ -12,6 +12,7 @@
   	<select id="findAll" resultType="Mentoroom">
     SELECT *
     FROM mentoroom
+    WHERE team_confirm != 2
     ORDER BY mentoroom_id DESC
     </select>
        
