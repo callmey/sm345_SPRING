@@ -22,11 +22,13 @@ import net.skhu.dto.Article;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.User;
+import net.skhu.dto.MentoRoomInfo;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UserMapper;
 import net.skhu.mapper.MessageMapper;
+import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -38,6 +40,7 @@ public class SMController {
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired StudentMapper studentMapper;
 	@Autowired MessageMapper messageMapper;
+	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -196,6 +199,27 @@ public class SMController {
         List<User> list = userMapper.findAll(auth);
         return list;
     }
+    
+    //멘토방 설정
+    @RequestMapping("admin/room_info")
+  	public @ResponseBody List<MentoRoomInfo> mentoRoomInfo_list(Model model, HttpServletRequest request) {
+  		List<MentoRoomInfo> list = mentoroominfoMapper.findAll(); 
+        return list;
+  	}
+  	
+  	// 멘토방 설정 생성
+  	@RequestMapping(value="admin/room_info/create", method = RequestMethod.POST)
+    public String mentoRoomInfo_create(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
+        mentoroominfoMapper.insert(mentoroominfo);
+        return "멘토방 설정이 생성되었습니다";
+    }
+  	
+ // 멘토방 설정 삭제
+   	@RequestMapping(value="admin/room_info/delete", method = RequestMethod.POST)
+   	public String delete(Model model, HttpServletRequest request) {
+        mentoroominfoMapper.delete();
+        return "멘토방 설정이 삭제되었습니다";
+     }
     
     //쪽지함 목록
     @RequestMapping("message")
