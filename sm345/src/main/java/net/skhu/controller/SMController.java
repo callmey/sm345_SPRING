@@ -206,7 +206,7 @@ public class SMController {
     }
 
   //쪽지함 목록
-    @RequestMapping("message")
+    @RequestMapping("message/{u_id}")
     public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         List<Message> list = messageMapper.selectByToId(u_id);
         return list;
