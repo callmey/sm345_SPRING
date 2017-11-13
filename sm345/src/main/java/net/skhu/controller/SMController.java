@@ -200,7 +200,7 @@ public class SMController {
         return list;
     }
     
-    //멘토방 설정
+    //멘토방 설정 목록
     @RequestMapping("admin/room_info")
   	public @ResponseBody List<MentoRoomInfo> mentoRoomInfo_list(Model model, HttpServletRequest request) {
   		List<MentoRoomInfo> list = mentoroominfoMapper.findAll(); 
