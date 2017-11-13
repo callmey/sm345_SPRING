@@ -157,18 +157,20 @@ public class SMController {
 
     //게시글 보기
     @RequestMapping("list/{b_id}/{a_id}")
-    public @ResponseBody Article article(Model model, HttpServletRequest request, @RequestBody Article article, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id) {
-        articleMapper.updateHit(article); //조회수 증가
+    public @ResponseBody Article article(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id) {
+        int hit = articleMapper.selectHit(a_id); //조회수 조회
+        int new_hit = hit+1;
+        Article article = new Article();
+        article.setId(a_id);
+        article.setArticle_hit(new_hit);
+    	articleMapper.updateHit(article); //조회수 증가
     	return articleMapper.findArticle(a_id);
     }
 
     //게시글 생성
     @RequestMapping(value="list/{b_id}/create", method = RequestMethod.POST)
-    public Map<String, Object> list_crate(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
+    public void list_crate(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
         articleMapper.insert(article);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("title", "게시글이 등록되었습니다");
-		return map;
     }
 
     //게시글 수정

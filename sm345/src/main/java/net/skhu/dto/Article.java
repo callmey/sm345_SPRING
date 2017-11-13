@@ -12,6 +12,7 @@ public class Article {
 	int article_hit;
 	int article_delete;
 	Timestamp timestamp;
+	String user_name; //조인
 
 	public int getId() {
 		return id;
@@ -61,6 +62,13 @@ public class Article {
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
 
 
 }

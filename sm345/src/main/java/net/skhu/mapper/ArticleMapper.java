@@ -13,5 +13,6 @@ public interface ArticleMapper {
     void insert(Article article);
     void update(Article article);
     void updateHit(Article article);
+    int selectHit(int id);
     void delete(int id);
 }

@@ -5,14 +5,15 @@
 <mapper namespace="net.skhu.mapper.ArticleMapper">
 
 	<select id="findAll" resultType="Article">
-    SELECT *
-    FROM article
+    SELECT a.*, u.user_name
+    FROM article a JOIN user u ON a.article_writer = u.user_id
     WHERE board_id = #{board_id}
+    ORDER BY a.id DESC 
     </select>
     
     <select id="findArticle" resultType="Article">
-    SELECT *
-    FROM article
+    SELECT a.*, u.user_name
+    FROM article a JOIN user u ON a.article_writer = u.user_id
     WHERE id = #{id}
     </select>
     
@@ -28,9 +29,15 @@
     WHERE id = #{id}
   	</update>
   	
+  	<select id="selectHit" resultType="int">
+    SELECT article_hit
+    FROM article
+    WHERE id = #{id}
+    </select>
+  	
   	<update id="updateHit">
     UPDATE article
-    SET article_hit = #{article_hit}+1
+    SET article_hit = #{article_hit}
    	WHERE id = #{id}    
     </update>
 
