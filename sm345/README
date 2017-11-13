@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 API 명세서
 
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
@@ -12,9 +11,12 @@ API 명세서
    
  api/list/:bid/:aid/delete
  api/list/:bid/:aid/edit
- api/list/:bid/:aid/comment/create
- api/list/:bid/:aid/:cid/edit
- api/list/:bid/:aid/:cid/delete
+ 
+  api/list/3/:aid/comment/create
+   -post방식. board_id는 3(Q&A). article_id와 comment객체를 받아와 저장
+   
+ api/list/3/:aid/:cid/edit
+ api/list/3/:aid/:cid/delete
 
 -멘토방(rid->mentoroom_id)
  api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
