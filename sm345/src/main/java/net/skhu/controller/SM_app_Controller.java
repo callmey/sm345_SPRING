@@ -138,7 +138,7 @@ public class SM_app_Controller {
     
     //쪽지함 목록
     @RequestMapping("message")
-    public List<Message> list(Model model, HttpServletRequest request) {
+    public @ResponseBody List<Message> list(Model model, HttpServletRequest request) {
         List<Message> list = messageMapper.findAll();
         model.addAttribute("list", list);
         return list;

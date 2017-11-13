@@ -1,9 +1,14 @@
 API 명세서
 
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
- api/list/:bid
- api/list/:bid/:aid
- api/list/:bid/create
+  api/list/:bid
+   -get방식. board_id를 받아와 모두 보내줌
+   
+  api/list/:bid/:aid
+   -get방식. board_id와 id를 받아와 모두 보내줌
+   
+  api/list/:bid/create
+   
  api/list/:bid/:aid/delete
  api/list/:bid/:aid/edit
  api/list/:bid/:aid/comment/create
@@ -11,32 +16,39 @@ API 명세서
  api/list/:bid/:aid/:cid/delete
 
 -멘토방(rid->mentoroom_id)
- api/mentoroom - 멘토방목록
+ api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
   -get방식. mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
  
  api/mentoroom/create - 멘토신청
   -post방식. 입력폼에 입력된 데이터를 mentoroom객체로 받아옴. 학기와 년도는 date타입으로 현재 시간을 받아와서 저장함.
  
-api/mentoroom/:rid - 멘토방
+ api/mentoroom/:rid - 멘토방 조회
+  -get방식. 해당 mentoroon_id를 받아와 조회 후 모두 리턴.
+  
+ api/mentoroom/:rid/confirm - 멘토신청승인
+  -post방식. 해당  mentoroom객체로 mentoroom_id를 받아와 team_confirm을 1로 업데이트 / mentoroom객체로 mento_id를 받아와 user_auth를 1로 업데이트(멘토로승격) 
+  
+ api/mentoroom/:rid/reject - 멘토승인거절
+  -get방식. 해당 mentoroom_id를 받아와 db 삭제
+  
 api/mentoroom/:rid/menti_join - 멘티신청
 api/mentoroom/:rid/menti_canceal - 멘티신청취소
 api/mentoroom/:rid/report/upload - 보고서 제출
 api/mentoroom/:rid/report/download - 보고서 다운로드
-api/mentoroom/:rid/confirm - 멘토신청승인
-api/mentoroom/:rid/reject - 멘토승인거절
+
 
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
-api/admin/user/:auth - 사용자목록 -> post형식. user_auth로 findAll. 
+ api/admin/user/:auth - 사용자목록
+  -get형식. user_auth로 findAll. 
 api/admin/room_info - 멘토방 설정
-api/admin/mentoroom - 멘토방 목록
+
 api/admin/report - 보고서목록
 api/admin/survey - 설문조사
 
 -쪽지함
-api/message - 쪽지함 목록 , mid-쪽지아이디
-api/message/:mid/create - 쪽지 생성
-api/message/:mid/delete - 쪽지 삭제
-
+api/message - 쪽지함목록  get 형식 findAll
+api/message/:mid/create - 쪽지함생성  쪽지함아이디: mid
+api/message/:mid/delete - 쪽지함삭제
 
 -기타
 api/updatepassword - 비밀번호변경
@@ -46,3 +58,7 @@ api/updatepassword - 비밀번호변경
   
 api/login - 로그인
  -post방식. user객체에 비밀번호와 아이디를 받아옴. 저장되어있는 비밀번호와 입력한 비밀번호가 맞는지 확인 후 user_id, user_auth, user_name을 담아서 보내줌
+  user_auth - 1.멘토 2.멘티 3.관리자
+
+api/login_record/:uid - 로그인기록조회
+ -post방식. user_id를 받아와서 로그인기록을 조회함. 

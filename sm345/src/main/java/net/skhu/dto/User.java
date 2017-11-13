@@ -2,16 +2,16 @@ package net.skhu.dto;
 
 public class User {
 
-	String user_id;
+	int user_id;
 	String user_password;
 	int user_auth;
 	String user_name;
 	int login_record;
 
-	public String getUser_id() {
+	public int getUser_id() {
 		return user_id;
 	}
-	public void setUser_id(String user_id) {
+	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
 	public String getUser_password() {
@@ -38,8 +38,16 @@ public class User {
 	public void setLogin_record(int login_record) {
 		this.login_record = login_record;
 	}
-
-
-
-
+	public int getTo_id() {
+		return to_id;
+	}
+	public void setTo_id(int to_id) {
+		this.to_id = to_id;
+	}
+	public int getFrom_id() {
+		return from_id;
+	}
+	public void setFrom_id(int from_id) {
+		this.from_id = from_id;
+	}
 }

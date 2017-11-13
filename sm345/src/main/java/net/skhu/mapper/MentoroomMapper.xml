@@ -5,8 +5,8 @@
 <mapper namespace="net.skhu.mapper.MentoroomMapper">
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="mentoroom_id">
-    INSERT mentoroom (team_name, team_about, team_theme, team_link, team_year, team_semester, mento_id)
-    VALUES (#{team_name}, #{team_about}, #{team_theme}, #{team_link}, #{team_year}, #{team_semester}, #{mento_id} )
+    INSERT mentoroom (team_name, team_about, team_theme, team_link, team_year, team_semester, mento_id, mento_name)
+    VALUES (#{team_name}, #{team_about}, #{team_theme}, #{team_link}, #{team_year}, #{team_semester}, #{mento_id}, #{mento_name})
   	</insert>
   	
   	<select id="findAll" resultType="Mentoroom">
@@ -14,5 +14,22 @@
     FROM mentoroom
     ORDER BY mentoroom_id DESC
     </select>
-   
+    
+    <select id="findMentoroom" resultType="Mentoroom">
+    SELECT *
+    FROM mentoroom
+    WHERE mentoroom_id = #{mentoroom_id}
+    </select>
+    
+    <update id="updateTeamconfirm">
+    UPDATE mentoroom
+    SET team_confirm = 1
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
+  	<delete id="deleteMentoroom">
+    DELETE FROM mentoroom
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</delete>
+    
 </mapper>
