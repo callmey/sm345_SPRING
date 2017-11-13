@@ -133,6 +133,39 @@ public class SMController {
 		return mentoroomMapper.findAll();
 	}
 
+	//멘토방 목록 (관리자)
+	@RequestMapping("mentoroom/{year}")
+	public List<Mentoroom> mentoroomList_admin(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+		if(year == 0)
+			return mentoroomMapper.findAll();
+		else{
+		String y = String.valueOf(year);
+		int yyyy = Integer.parseInt(y.substring(0,4));
+		int s =  Integer.parseInt(y.substring(4,5));
+		System.out.println(yyyy+" "+s);
+		Mentoroom mentoroom = new Mentoroom();
+		mentoroom.setTeam_year(yyyy);
+		mentoroom.setTeam_semester(s);
+		return mentoroomMapper.findAllByYear(mentoroom);
+		}
+	}
+
+	@RequestMapping("mentoroom/{year}/1")
+	public List<Mentoroom> mentoroomList_admn(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+		if(year == 0)
+			return mentoroomMapper.findAll();
+		else{
+		String y = String.valueOf(year);
+		int yyyy = Integer.parseInt(y.substring(0,4));
+		int s =  Integer.parseInt(y.substring(4,5));
+		System.out.println(yyyy+" "+s);
+		Mentoroom mentoroom = new Mentoroom();
+		mentoroom.setTeam_year(yyyy);
+		mentoroom.setTeam_semester(s);
+		return mentoroomMapper.findAllByYear(mentoroom);
+		}
+	}
+
 	//각 멘토방 조회
 	@RequestMapping("mentoroom/{r_id}")
 	public Mentoroom mentoroom(HttpServletRequest request, Model model, @PathVariable("r_id") int r_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {

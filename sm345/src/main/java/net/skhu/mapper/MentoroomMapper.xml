@@ -13,6 +13,12 @@
     SELECT *
     FROM mentoroom
     ORDER BY mentoroom_id DESC
+    </select>   
+    <select id="findAllByYear" resultType="Mentoroom">
+    SELECT *
+    FROM mentoroom
+    WHERE team_year = #{team_year} AND team_semester = #{team_semester}
+    ORDER BY mentoroom_id DESC
     </select>
     
     <select id="findMentoroom" resultType="Mentoroom">
