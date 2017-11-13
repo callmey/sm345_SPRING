@@ -11,22 +11,18 @@
     </select>
     
     <select id="selectByToId" resultType="Message">
-    SELECT m.to_id, u.user_id
+    SELECT m.*, u.user_name
     FROM message m LEFT JOIN user u ON m.to_id = u.user_id
-    </select>
-    
-    <select id="selectByFromId" resultType="Message">
-    SELECT m.from_id, u.user_id
-    FROM message m LEFT JOIN user u ON m.from_id = u.user_id
+    WHERE m.to_id = #{user_id}
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT Message (to_id, message_title, message_content)
-    VALUES (#{to_id}, #{message_title}, #{message_content})
+    INSERT Message (to_id, from_id, message_title, message_content)
+    VALUES (#{to_id}, #{from_id}, #{message_title}, #{message_content})
   	</insert>
 
 	<delete id="delete">
-    DELETE FROM message WHERE id = #{id}
+    DELETE FROM messageMapper WHERE id = #{id}
   	</delete>
 
 </mapper>

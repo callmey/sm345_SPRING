@@ -10,6 +10,7 @@ import net.skhu.dto.User;
 public interface UserMapper {
 	List<User> findAll(int user_auth);
     User selectByUserId(int user_id);
+    String selectByUserName(int user_id);
     void updateBeforelogin(User user);
     void updateUserauth(int mento_id);
     User selectByUserAuth(int user_auth);

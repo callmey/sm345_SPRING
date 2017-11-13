@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Mentoroom;
+import net.skhu.dto.Message;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UserMapper;
+import net.skhu.mapper.MessageMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -35,6 +37,7 @@ public class SMController {
 	@Autowired UserMapper userMapper;
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired StudentMapper studentMapper;
+	@Autowired MessageMapper messageMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -51,7 +54,7 @@ public class SMController {
 			return map;
 
 		} else {
-			if (userService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
+			if (UserService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
 				map.put("title", "로그인 되었습니다!");
 				map.put("key", 0);
 				map.put("user_id", db_user.getUser_id());
@@ -77,7 +80,7 @@ public class SMController {
 	//비밀번호 변경
 	@RequestMapping(value ="updatepassword", method = RequestMethod.POST)
 	public Map<String, Object> update_password(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
-		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
+		String new_password = UserService.encryptPasswd(user.getUser_password()); //암호화
 		user.setUser_password(new_password);
 		User db_user = userMapper.selectByUserId(user.getUser_id());
 		HashMap<String, Object> map = new HashMap<>();
@@ -169,7 +172,7 @@ public class SMController {
 
     //게시글 생성
     @RequestMapping(value="list/{b_id}/create", method = RequestMethod.POST)
-    public void list_crate(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
+    public void list_create(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
         articleMapper.insert(article);
     }
 
@@ -187,12 +190,41 @@ public class SMController {
         return "게시글이 삭제되었습니다";
     }
 
-  //사용자 목록
+    //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public @ResponseBody List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
         List<User> list = userMapper.findAll(auth);
         return list;
     }
-
-
+    
+    //쪽지함 목록
+    @RequestMapping("message")
+    public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        List<Message> list = messageMapper.selectByToId(u_id); 
+        return list;
+    }
+    
+    //쪽지함 to_id -> user_name 설정
+    @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
+	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
+		String to_id = userMapper.selectByUserName(u_id);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_name", to_id);
+		System.out.println("받는이 : "+ to_id);
+		return map;
+    }
+    
+    //쪽지함 생성
+    @RequestMapping(value="message/create", method = RequestMethod.POST)
+    public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
+        messageMapper.insert(message);
+        return "쪽지함이 등록되었습니다.";
+    }
+    
+    //쪽지함 삭제
+    @RequestMapping(value="message/{m_id}/delete", method = RequestMethod.POST)
+    public String delete(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        messageMapper.delete(m_id);
+        return "쪽지함이 삭제되었습니다";
+    }
 }
