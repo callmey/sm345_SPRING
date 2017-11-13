@@ -192,8 +192,7 @@ public class SMController {
 
     //게시글 생성
     @RequestMapping(value="list/{b_id}/create", method = RequestMethod.POST)
-    public void list_crate(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
-    	System.out.println("생성실행되니??????????/");
+    public void list_create(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
         articleMapper.insert(article);
     }
 
@@ -205,10 +204,9 @@ public class SMController {
     }
 
     //게시글 삭제
-    @RequestMapping(value="list/{b_id}/{a_id}/delete", method = RequestMethod.POST)
-    public String delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
+    @RequestMapping("list/{b_id}/{a_id}/delete")
+    public void delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
         articleMapper.delete(a_id);
-        return "게시글이 삭제되었습니다";
     }
 /*
     //댓글 생성
@@ -246,11 +244,10 @@ public class SMController {
 
     //쪽지 받는 사람 이름 불러오기
     @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
-	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
+	public Map<String, Object> to_name(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
 		String to_name = userMapper.selectByUserName(u_id);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("user_name", to_name);
-		System.out.println("받는이 : "+ to_name);
 		return map;
     }
 
@@ -258,7 +255,14 @@ public class SMController {
     @RequestMapping(value="message/create", method = RequestMethod.POST)
     public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
         messageMapper.insert(message);
-        return "쪽지함이 등록되었습니다.";
+        return "쪽지가 전송되었습니다";
+    }
+
+    //쪽지 조회
+    @RequestMapping("message/{m_id}")
+    public Message message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        messageMapper.updateReadcheck(m_id); //쪽지읽음으로 표시
+    	return messageMapper.findMessage(m_id);
     }
 
     //쪽지 삭제
@@ -266,4 +270,17 @@ public class SMController {
     public void delete_message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
         messageMapper.delete(m_id);
     }
+
+    //관리자 지정
+    @RequestMapping(value="admin/empower/{u_id}")
+    public void admin_empower(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        userMapper.updateEmpower(u_id);
+    }
+
+    //관리자 권한 해제
+    @RequestMapping(value="admin/leave/{u_id}")
+    public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        userMapper.updateLeave(u_id);
+    }
+
 }

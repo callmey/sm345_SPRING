@@ -41,4 +41,16 @@
     WHERE user_auth = #{user_auth}
     </select>
     
+    <update id="updateEmpower">
+    UPDATE user
+    SET user_auth = 3
+    WHERE user_id = #{user_id}
+  	</update>
+  	
+  	<update id="updateLeave">
+    UPDATE user
+    SET user_auth = 2
+    WHERE user_id = #{user_id}
+  	</update>
+    
 </mapper>

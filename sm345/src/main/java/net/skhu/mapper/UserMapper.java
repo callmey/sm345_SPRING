@@ -14,4 +14,6 @@ public interface UserMapper {
     void updateBeforelogin(User user);
     void updateUserauth(int mento_id);
     User selectByUserAuth(int user_auth);
+    void updateEmpower(int user_id);
+    void updateLeave(int user_id);
 }
