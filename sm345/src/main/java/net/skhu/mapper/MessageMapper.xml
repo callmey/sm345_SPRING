@@ -17,7 +17,7 @@
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT Message (to_id, from_id, message_title, message_content)
+    INSERT message (to_id, from_id, message_title, message_content)
     VALUES (#{to_id}, #{from_id}, #{message_title}, #{message_content})
   	</insert>
 

@@ -43,15 +43,19 @@ api/mentoroom/:rid/report/download - 보고서 다운로드
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
  api/admin/user/:auth - 사용자목록
   -get형식. user_auth로 findAll. 
-api/admin/room_info - 멘토방 설정
+
+api/admin/room_info - 멘토방 설정목록 get 형식
+api/admin/room_info/create - 멘토방 설정 생성 post형식
+api/admin/room_info/delete - 멘토방 설정 삭제 post형식
 
 api/admin/report - 보고서목록
 api/admin/survey - 설문조사
 
 -쪽지함
-api/message - 쪽지함목록  get 형식 messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
-api/message/username/:uid - 쪽지함 to_id -> user_name 설정  사용자아이디: uid
-api/message/:mid/delete - 쪽지함삭제 쪽지아이디:mid
+api/message/:uid - 쪽지함목록  get 형식 messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
+api/message/username/:uid - 쪽지함 to_id -> user_name 설정  사용자아이디: uid post형식 
+api/message/create - 쪽지함 생성  post형식 
+api/message/:mid/delete - 쪽지함삭제 쪽지아이디:mid post형식 
 
 -기타
 api/updatepassword - 비밀번호변경

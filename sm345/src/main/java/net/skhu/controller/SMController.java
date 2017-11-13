@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Article;
+import net.skhu.dto.MentoRoomInfo;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
+import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
@@ -38,6 +40,7 @@ public class SMController {
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired StudentMapper studentMapper;
 	@Autowired MessageMapper messageMapper;
+	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -231,21 +234,33 @@ public class SMController {
         commentMapper.insert(comment);
     }
 */
-  //사용자 목록
+    //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public @ResponseBody List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
         List<User> list = userMapper.findAll(auth);
         return list;
     }
 
-  //쪽지함 목록
+    //멘토방 설정 데이터
+    @RequestMapping("admin/room_info")
+  	public MentoRoomInfo mentoRoomInfo(Model model, HttpServletRequest request) {
+        return mentoroominfoMapper.findMentoRoomInfo();
+  	}
+
+  	// 멘토방 설정 수정
+  	@RequestMapping(value="admin/room_info/edit", method = RequestMethod.POST)
+    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
+        mentoroominfoMapper.insert(mentoroominfo);
+    }
+
+   	//쪽지함 목록
     @RequestMapping("message/{u_id}")
     public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         List<Message> list = messageMapper.selectByToId(u_id);
         return list;
     }
 
-    //쪽지함 to_id -> user_name 설정
+    //쪽지 받는 사람 이름 불러오기
     @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
 	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
 		String to_name = userMapper.selectByUserName(u_id);
@@ -255,17 +270,16 @@ public class SMController {
 		return map;
     }
 
-    //쪽지함 생성
+    //쪽지 보내기
     @RequestMapping(value="message/create", method = RequestMethod.POST)
     public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
         messageMapper.insert(message);
         return "쪽지함이 등록되었습니다.";
     }
 
-    //쪽지함 삭제
-    @RequestMapping(value="message/{m_id}/delete", method = RequestMethod.POST)
-    public String delete(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+    //쪽지 삭제
+    @RequestMapping(value="message/{m_id}/delete")
+    public void delete_message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
         messageMapper.delete(m_id);
-        return "쪽지함이 삭제되었습니다";
     }
 }
