@@ -32,6 +32,12 @@ api/admin/mentoroom - 멘토방 목록
 api/admin/report - 보고서목록
 api/admin/survey - 설문조사
 
+-쪽지함
+api/message - 쪽지함 목록 , mid-쪽지아이디
+api/message/:mid/create - 쪽지 생성
+api/message/:mid/delete - 쪽지 삭제
+
+
 -기타
 api/updatepassword - 비밀번호변경
  -post방식. user객체에 변경할 비밀번호와 user_id를 받아옴.

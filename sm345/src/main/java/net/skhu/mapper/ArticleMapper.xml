@@ -12,7 +12,7 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     INSERT article (board_id, article_title, article_content, article_writer)
-    VALUES (#{board_id}, #{article_title}, #{article_content}, 201432023)
+    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer})
   	</insert>
     
 	<update id="update">
@@ -20,7 +20,7 @@
     SET board_id = #{board_id}, 
       	article_title = #{article_title}, 
       	article_content = #{article_content}, 
-      	article_writer = 201432023 
+      	article_writer = #{article_writer} 
     WHERE id = #{id}
   	</update>
 

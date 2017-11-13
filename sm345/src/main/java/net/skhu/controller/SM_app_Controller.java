@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.User;
+import net.skhu.dto.Message;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.UserMapper;
+import net.skhu.mapper.MessageMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -32,7 +34,8 @@ public class SM_app_Controller {
 	@Autowired UserService userService;
 	@Autowired UserMapper userMapper;
 	@Autowired MentoroomMapper mentoroomMapper;
-
+	@Autowired MessageMapper messageMapper;
+	
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public Map<String, Object> login(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
@@ -132,5 +135,26 @@ public class SM_app_Controller {
         model.addAttribute("list", list);
         return list;
     }
-
+    
+    //쪽지함 목록
+    @RequestMapping("message")
+    public List<Message> list(Model model, HttpServletRequest request) {
+        List<Message> list = messageMapper.findAll();
+        model.addAttribute("list", list);
+        return list;
+    }
+    
+    //쪽지함 생성
+    @RequestMapping(value="message/{mid}/create", method = RequestMethod.POST)
+    public String create(@RequestBody Message message, @PathVariable("mid") int mid,  Model model, HttpServletRequest request ) {
+        messageMapper.insert(message);
+        return "쪽지함이 등록되었습니다.";
+    }
+    
+    //쪽지함 삭제
+    @RequestMapping(value="message/{mid}/delete", method = RequestMethod.POST)
+    public String delete(@PathVariable("mid") int mid, Model model, HttpServletRequest request ) {
+        messageMapper.delete(mid);
+        return "쪽지함이 삭제되었습니다";
+    }
 }
