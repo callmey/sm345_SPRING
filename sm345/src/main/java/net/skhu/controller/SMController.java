@@ -230,7 +230,7 @@ public class SMController {
     }
 
     //쪽지함 to_id -> user_name 설정
-    @RequestMapping(value = "message/username", method = RequestMethod.POST)
+    @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
 	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
 		String to_name = userMapper.selectByUserName(u_id);
 		HashMap<String, Object> map = new HashMap<>();
