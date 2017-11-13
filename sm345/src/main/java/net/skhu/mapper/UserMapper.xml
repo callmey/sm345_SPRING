@@ -16,6 +16,12 @@
     WHERE user_id = #{user_id}
     </select>
     
+    <select id="selectByUserName" resultType="String">
+    SELECT user_name
+    FROM user
+    WHERE to_id = #{user_id}
+    </select>
+    
     <update id="updateBeforelogin">
     UPDATE user
     SET user_password = #{user_password},
@@ -35,6 +41,4 @@
     WHERE user_auth = #{user_auth}
     </select>
     
-    
-  
 </mapper>

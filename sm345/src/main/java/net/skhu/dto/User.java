@@ -38,8 +38,4 @@ public class User {
 	public void setLogin_record(int login_record) {
 		this.login_record = login_record;
 	}
-
-
-
-
 }

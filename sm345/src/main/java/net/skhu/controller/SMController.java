@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Mentoroom;
+import net.skhu.dto.Message;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoroomMapper;
+import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UserMapper;
 import net.skhu.service.UserService;
@@ -35,7 +37,7 @@ public class SMController {
 	@Autowired UserMapper userMapper;
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired StudentMapper studentMapper;
-//	@Autowired CommentMapper commentMapper;
+	@Autowired MessageMapper messageMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -203,7 +205,34 @@ public class SMController {
         return list;
     }
 
+  //쪽지함 목록
+    @RequestMapping("message")
+    public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        List<Message> list = messageMapper.selectByToId(u_id);
+        return list;
+    }
 
+    //쪽지함 to_id -> user_name 설정
+    @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
+	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
+		String to_name = userMapper.selectByUserName(u_id);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_name", to_name);
+		System.out.println("받는이 : "+ to_name);
+		return map;
+    }
 
+    //쪽지함 생성
+    @RequestMapping(value="message/create", method = RequestMethod.POST)
+    public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
+        messageMapper.insert(message);
+        return "쪽지함이 등록되었습니다.";
+    }
 
+    //쪽지함 삭제
+    @RequestMapping(value="message/{m_id}/delete", method = RequestMethod.POST)
+    public String delete(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        messageMapper.delete(m_id);
+        return "쪽지함이 삭제되었습니다";
+    }
 }

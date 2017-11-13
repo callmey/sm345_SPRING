@@ -45,6 +45,4 @@
     DELETE FROM article WHERE id = #{id}
   	</delete>
 
-
-
 </mapper>
