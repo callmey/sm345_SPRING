@@ -13,5 +13,7 @@ public interface UserMapper {
     String selectByUserName(int user_id);
     void updateBeforelogin(User user);
     void updateUserauth(int mento_id);
+    void updateMentiauth(int menti_id);
+    void updateMentiCanceal(int menti_id);
     User selectByUserAuth(int user_auth);
 }

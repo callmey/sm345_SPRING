@@ -22,6 +22,12 @@
     WHERE user_id = #{user_id}
     </select>
     
+    <select id="selectByUserAuth" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth = #{user_auth}
+    </select>
+    
     <update id="updateBeforelogin">
     UPDATE user
     SET user_password = #{user_password},
@@ -35,10 +41,16 @@
     WHERE user_id = #{user_id}
   	</update>
   	
-  	<select id="selectByUserAuth" resultType="User">
-    SELECT *
-    FROM user
-    WHERE user_auth = #{user_auth}
-    </select>
+  	<update id="updateMentiauth">
+    UPDATE user
+    SET user_auth = 2
+    WHERE user_id = #{user_id}
+  	</update>
+  	
+  	<update id="updateMentiCanceal">
+  	UPDATE user
+  	SET user_auth = 0 
+  	WHERE user_id = #{user_id}
+  	</update>
     
 </mapper>

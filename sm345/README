@@ -34,8 +34,12 @@ API 명세서
  api/mentoroom/:rid/reject - 멘토승인거절
   -get방식. 해당 mentoroom_id를 받아와 db 삭제
   
-api/mentoroom/:rid/menti_join - 멘티신청
-api/mentoroom/:rid/menti_canceal - 멘티신청취소
+api/mentoroom/:rid/:mid/menti_join - 멘티신청 [post]:rid- mentoroom_id / :mid- menti_id 
+=> Menti(mento_id, menti_id insert) 
+
+api/mentoroom/:rid/:mid/menti_canceal - 멘티신청취소 [post] 
+=> Menti(mento_id, menti_id delete)
+
 api/mentoroom/:rid/report/upload - 보고서 제출
 api/mentoroom/:rid/report/download - 보고서 다운로드
 

@@ -23,12 +23,14 @@ import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.User;
 import net.skhu.dto.MentoRoomInfo;
+import net.skhu.dto.Menti;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UserMapper;
 import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
+import net.skhu.mapper.MentiMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -41,7 +43,8 @@ public class SMController {
 	@Autowired StudentMapper studentMapper;
 	@Autowired MessageMapper messageMapper;
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
-
+	@Autowired MentiMapper mentiMapper;
+	
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public Map<String, Object> login(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
@@ -220,7 +223,22 @@ public class SMController {
         mentoroominfoMapper.delete();
         return "멘토방 설정이 삭제되었습니다";
      }
-    
+   	
+   	// 멘티신청
+   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_join", method = RequestMethod.POST)
+   	public String menti_join(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
+        userMapper.updateMentiauth(mid);
+        mentiMapper.insert(menti);
+        return "멘티신청이 완료되었습니다";
+     }
+   	
+   	// 멘티신청취소
+   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_canceal", method = RequestMethod.POST)
+   	public String menti_canceal(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
+        userMapper.updateMentiCanceal(mid);
+        mentiMapper.delete(mid);
+        return "멘티신청이 취소되었습니다";
+     }
     
    	//쪽지함 목록
     @RequestMapping("message/{u_id}")
