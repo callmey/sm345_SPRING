@@ -9,8 +9,8 @@ API 명세서
    
   api/list/:bid/create
    
- api/list/:bid/:aid/delete
- api/list/:bid/:aid/edit
+  api/list/:bid/:aid/delete
+  api/list/:bid/:aid/edit
  
   api/list/3/:aid/comment/create
    -post방식. board_id는 3(Q&A). article_id와 comment객체를 받아와 저장
@@ -55,11 +55,17 @@ api/admin/room_info/delete - 멘토방 설정 삭제 post형식
 api/admin/report - 보고서목록
 api/admin/survey - 설문조사
 
+api/admin/
+api/admin/
+
 -쪽지함
 api/message/:uid - 쪽지함목록  get 형식 messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
 api/message/username/:uid - 쪽지함 to_id -> user_name 설정  사용자아이디: uid post형식 
 api/message/create - 쪽지함 생성  post형식 
-api/message/:mid/delete - 쪽지함삭제 쪽지아이디:mid post형식 
+
+api/message/:mid/delete - 쪽지 삭제. get방식. 메세지의 id를 받아와 삭제
+api/message/:uid/:mid - 쪽지 조회. get방식. user_id와 메세지의 id를 받아와 조회함
+
 
 -기타
 api/updatepassword - 비밀번호변경

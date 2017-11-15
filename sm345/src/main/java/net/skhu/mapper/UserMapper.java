@@ -16,4 +16,6 @@ public interface UserMapper {
     void updateMentiauth(int menti_id);
     void updateMentiCanceal(int menti_id);
     User selectByUserAuth(int user_auth);
+    void updateEmpower(int user_id);
+    void updateLeave(int user_id);
 }

@@ -12,6 +12,7 @@ public class Article {
 	int article_hit;
 	int article_delete;
 	Timestamp timestamp;
+	int answer_complete;
 	String user_name; //조인
 
 	public int getId() {
@@ -67,6 +68,12 @@ public class Article {
 	}
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
+	}
+	public int getAnswer_complete() {
+		return answer_complete;
+	}
+	public void setAnswer_complete(int answer_complete) {
+		this.answer_complete = answer_complete;
 	}
 
 

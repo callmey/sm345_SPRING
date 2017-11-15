@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package net.skhu.controller;
 
 import java.io.UnsupportedEncodingException;
@@ -41,10 +42,53 @@ public class SMController {
 	@Autowired UserMapper userMapper;
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired StudentMapper studentMapper;
+=======
+package net.skhu.controller;
+
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import net.skhu.dto.Article;
+import net.skhu.dto.MentoRoomInfo;
+import net.skhu.dto.Mentoroom;
+import net.skhu.dto.Message;
+import net.skhu.dto.User;
+import net.skhu.mapper.ArticleMapper;
+import net.skhu.mapper.MentoRoomInfoMapper;
+import net.skhu.mapper.MentoroomMapper;
+import net.skhu.mapper.MessageMapper;
+import net.skhu.mapper.StudentMapper;
+import net.skhu.mapper.UserMapper;
+import net.skhu.service.UserService;
+
+@RestController
+@RequestMapping("api/")
+public class SMController {
+	@Autowired ArticleMapper articleMapper;
+	@Autowired UserService userService;
+	@Autowired UserMapper userMapper;
+	@Autowired MentoroomMapper mentoroomMapper;
+	@Autowired StudentMapper studentMapper;
 	@Autowired MessageMapper messageMapper;
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired MentiMapper mentiMapper;
-	
+	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
+
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public Map<String, Object> login(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
@@ -60,7 +104,7 @@ public class SMController {
 			return map;
 
 		} else {
-			if (UserService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
+			if (userService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
 				map.put("title", "로그인 되었습니다!");
 				map.put("key", 0);
 				map.put("user_id", db_user.getUser_id());
@@ -86,7 +130,7 @@ public class SMController {
 	//비밀번호 변경
 	@RequestMapping(value ="updatepassword", method = RequestMethod.POST)
 	public Map<String, Object> update_password(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
-		String new_password = UserService.encryptPasswd(user.getUser_password()); //암호화
+		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
 		user.setUser_password(new_password);
 		User db_user = userMapper.selectByUserId(user.getUser_id());
 		HashMap<String, Object> map = new HashMap<>();
@@ -137,6 +181,23 @@ public class SMController {
 	@RequestMapping("mentoroom")
 	public List<Mentoroom> mentoroomList(HttpServletRequest request, Model model) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		return mentoroomMapper.findAll();
+	}
+
+	//멘토방 목록 (관리자)
+	@RequestMapping("mentoroom/{year}/1")
+	public List<Mentoroom> mentoroomList_admn(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+		if(year == 0)
+			return mentoroomMapper.findAll();
+		else{
+		String y = String.valueOf(year);
+		int yyyy = Integer.parseInt(y.substring(0,4));
+		int s =  Integer.parseInt(y.substring(4,5));
+		System.out.println(yyyy+" "+s);
+		Mentoroom mentoroom = new Mentoroom();
+		mentoroom.setTeam_year(yyyy);
+		mentoroom.setTeam_semester(s);
+		return mentoroomMapper.findAllByYear(mentoroom);
+		}
 	}
 
 	//각 멘토방 조회
@@ -190,31 +251,42 @@ public class SMController {
     }
 
     //게시글 삭제
-    @RequestMapping(value="list/{b_id}/{a_id}/delete", method = RequestMethod.POST)
-    public String delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
+    @RequestMapping("list/{b_id}/{a_id}/delete")
+    public void delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
         articleMapper.delete(a_id);
-        return "게시글이 삭제되었습니다";
     }
 
+    //답변 완료
+    @RequestMapping(value="list/{b_id}/{a_id}/answer")
+    public void answer(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+        articleMapper.updateAnswer(a_id);
+    }
+
+/*
+    //댓글 생성
+    @RequestMapping(value="list/3/{a_id}/create", method = RequestMethod.POST)
+    public void comment_crate(@RequestBody Comment comment, @PathVariable("a_id") int a_id,  Model model, HttpServletRequest request ) {
+    	System.out.println("생성실행되니??????????/");
+        commentMapper.insert(comment);
+    }
+*/
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public @ResponseBody List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
         List<User> list = userMapper.findAll(auth);
         return list;
     }
-    
-    //멘토방 설정 목록
+
+    //멘토방 설정 데이터
     @RequestMapping("admin/room_info")
-  	public @ResponseBody List<MentoRoomInfo> mentoRoomInfo_list(Model model, HttpServletRequest request) {
-  		List<MentoRoomInfo> list = mentoroominfoMapper.findAll(); 
-        return list;
+  	public MentoRoomInfo mentoRoomInfo(Model model, HttpServletRequest request) {
+        return mentoroominfoMapper.findMentoRoomInfo();
   	}
-  	
-  	// 멘토방 설정 생성
-  	@RequestMapping(value="admin/room_info/create", method = RequestMethod.POST)
-    public String mentoRoomInfo_create(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
-        mentoroominfoMapper.insert(mentoroominfo);
-        return "멘토방 설정이 생성되었습니다";
+
+  	// 멘토방 설정 수정
+  	@RequestMapping(value="admin/room_info/edit", method = RequestMethod.POST)
+    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
+        mentoroominfoMapper.update(mentoroominfo);
     }
   	
     // 멘토방 설정 삭제
@@ -247,27 +319,45 @@ public class SMController {
         return list;
     }
 
-    //쪽지함 to_id -> user_name 설정
+    //쪽지 받는 사람 이름 불러오기
     @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
-	public Map<String, Object> message(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
+	public Map<String, Object> to_name(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
 		String to_name = userMapper.selectByUserName(u_id);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("user_name", to_name);
-		System.out.println("받는이 : "+ to_name);
 		return map;
     }
 
-    //쪽지함 생성
+    //쪽지 보내기
     @RequestMapping(value="message/create", method = RequestMethod.POST)
     public String create(@RequestBody Message message, Model model, HttpServletRequest request ) {
         messageMapper.insert(message);
-        return "쪽지함이 등록되었습니다.";
+        return "쪽지가 전송되었습니다";
     }
 
-    //쪽지함 삭제
-    @RequestMapping(value="message/{m_id}/delete", method = RequestMethod.POST)
-    public String delete(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
-        messageMapper.delete(m_id);
-        return "쪽지함이 삭제되었습니다";
+    //쪽지 조회
+    @RequestMapping("message/{m_id}")
+    public Message message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        messageMapper.updateReadcheck(m_id); //쪽지읽음으로 표시
+    	return messageMapper.findMessage(m_id);
     }
+
+    //쪽지 삭제
+    @RequestMapping(value="message/{m_id}/delete")
+    public void delete_message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        messageMapper.delete(m_id);
+    }
+
+    //관리자 지정
+    @RequestMapping(value="admin/empower/{u_id}")
+    public void admin_empower(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        userMapper.updateEmpower(u_id);
+    }
+
+    //관리자 권한 해제
+    @RequestMapping(value="admin/leave/{u_id}")
+    public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+        userMapper.updateLeave(u_id);
+    }
+
 }

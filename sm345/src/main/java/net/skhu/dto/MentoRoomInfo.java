@@ -1,77 +1,78 @@
 package net.skhu.dto;
 
-import java.sql.Date;
-
 public class MentoRoomInfo {
-	Date mento_start;
-	Date mento_end;
-	Date menti_start;
-	Date menti_end;
-	int max_mento;
-	int max_menti;
-	int meeting_number;
-	int meeting_period;
-	Date survey_start;
-	Date survey_end;
-	
-	public Date getMento_start() {
+
+	String mento_start;
+	String mento_end;
+	String menti_start;
+	String menti_end;
+	String max_mento;
+	String max_menti;
+	String meeting_number;
+	String meeting_period;
+	String survey_start;
+	String survey_end;
+
+	public String getMento_start() {
 		return mento_start;
 	}
-	public void setMento_start(Date mento_start) {
+	public void setMento_start(String mento_start) {
 		this.mento_start = mento_start;
 	}
-	public Date getMento_end() {
+	public String getMento_end() {
 		return mento_end;
 	}
-	public void setMento_end(Date mento_end) {
+	public void setMento_end(String mento_end) {
 		this.mento_end = mento_end;
 	}
-	public Date getMenti_start() {
+	public String getMenti_start() {
 		return menti_start;
 	}
-	public void setMenti_start(Date menti_start) {
+	public void setMenti_start(String menti_start) {
 		this.menti_start = menti_start;
 	}
-	public Date getMenti_end() {
+	public String getMenti_end() {
 		return menti_end;
 	}
-	public void setMenti_end(Date menti_end) {
+	public void setMenti_end(String menti_end) {
 		this.menti_end = menti_end;
 	}
-	public int getMax_mento() {
+	public String getMax_mento() {
 		return max_mento;
 	}
-	public void setMax_mento(int max_mento) {
+	public void setMax_mento(String max_mento) {
 		this.max_mento = max_mento;
 	}
-	public int getMax_menti() {
+	public String getMax_menti() {
 		return max_menti;
 	}
-	public void setMax_menti(int max_menti) {
+	public void setMax_menti(String max_menti) {
 		this.max_menti = max_menti;
 	}
-	public int getMeeting_number() {
+	public String getMeeting_number() {
 		return meeting_number;
 	}
-	public void setMeeting_number(int meeting_number) {
+	public void setMeeting_number(String meeting_number) {
 		this.meeting_number = meeting_number;
 	}
-	public int getMeeting_period() {
+	public String getMeeting_period() {
 		return meeting_period;
 	}
-	public void setMeeting_period(int meeting_period) {
+	public void setMeeting_period(String meeting_period) {
 		this.meeting_period = meeting_period;
 	}
-	public Date getSurvey_start() {
+	public String getSurvey_start() {
 		return survey_start;
 	}
-	public void setSurvey_start(Date survey_start) {
+	public void setSurvey_start(String survey_start) {
 		this.survey_start = survey_start;
 	}
-	public Date getSurvey_end() {
+	public String getSurvey_end() {
 		return survey_end;
 	}
-	public void setSurvey_end(Date survey_end) {
+	public void setSurvey_end(String survey_end) {
 		this.survey_end = survey_end;
 	}
+
+
 }

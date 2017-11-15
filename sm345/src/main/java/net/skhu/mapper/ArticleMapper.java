@@ -15,4 +15,5 @@ public interface ArticleMapper {
     void updateHit(Article article);
     int selectHit(int id);
     void delete(int id);
+    void updateAnswer(int id);
 }

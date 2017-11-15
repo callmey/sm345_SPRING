@@ -9,6 +9,7 @@ import net.skhu.dto.Mentoroom;
 @Mapper
 public interface MentoroomMapper {
     List<Mentoroom> findAll();
+    List<Mentoroom> findAllByYear(Mentoroom mentoroom);
     Mentoroom findMentoroom(int mentoroom_id);
     void insert(Mentoroom mentoroom);
     void updateTeamconfirm(int mentoroom_id);

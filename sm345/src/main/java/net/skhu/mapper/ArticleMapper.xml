@@ -44,5 +44,11 @@
 	<delete id="delete">
     DELETE FROM article WHERE id = #{id}
   	</delete>
+  	
+  	<update id="updateAnswer">
+    UPDATE article
+    SET answer_complete = 1
+    WHERE id = #{id}
+  	</update>
 
 </mapper>
