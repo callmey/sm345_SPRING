@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.Article;
+import net.skhu.dto.Menti;
 import net.skhu.dto.MentoRoomInfo;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
+import net.skhu.mapper.MentiMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.MessageMapper;
@@ -41,6 +43,7 @@ public class SMController {
 	@Autowired StudentMapper studentMapper;
 	@Autowired MessageMapper messageMapper;
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
+	@Autowired MentiMapper mentiMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -245,6 +248,22 @@ public class SMController {
         mentoroominfoMapper.update(mentoroominfo);
     }
 
+   	// 멘티신청
+   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_join", method = RequestMethod.POST)
+   	public String menti_join(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
+        userMapper.updateMentiauth(mid);
+        mentiMapper.insert(menti);
+        return "멘티신청이 완료되었습니다";
+     }
+
+   	// 멘티신청취소
+   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_canceal", method = RequestMethod.POST)
+   	public String menti_canceal(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
+        userMapper.updateMentiCanceal(mid);
+        mentiMapper.delete(mid);
+        return "멘티신청이 취소되었습니다";
+     }
+
    	//쪽지함 목록
     @RequestMapping("message/{u_id}")
     public List<Message> messagelist(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
@@ -292,5 +311,4 @@ public class SMController {
     public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         userMapper.updateLeave(u_id);
     }
-
 }
