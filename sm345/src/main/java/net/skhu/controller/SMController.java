@@ -174,7 +174,7 @@ public class SMController {
 
 	//게시판 목록
     @RequestMapping("list/{b_id}")
-    public @ResponseBody List<Article> list(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id) {
+    public List<Article> list(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id) {
         return articleMapper.findAll(b_id);
     }
 
@@ -200,7 +200,7 @@ public class SMController {
     @RequestMapping(value="list/{b_id}/{a_id}/edit", method = RequestMethod.POST)
     public String edit(@RequestBody Article article, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
         articleMapper.update(article);
-        return "게시글이 수정되었습니다.";
+        return "게시글이 수정되었습니다";
     }
 
     //게시글 삭제
@@ -225,8 +225,11 @@ public class SMController {
 */
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
-    public @ResponseBody List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
-        List<User> list = userMapper.findAll(auth);
+    public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
+        if(auth == 4){ //보고서 미제출멘토라면
+        	return userMapper.selectReportNotYet();
+        }
+    	List<User> list = userMapper.findAll(auth);
         return list;
     }
 
@@ -244,7 +247,7 @@ public class SMController {
 
    	//쪽지함 목록
     @RequestMapping("message/{u_id}")
-    public @ResponseBody List<Message> message_list(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
+    public List<Message> messagelist(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
         List<Message> list = messageMapper.selectByToId(u_id);
         return list;
     }
@@ -284,7 +287,7 @@ public class SMController {
         userMapper.updateEmpower(u_id);
     }
 
-    //관리자 권한 해제
+    //관리자 권한 해제 (user_auth == 4)
     @RequestMapping(value="admin/leave/{u_id}")
     public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         userMapper.updateLeave(u_id);

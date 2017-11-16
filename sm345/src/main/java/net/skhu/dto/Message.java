@@ -10,7 +10,9 @@ public class Message {
 	String message_title;
 	String message_content;
 	Timestamp timestamp;
-	String user_name;
+	int all_message;
+	int read_check;
+	String user_name; //조인
 
 	public int getId() {
 		return id;
@@ -54,4 +56,17 @@ public class Message {
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
+	public int getAll_message() {
+		return all_message;
+	}
+	public void setAll_message(int all_message) {
+		this.all_message = all_message;
+	}
+	public int getRead_check() {
+		return read_check;
+	}
+	public void setRead_check(int read_check) {
+		this.read_check = read_check;
+	}
+
 }

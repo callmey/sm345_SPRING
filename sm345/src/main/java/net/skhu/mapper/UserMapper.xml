@@ -49,8 +49,14 @@
   	
   	<update id="updateLeave">
     UPDATE user
-    SET user_auth = 2
+    SET user_auth = 4
     WHERE user_id = #{user_id}
   	</update>
+  	
+  	<select id="selectReportNotYet" resultType="User">
+    SELECT u.*, s.report_check
+    FROM user u LEFT JOIN student s ON u.user_id = s.student_id
+    WHERE u.user_auth = 1 AND s.report_check = 0
+    </select>
     
 </mapper>

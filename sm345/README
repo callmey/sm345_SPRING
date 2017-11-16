@@ -8,17 +8,16 @@ API 명세서
    -get방식. board_id와 id를 받아와 모두 보내줌
    
   api/list/:bid/create
+   -post방식. article객체를 받아와 insert
    
   api/list/:bid/:aid/delete
-  api/list/:bid/:aid/edit
- 
-  api/list/3/:aid/comment/create
-   -post방식. board_id는 3(Q&A). article_id와 comment객체를 받아와 저장
+   -get방식. article_id를 받아와 삭제
    
- api/list/3/:aid/:cid/edit
- api/list/3/:aid/:cid/delete
-
+  api/list/:bid/:aid/edit
+   -post방식. article객체(board_id, article_title, article_content, article_writer)를 받아와 update
+   
 -멘토방(rid->mentoroom_id)
+  
  api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
   -get방식. mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
  
@@ -34,10 +33,13 @@ API 명세서
  api/mentoroom/:rid/reject - 멘토승인거절
   -get방식. 해당 mentoroom_id를 받아와 db 삭제
   
-api/mentoroom/:rid/menti_join - 멘티신청
-api/mentoroom/:rid/menti_canceal - 멘티신청취소
-api/mentoroom/:rid/report/upload - 보고서 제출
-api/mentoroom/:rid/report/download - 보고서 다운로드
+ api/mentoroom/:rid/:mid/:uid/menti_join - 멘티신청
+ 
+ api/mentoroom/:rid/:uid/menti_canceal - 멘티신청취소
+ 
+ api/mentoroom/:rid/report/upload - 보고서 제출
+ 
+ api/mentoroom/:rid/report/download - 보고서 다운로드
 
 
 -관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))

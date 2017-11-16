@@ -16,4 +16,5 @@ public interface UserMapper {
     User selectByUserAuth(int user_auth);
     void updateEmpower(int user_id);
     void updateLeave(int user_id);
+    List<User> selectReportNotYet();
 }
