@@ -7,7 +7,7 @@ public class User {
 	int user_auth;
 	String user_name;
 	int login_record;
-	int report_check; //조인
+	int report_check;
 
 	public int getUser_id() {
 		return user_id;

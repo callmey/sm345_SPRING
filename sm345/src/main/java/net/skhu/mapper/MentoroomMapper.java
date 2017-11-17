@@ -14,4 +14,5 @@ public interface MentoroomMapper {
     void insert(Mentoroom mentoroom);
     void updateTeamconfirm(int mentoroom_id);
     void deleteMentoroom(int mentoroom_id);
+    void updateReportcheck(int mentoroom_id);
 }

@@ -22,6 +22,12 @@
     WHERE user_id = #{user_id}
     </select>
     
+    <select id="selectStudent" resultType="User">
+    SELECT *
+    FROM user
+    WHERE user_auth != 3 AND user_auth != 4
+    </select>
+    
     <select id="selectByUserAuth" resultType="User">
     SELECT *
     FROM user
@@ -70,5 +76,11 @@
     FROM user u LEFT JOIN student s ON u.user_id = s.student_id
     WHERE u.user_auth = 1 AND s.report_check = 0
     </select>
+    
+    <update id="updateReportcheck">
+    UPDATE user
+    SET report_check = 1
+    WHERE user_id = #{user_id}
+  	</update>
     
 </mapper>

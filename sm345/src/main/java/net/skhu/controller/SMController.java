@@ -1,6 +1,10 @@
 package net.skhu.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,8 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Menti;
 import net.skhu.dto.MentoRoomInfo;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
+import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentiMapper;
@@ -30,6 +38,7 @@ import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
+import net.skhu.mapper.UploadFileMapper;
 import net.skhu.mapper.UserMapper;
 import net.skhu.service.UserService;
 
@@ -44,6 +53,7 @@ public class SMController {
 	@Autowired MessageMapper messageMapper;
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired MentiMapper mentiMapper;
+	@Autowired UploadFileMapper uploadFileMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -229,9 +239,10 @@ public class SMController {
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
-        if(auth == 4){ //보고서 미제출멘토라면
+        if(auth == 4) //보고서 미제출멘토
         	return userMapper.selectReportNotYet();
-        }
+        if(auth == 0) //전체 학생 목록
+        	return userMapper.selectStudent();
     	List<User> list = userMapper.findAll(auth);
         return list;
     }
@@ -249,18 +260,21 @@ public class SMController {
     }
 
    	// 멘티신청
-   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_join", method = RequestMethod.POST)
-   	public String menti_join(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
-        userMapper.updateMentiauth(mid);
+   	@RequestMapping(value="mentoroom/{rid}/{mid}/{uid}/menti_join")
+   	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
+        userMapper.updateMentiauth(uid);
+        Menti menti = new Menti();
+        menti.setMenti_id(uid);
+        menti.setMento_id(mid);
         mentiMapper.insert(menti);
         return "멘티신청이 완료되었습니다";
      }
 
    	// 멘티신청취소
-   	@RequestMapping(value="mentoroom/{rid}/{mid}/menti_canceal", method = RequestMethod.POST)
-   	public String menti_canceal(@RequestBody Menti menti, Model model, HttpServletRequest request, @PathVariable("mid") int mid) {
-        userMapper.updateMentiCanceal(mid);
-        mentiMapper.delete(mid);
+   	@RequestMapping(value="mentoroom/{rid}/{uid}/menti_canceal")
+   	public String menti_canceal(Model model, HttpServletRequest request, @PathVariable("uid") int uid) {
+        userMapper.updateMentiCanceal(uid);
+        mentiMapper.delete(uid);
         return "멘티신청이 취소되었습니다";
      }
 
@@ -310,5 +324,49 @@ public class SMController {
     @RequestMapping(value="admin/leave/{u_id}")
     public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         userMapper.updateLeave(u_id);
+    }
+
+    //보고서 저장
+    @Transactional
+    @RequestMapping(value="mentoroom/{r_id}/{file_kind}/upload", method=RequestMethod.POST)
+    public String fileupload(@RequestBody MultipartFile[] uploadFiles, @PathVariable("r_id") int r_id, @PathVariable("file_kind") int file_kind, Model model, HttpServletRequest request) throws IOException {
+        for(MultipartFile uploadFile : uploadFiles) {
+            if (uploadFile.getSize() <= 0) continue;
+            String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+            UploadFile uploadedFile = new UploadFile();
+            uploadedFile.setFile_name(fileName);
+            uploadedFile.setFile_size((int)uploadFile.getSize());
+            //uploadedFile.setTimestamp(new Timestamp(0));
+            uploadedFile.setFile_data(uploadFile.getBytes());
+            uploadedFile.setFile_kind(file_kind);
+            uploadedFile.setMentoroom_id(r_id);
+            uploadFileMapper.insert(uploadedFile);
+        }
+        mentoroomMapper.updateReportcheck(r_id); //보고서 제출시 +1
+        //if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
+        	//userMapper.updateReportcheck(uploadFile.getMentoroom_id());//유저테이블 업데이트
+        return "보고서가 업로드 되었습니다";
+    }
+
+    //파일 삭제
+    @RequestMapping("mentoroom/{r_id}/{f_id}/delete")
+    public String filedelete(@PathVariable("f_id") int f_id, Model model, HttpServletRequest request) throws Exception {
+        uploadFileMapper.delete(f_id);
+        //reportcheck
+        return "보고서가 삭제되었습니다";
+    }
+
+    //파일 다운로드
+    @RequestMapping("mentoroom/{r_id}/{f_id}/download")
+    public String download(@PathVariable("f_id") int f_id, HttpServletResponse response) throws Exception {
+        UploadFile uploadedfile = uploadFileMapper.findOne(f_id);
+       if (uploadedfile == null) return "파일이 없습니다";
+        String fileName = URLEncoder.encode(uploadedfile.getFile_name(),"UTF-8");
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ";");
+        try (BufferedOutputStream output = new BufferedOutputStream(response.getOutputStream())) {
+            output.write(uploadedfile.getFile_data());
+        }
+        return "파일이 다운로드되었습니다";
     }
 }

@@ -33,17 +33,15 @@ API 명세서
  api/mentoroom/:rid/reject - 멘토승인거절
   -get방식. 해당 mentoroom_id를 받아와 db 삭제
   
- api/mentoroom/:rid/:mid/menti_join - 멘티신청 [post]:rid- mentoroom_id / :mid- menti_id 
- => Menti(mento_id, menti_id insert) 
-
- api/mentoroom/:rid/:mid/menti_canceal - 멘티신청취소 [post] 
- => Menti(mento_id, menti_id delete)
+ api/mentoroom/:rid/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
+  
+ api/mentoroom/:rid/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
 
  api/mentoroom/:rid/report/upload - 보고서 제출
  api/mentoroom/:rid/report/download - 보고서 다운로드
 
--관리자(auth->user_auth(1.멘토 2.멘티 3.관리자))
- api/admin/user/:auth - 사용자목록
+-관리자
+ api/admin/user/:auth - 사용자목록  :auth = 앱에서 value 값! (0.전체학생(일반학생+멘토+멘티) 1.멘토 2.멘티 3.관리자 4.보고서제출안한멘토)
   -get형식. user_auth로 findAll. 
 
 api/admin/room_info - 멘토방 설정목록 get 형식
