@@ -14,6 +14,9 @@ public class Article {
 	Timestamp timestamp;
 	int answer_complete;
 	String user_name; //조인
+	int article_id;
+	String comment_content;
+	String comment_writer; //조인
 
 	public int getId() {
 		return id;
@@ -75,7 +78,23 @@ public class Article {
 	public void setAnswer_complete(int answer_complete) {
 		this.answer_complete = answer_complete;
 	}
-
-
-
+	public int getArticle_id() {
+		return article_id;
+	}
+	public void setArticle_id(int article_id) {
+		this.article_id = article_id;
+	}
+	public String getComment_content() {
+		return comment_content;
+	}
+	public void setComment_content(String comment_content) {
+		this.comment_content = comment_content;
+	}
+	public String getComment_writer() {
+		return comment_writer;
+	}
+	public void setComment_writer(String comment_writer) {
+		this.comment_writer = comment_writer;
+	}
+	
 }

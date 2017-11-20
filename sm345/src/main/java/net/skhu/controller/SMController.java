@@ -32,6 +32,8 @@ import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
+import net.skhu.dto.Comment;
+
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentiMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
@@ -40,6 +42,7 @@ import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 import net.skhu.mapper.UserMapper;
+import net.skhu.mapper.CommentMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -54,6 +57,7 @@ public class SMController {
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
+	@Autowired CommentMapper commentMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -228,14 +232,31 @@ public class SMController {
         articleMapper.updateAnswer(a_id);
     }
 
-/*
+
     //댓글 생성
-    @RequestMapping(value="list/3/{a_id}/create", method = RequestMethod.POST)
-    public void comment_crate(@RequestBody Comment comment, @PathVariable("a_id") int a_id,  Model model, HttpServletRequest request ) {
-    	System.out.println("생성실행되니??????????/");
+    @RequestMapping(value="list/{b_id}/{a_id}/comment/create", method = RequestMethod.POST)
+    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
         commentMapper.insert(comment);
     }
-*/
+    
+    //댓글 수정
+    @RequestMapping(value="list/{b_id}/{a_id}/{c_id}/edit", method = RequestMethod.POST)
+    public void comment_update(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
+        commentMapper.update(comment);
+    }
+    
+    //댓글 삭제
+    @RequestMapping("list/{b_id}/{a_id}/{c_id}/delete")
+    public void delete(Model model, @PathVariable("c_id") int c_id, HttpServletRequest request ) {
+        commentMapper.delete(c_id);
+    }
+    
+    //댓글 목록
+    @RequestMapping("list/{b_id}/{a_id}/{c_id}")
+    public List<Article> comment_list (Model model, HttpServletRequest request, @PathVariable("c_id") int c_id) {
+    	return articleMapper.findComment(c_id);
+    }
+    
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {

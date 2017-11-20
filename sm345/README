@@ -16,6 +16,15 @@ API 명세서
   api/list/:bid/:aid/edit
    -post방식. article객체(board_id, article_title, article_content, article_writer)를 받아와 update
    
+   -댓글 생성
+   api/list/:bid/:aid/comment/create [post] article_id, comment_content, comment_writer 를 insert.
+   -댓글 수정
+   api/list/:bid/:aid/:cid/edit [post] :bid- board_id,  :aid- article_id,  :cid- comment의 id.
+   -댓글 삭제
+   api/list/:bid/:aid/:cid/delete [get] 
+   -댓글 목록
+   api/list/:bid/:aid/:cid [get] articleMapper의 findComment에서 댓글 id를 불러옴.
+   
 -멘토방(rid->mentoroom_id)
   
  api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록

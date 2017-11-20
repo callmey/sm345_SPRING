@@ -9,6 +9,7 @@ import net.skhu.dto.Article;
 @Mapper
 public interface ArticleMapper {
     List<Article> findAll(int board_id);
+    List<Article> findComment(int article_id);
     Article findArticle(int id);
     void insert(Article article);
     void update(Article article);
