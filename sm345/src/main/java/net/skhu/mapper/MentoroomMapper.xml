@@ -23,9 +23,9 @@
     </select>
     
     <select id="findMentoroom" resultType="Mentoroom">
-    SELECT m.*, f.id file_id, f.file_name, f.file_data, f.file_kind, f.timestamp
-    FROM mentoroom m JOIN uploadFile f ON m.mentoroom_id = f.mentoroom_id
-    WHERE m.mentoroom_id = #{mentoroom_id}
+    SELECT *
+    FROM mentoroom
+    WHERE mentoroom_id = #{mentoroom_id}
     </select>
     
     <update id="updateTeamconfirm">
@@ -42,6 +42,18 @@
   	<update id="updateReportcheck">
     UPDATE mentoroom
     SET report_check = report_check + 1
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
+  	<update id="updatePersoncount1">
+    UPDATE mentoroom
+    SET person_count = person_count + 1
+    WHERE mento_id = #{mento_id}
+  	</update>
+  	
+  	<update id="updatePersoncount2">
+    UPDATE mentoroom
+    SET person_count = person_count - 1
     WHERE mentoroom_id = #{mentoroom_id}
   	</update>
     

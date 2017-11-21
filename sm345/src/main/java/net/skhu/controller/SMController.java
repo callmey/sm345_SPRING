@@ -58,19 +58,9 @@ public class SMController {
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public Map<String, Object> login(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
-		String message = null;
-		message = userService.validateBeforelogin(user.getUser_id(), user.getUser_password());
 		User db_user = userMapper.selectByUserId(user.getUser_id());
-
 		HashMap<String, Object> map = new HashMap<>();
-
-		if (message != "") {
-			map.put("title", message);
-			map.put("key", -1);
-			return map;
-
-		} else {
-			if (userService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
+		if (userService.encryptPasswd(user.getUser_password()).equals(db_user.getUser_password())) {
 				map.put("title", "로그인 되었습니다!");
 				map.put("key", 0);
 				map.put("user_id", db_user.getUser_id());
@@ -81,14 +71,33 @@ public class SMController {
 			map.put("title", "비밀번호가 맞지 않습니다");
 			map.put("key", 2);
 			return map;
-		}
 	}
 
 	//로그인기록조회
-	@RequestMapping("login_record/{u_id}")
-    public Map<String, Object> login_record(HttpServletRequest request, Model model, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
-    	int login_record = userMapper.selectByUserId(u_id).getLogin_record();
-    	Map<String, Object> map = new HashMap<String, Object>();
+	@RequestMapping(value = "login_record", method = RequestMethod.POST)
+    public Map<String, Object> login_record(HttpServletRequest request, Model model, @RequestBody User user) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(user.getUser_id() == 0 && user.getUser_password().isEmpty()){
+			map.put("key", -4);
+    		map.put("title", "아이디와 비밀번호를 입력하세요");
+    		return map;
+		}
+		if(user.getUser_id() == 0){
+    		map.put("key", -1);
+    		map.put("title", "아이디를 입력하세요");
+    		return map;
+		}
+		if (user.getUser_password().isEmpty()) {
+			map.put("key", -2);
+    		map.put("title", "비밀번호를 입력하세요");
+    		return map;
+		}
+		if (userMapper.selectByUserId(user.getUser_id()) == null) {
+			map.put("key", -3);
+    		map.put("title", "존재하지 않는 회원입니다");
+    		return map;
+		}
+		int login_record = userMapper.selectByUserId(user.getUser_id()).getLogin_record();
         map.put("login_record", login_record);
     	return map;
     }
@@ -96,10 +105,10 @@ public class SMController {
 	//비밀번호 변경
 	@RequestMapping(value ="updatepassword", method = RequestMethod.POST)
 	public Map<String, Object> update_password(Model model, @RequestBody User user, HttpServletRequest request) throws UnsupportedEncodingException {
-		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
-		user.setUser_password(new_password);
 		User db_user = userMapper.selectByUserId(user.getUser_id());
 		HashMap<String, Object> map = new HashMap<>();
+		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
+		user.setUser_password(new_password);
 		if(db_user.getLogin_record() == 1){ //로그인 기록이 있으면
 			userMapper.updateBeforelogin(user);
 			map.put("title", "비밀번호가 변경되었습니다");
@@ -150,7 +159,7 @@ public class SMController {
 	}
 
 	//멘토방 목록 (관리자)
-	@RequestMapping("mentoroom/{year}/1")
+	@RequestMapping("admin/mentoroom/{year}")
 	public List<Mentoroom> mentoroomList_admn(HttpServletRequest request, Model model, @PathVariable("year") int year) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		if(year == 0)
 			return mentoroomMapper.findAll();
@@ -228,14 +237,6 @@ public class SMController {
         articleMapper.updateAnswer(a_id);
     }
 
-/*
-    //댓글 생성
-    @RequestMapping(value="list/3/{a_id}/create", method = RequestMethod.POST)
-    public void comment_crate(@RequestBody Comment comment, @PathVariable("a_id") int a_id,  Model model, HttpServletRequest request ) {
-    	System.out.println("생성실행되니??????????/");
-        commentMapper.insert(comment);
-    }
-*/
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
@@ -260,26 +261,28 @@ public class SMController {
     }
 
    	// 멘티신청
-   	@RequestMapping(value="mentoroom/{rid}/{mid}/{uid}/menti_join")
+   	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_join")
    	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
         userMapper.updateMentiauth(uid);
         Menti menti = new Menti();
         menti.setMenti_id(uid);
         menti.setMento_id(mid);
         mentiMapper.insert(menti);
+        mentoroomMapper.updatePersoncount1(mid);
         return "멘티신청이 완료되었습니다";
      }
 
    	// 멘티신청취소
-   	@RequestMapping(value="mentoroom/{rid}/{uid}/menti_canceal")
-   	public String menti_canceal(Model model, HttpServletRequest request, @PathVariable("uid") int uid) {
+   	@RequestMapping(value="mentoroom/{uid}/menti_canceal")
+   	public String menti_canceal(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("rid") int rid) {
         userMapper.updateMentiCanceal(uid);
         mentiMapper.delete(uid);
+        mentoroomMapper.updatePersoncount1(rid);
         return "멘티신청이 취소되었습니다";
      }
 
    	//쪽지함 목록
-    @RequestMapping("message/{u_id}")
+    @RequestMapping("message/list/{u_id}")
     public List<Message> messagelist(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
         List<Message> list = messageMapper.selectByToId(u_id);
         return list;
@@ -303,7 +306,7 @@ public class SMController {
 
     //쪽지 조회
     @RequestMapping("message/{m_id}")
-    public Message message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+    public Message message_(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
         messageMapper.updateReadcheck(m_id); //쪽지읽음으로 표시
     	return messageMapper.findMessage(m_id);
     }
@@ -328,23 +331,23 @@ public class SMController {
 
     //보고서 저장
     @Transactional
-    @RequestMapping(value="mentoroom/{r_id}/{file_kind}/upload", method=RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile[] uploadFiles, @PathVariable("r_id") int r_id, @PathVariable("file_kind") int file_kind, Model model, HttpServletRequest request) throws IOException {
-        for(MultipartFile uploadFile : uploadFiles) {
-            if (uploadFile.getSize() <= 0) continue;
+    @RequestMapping(value="mentoroom/{r_id}/{f_kind}/upload", method=RequestMethod.POST)
+    public String fileupload(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("f_kind") int f_kind, Model model, HttpServletRequest request) throws IOException {
+            if (uploadFile.getSize() > 0){
             String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
             UploadFile uploadedFile = new UploadFile();
             uploadedFile.setFile_name(fileName);
             uploadedFile.setFile_size((int)uploadFile.getSize());
             //uploadedFile.setTimestamp(new Timestamp(0));
             uploadedFile.setFile_data(uploadFile.getBytes());
-            uploadedFile.setFile_kind(file_kind);
+            uploadedFile.setFile_kind(f_kind);
             uploadedFile.setMentoroom_id(r_id);
             uploadFileMapper.insert(uploadedFile);
-        }
+
         mentoroomMapper.updateReportcheck(r_id); //보고서 제출시 +1
         //if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
         	//userMapper.updateReportcheck(uploadFile.getMentoroom_id());//유저테이블 업데이트
+            }
         return "보고서가 업로드 되었습니다";
     }
 
@@ -369,4 +372,12 @@ public class SMController {
         }
         return "파일이 다운로드되었습니다";
     }
+
+    //앱 최초 실행시 user_auth 받아오기
+    @RequestMapping("{u_id}/check_userauth")
+    public int check_userauth(@PathVariable("u_id") int u_id, Model model, HttpServletRequest request) throws Exception {
+        int user_auth = userMapper.selectByUserId(u_id).getUser_auth();
+        return user_auth;
+    }
+
 }
