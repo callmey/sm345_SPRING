@@ -1,5 +1,33 @@
 API 명세서
 
+-------수정사항-------
+api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
+-> url수정 
+
+api/mentoroom/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
+-> url수정
+
+api/admin/user/:auth - 사용자목록  :auth = 앱에서 value 값! (0.전체학생(일반학생+멘토+멘티) 1.멘토 2.멘티 3.관리자 4.보고서제출안한멘토)
+  -get형식. user_auth로 findAll. 
+-> auth 0, 4 추가
+
+api/message/list/:uid - 쪽지함목록 
+  -get 형식. user_id로 리스트 불러옴
+-> url 수정
+
+api/message/:mid - 쪽지 조회. get방식. 메세지의 id를 받아와 조회함
+
+api/:uid/check_userauth
+ -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
+
+api/login_record/:uid - 로그인기록조회
+ -post방식. user_id를 받아와서 로그인기록을 조회함. + service 내용 추가. 로그인 에러 수정.
+-> 앱 수정도 완료
+
+---------------------
+
+
+
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
   api/list/:bid
    -get방식. board_id를 받아와 모두 보내줌
@@ -82,3 +110,4 @@ api/login_record/:uid - 로그인기록조회
  
 api/:uid/check_userauth
  -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기)
+ 
