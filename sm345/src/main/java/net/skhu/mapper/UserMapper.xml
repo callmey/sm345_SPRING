@@ -77,9 +77,15 @@
     WHERE u.user_auth = 1 AND s.report_check = 0
     </select>
     
-    <update id="updateReportcheck">
+    <update id="updateReportcheck1">
     UPDATE user
     SET report_check = 1
+    WHERE user_id = #{user_id}
+  	</update>
+  	
+  	<update id="updateReportcheck2">
+    UPDATE user
+    SET report_check = 0
     WHERE user_id = #{user_id}
   	</update>
     

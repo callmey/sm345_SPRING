@@ -3,9 +3,11 @@ package net.skhu.dto;
 import java.sql.Timestamp;
 
 public class UploadFile {
+
 	int id;
-	String file_name;
-	int file_size;
+	String file_name; //중복처리방지를 위한 파일 이름
+	long file_size;
+	String file_path;
 	byte[] file_data;
 	int file_kind;
 	int mentoroom_id;
@@ -23,11 +25,17 @@ public class UploadFile {
 	public void setFile_name(String file_name) {
 		this.file_name = file_name;
 	}
-	public int getFile_size() {
+	public long getFile_size() {
 		return file_size;
 	}
-	public void setFile_size(int file_size) {
+	public void setFile_size(long file_size) {
 		this.file_size = file_size;
+	}
+	public String getFile_path() {
+		return file_path;
+	}
+	public void setFile_path(String file_path) {
+		this.file_path = file_path;
 	}
 	public byte[] getFile_data() {
 		return file_data;

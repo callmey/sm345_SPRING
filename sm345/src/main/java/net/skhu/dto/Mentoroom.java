@@ -1,7 +1,5 @@
 package net.skhu.dto;
 
-import java.sql.Timestamp;
-
 public class Mentoroom {
 	int mentoroom_id;
 	String team_name;
@@ -15,13 +13,6 @@ public class Mentoroom {
 	String mento_name;
 	int team_confirm;
 	int report_check;
-
-	int file_id;
-	String file_name;
-	byte[] file_data;
-	int file_kind;
-	Timestamp timestamp;
-
 	int person_count;
 
 	public int getMentoroom_id() {
@@ -89,36 +80,6 @@ public class Mentoroom {
 	}
 	public void setTeam_confirm(int team_confirm) {
 		this.team_confirm = team_confirm;
-	}
-	public int getFile_id() {
-		return file_id;
-	}
-	public void setFile_id(int file_id) {
-		this.file_id = file_id;
-	}
-	public String getFile_name() {
-		return file_name;
-	}
-	public void setFile_name(String file_name) {
-		this.file_name = file_name;
-	}
-	public byte[] getFile_data() {
-		return file_data;
-	}
-	public void setFile_data(byte[] file_data) {
-		this.file_data = file_data;
-	}
-	public int getFile_kind() {
-		return file_kind;
-	}
-	public void setFile_kind(int file_kind) {
-		this.file_kind = file_kind;
-	}
-	public Timestamp getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(Timestamp timestamp) {
-		this.timestamp = timestamp;
 	}
 	public int getPerson_count() {
 		return person_count;

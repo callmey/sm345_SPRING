@@ -1,5 +1,35 @@
 API 명세서
 
+-------수정사항-------
+api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
+-> url수정 
+
+api/mentoroom/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
+-> url수정
+
+api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 보내주면 멘토목록을 조회
+
+api/:uid/check_userauth
+ -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
+
+api/list/:b_id/:a_id/comment/create - 댓글생성 [post] :bid- board_id / a_id- article_id 
+-> comment([insert] article_id, comment_content, comment_writer)
+
+api/list/:b_id/:a_id/c_id/edit - 댓글수정[post] :cid- comment의 id
+-> comment([update] article_id, comment_content, comment_writer)
+
+api/list/:b_id/:a_id/c_id/delete - 댓글 삭제[get]
+-> comment의 id를 받아와 delete. 
+
+api/list/:a_id/comment - 댓글 목록 [get]
+-> article_id로 List 반환
+
+api/list/:b_id/:a_id/CntComment - 댓글수 조회
+-> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
+---------------------
+
+
+
 -게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
   api/list/:bid
    -get방식. board_id를 받아와 모두 보내줌
@@ -15,16 +45,25 @@ API 명세서
    
   api/list/:bid/:aid/edit
    -post방식. article객체(board_id, article_title, article_content, article_writer)를 받아와 update
-   
-   -댓글 생성
-   api/list/:bid/:aid/comment/create [post] article_id, comment_content, comment_writer 를 insert.
-   -댓글 수정
-   api/list/:bid/:aid/:cid/edit [post] :bid- board_id,  :aid- article_id,  :cid- comment의 id.
-   -댓글 삭제
-   api/list/:bid/:aid/:cid/delete [get] 
-   -댓글 목록
-   api/list/:bid/:aid/:cid [get] articleMapper의 findComment에서 댓글 id를 불러옴.
-   
+
+
+-댓글(:b_id- board_id / :a_id- articled의 id, :c_id- comment의 id)
+   api/list/:b_id/:a_id/comment/create - 댓글생성 [post] 
+-> comment([insert] article_id, comment_content, comment_writer)
+
+api/list/:b_id/:a_id/c_id/edit - 댓글수정[post] 
+-> comment([update] article_id, comment_content, comment_writer)
+
+api/list/:b_id/:a_id/c_id/delete - 댓글 삭제[get]
+-> comment의 id를 받아와 delete. 
+
+api/list/:a_id/comment - 댓글 목록 [get]
+-> article_id로 List 반환
+
+api/list/:b_id/:a_id/CntComment - 댓글수 조회
+-> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
+    
+    
 -멘토방(rid->mentoroom_id)
   
  api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
@@ -42,9 +81,9 @@ API 명세서
  api/mentoroom/:rid/reject - 멘토승인거절
   -get방식. 해당 mentoroom_id를 받아와 db 삭제
   
- api/mentoroom/:rid/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
+ api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
   
- api/mentoroom/:rid/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
+ api/mentoroom/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
 
  api/mentoroom/:rid/report/upload - 보고서 제출
  api/mentoroom/:rid/report/download - 보고서 다운로드
@@ -64,12 +103,11 @@ api/admin/
 api/admin/
 
 -쪽지함
-api/message/:uid - 쪽지함목록  get 형식 messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
+api/message/list/:uid - 쪽지함목록  get 형식.  messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
 api/message/username/:uid - 쪽지함 to_id -> user_name 설정  사용자아이디: uid post형식 
 api/message/create - 쪽지함 생성  post형식 
-
 api/message/:mid/delete - 쪽지 삭제. get방식. 메세지의 id를 받아와 삭제
-api/message/:uid/:mid - 쪽지 조회. get방식. user_id와 메세지의 id를 받아와 조회함
+api/message/:mid - 쪽지 조회. get방식. 메세지의 id를 받아와 조회함
 
 
 -기타
@@ -83,4 +121,8 @@ api/login - 로그인
   user_auth - 1.멘토 2.멘티 3.관리자
 
 api/login_record/:uid - 로그인기록조회
- -post방식. user_id를 받아와서 로그인기록을 조회함. 
+ -post방식. user_id를 받아와서 로그인기록을 조회함. + service 내용 추가. 로그인 에러 수정.
+ 
+api/:uid/check_userauth
+ -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기)
+ 
