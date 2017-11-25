@@ -61,7 +61,5 @@ public class UploadFile {
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
-
-
-
 }
+

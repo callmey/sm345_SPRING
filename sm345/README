@@ -12,6 +12,7 @@ api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 보내주면 멘
 api/:uid/check_userauth
  -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
 
+
 api/list/:b_id/:a_id/comment/create - 댓글생성 [post] :bid- board_id / a_id- article_id 
 -> comment([insert] article_id, comment_content, comment_writer)
 
