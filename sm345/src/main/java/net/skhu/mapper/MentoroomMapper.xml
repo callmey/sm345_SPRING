@@ -39,9 +39,15 @@
     WHERE mentoroom_id = #{mentoroom_id}
   	</delete>
   	
-  	<update id="updateReportcheck">
+  	<update id="updateReportcheck1">
     UPDATE mentoroom
     SET report_check = report_check + 1
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
+  	<update id="updateReportcheck2">
+    UPDATE mentoroom
+    SET report_check = report_check - 1
     WHERE mentoroom_id = #{mentoroom_id}
   	</update>
   	

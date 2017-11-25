@@ -1,21 +1,19 @@
 package net.skhu.controller;
 
-import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Menti;
@@ -54,6 +53,8 @@ public class SMController {
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
+
+	String PATH;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -281,6 +282,12 @@ public class SMController {
         return "멘티신청이 취소되었습니다";
      }
 
+   	//멘티목록
+   	@RequestMapping(value="mentoroom/{m_id}/menti_list")
+   	public List<Menti> menti_list(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+        return mentiMapper.findAll(m_id);
+     }
+
    	//쪽지함 목록
     @RequestMapping("message/list/{u_id}")
     public List<Message> messagelist(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
@@ -329,10 +336,47 @@ public class SMController {
         userMapper.updateLeave(u_id);
     }
 
+    //보고서 제출
+    @RequestMapping(value="fileupload/{r_id}", method = RequestMethod.POST)
+    public String fileupload(@RequestBody MultipartFile uploadFile,@PathVariable("r_id") int r_id, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
+    	Random random = new Random();
+    	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+    	String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
+    	PATH = mrequest.getSession().getServletContext().getRealPath("/upload/");
+    	File file = new File(path);
+    	uploadFile.transferTo(file);
+    	String relPath = "/upload/" + filename;
+    	long size = uploadFile.getSize();
+    	UploadFile uploadfile = new UploadFile();
+    	uploadfile.setFile_size(size);
+    	uploadfile.setFile_name(filename);
+    	uploadfile.setFile_data(null);
+    	uploadfile.setFile_path(relPath);
+    	uploadfile.setFile_kind(1);
+    	uploadfile.setMentoroom_id(r_id);
+    	uploadFileMapper.insert(uploadfile);
+
+    	mentoroomMapper.updateReportcheck1(r_id); //보고서 제출시 +1
+        if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
+        	userMapper.updateReportcheck1(mentoroomMapper.findMentoroom(r_id).getMento_id()); //보고서 제출 멘토
+        return "보고서가 업로드 되었습니다";
+    }
+
+    //파일삭제
+    @RequestMapping("filedelete/{r_id}/{f_id}")
+    public String filedelete(@PathVariable("f_id") int f_id, @PathVariable("r_id") int r_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
+    	if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
+         	userMapper.updateReportcheck2(mentoroomMapper.findMentoroom(r_id).getMento_id()); //보고서 제출 멘토 삭제
+    	uploadFileMapper.delete(f_id);
+    	mentoroomMapper.updateReportcheck2(r_id);
+        return "보고서가 삭제되었습니다";
+    }
+
+    /*
     //보고서 저장
     @Transactional
     @RequestMapping(value="mentoroom/{r_id}/{f_kind}/upload", method=RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("f_kind") int f_kind, Model model, HttpServletRequest request) throws IOException {
+    public String fileupload(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("f_kind") int f_kind, Model model, HttpServletRequest request) throws IllegalStateException, IOException {
             if (uploadFile.getSize() > 0){
             String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
             UploadFile uploadedFile = new UploadFile();
@@ -359,6 +403,7 @@ public class SMController {
         return "보고서가 삭제되었습니다";
     }
 
+
     //파일 다운로드
     @RequestMapping("mentoroom/{r_id}/{f_id}/download")
     public String download(@PathVariable("f_id") int f_id, HttpServletResponse response) throws Exception {
@@ -372,6 +417,7 @@ public class SMController {
         }
         return "파일이 다운로드되었습니다";
     }
+    */
 
     //앱 최초 실행시 user_auth 받아오기
     @RequestMapping("{u_id}/check_userauth")

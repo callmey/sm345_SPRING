@@ -19,6 +19,7 @@ public interface UserMapper {
     void updateEmpower(int user_id);
     void updateLeave(int user_id);
     List<User> selectReportNotYet();
-    void updateReportcheck(int user_id);
+    void updateReportcheck1(int user_id);
+    void updateReportcheck2(int user_id);
     List<User> selectStudent();
 }
