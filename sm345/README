@@ -12,7 +12,6 @@ api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 보내주면 멘
 api/:uid/check_userauth
  -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
 
-
 api/list/:b_id/:a_id/comment/create - 댓글생성 [post] :bid- board_id / a_id- article_id 
 -> comment([insert] article_id, comment_content, comment_writer)
 
@@ -27,6 +26,7 @@ api/list/:a_id/comment - 댓글 목록 [get]
 
 api/list/:b_id/:a_id/CntComment - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
+
 ---------------------
 
 
@@ -48,6 +48,7 @@ api/list/:b_id/:a_id/CntComment - 댓글수 조회
    -post방식. article객체(board_id, article_title, article_content, article_writer)를 받아와 update
 
 
+
 -댓글(:b_id- board_id / :a_id- articled의 id, :c_id- comment의 id)
    api/list/:b_id/:a_id/comment/create - 댓글생성 [post] 
 -> comment([insert] article_id, comment_content, comment_writer)
@@ -64,7 +65,7 @@ api/list/:a_id/comment - 댓글 목록 [get]
 api/list/:b_id/:a_id/CntComment - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
     
-    
+
 -멘토방(rid->mentoroom_id)
   
  api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
