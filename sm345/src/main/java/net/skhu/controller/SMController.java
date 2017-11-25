@@ -198,13 +198,13 @@ public class SMController {
     //게시글 보기
     @RequestMapping("list/{b_id}/{a_id}")
     public @ResponseBody Article article(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id) {
-        int hit = articleMapper.selectHit(a_id); //조회수 조회
+    	Article article = new Article();
+    	int hit = articleMapper.selectHit(a_id); //조회수 조회
         int new_hit = hit+1;
-        Article article = new Article();
         article.setId(a_id);
         article.setArticle_hit(new_hit);
     	articleMapper.updateHit(article); //조회수 증가
-    	return articleMapper.findArticle(a_id);
+	    return articleMapper.findArticle(a_id);
     }
 
     //게시글 생성
@@ -235,7 +235,7 @@ public class SMController {
 
     //댓글 생성
     @RequestMapping(value="list/{b_id}/{a_id}/comment/create", method = RequestMethod.POST)
-    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
+    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request) {
         commentMapper.insert(comment);
     }
     
@@ -252,12 +252,19 @@ public class SMController {
     }
     
     //댓글 목록
-    @RequestMapping("list/{b_id}/{a_id}/{c_id}")
-    public List<Article> comment_list (Model model, HttpServletRequest request, @PathVariable("c_id") int c_id) {
-    	return articleMapper.findComment(c_id);
+    @RequestMapping("list/{a_id}/comment")
+    public List<Comment> comment_list (Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.findComment(a_id);
     }
     
-    //사용자 목록
+    //댓글수 조회
+    @RequestMapping("list/{a_id}/CntComment")
+    public int replyCnt(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.CntComment(a_id);
+    }
+    
+
+	//사용자 목록
     @RequestMapping("admin/user/{auth}")
     public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
         if(auth == 4) //보고서 미제출멘토

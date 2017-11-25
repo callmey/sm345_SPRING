@@ -17,16 +17,9 @@
     WHERE id = #{id}
     </select>
     
-    <select id="findComment" resultType="Article">
-	SELECT a.*, u.user_name, c.*
-    FROM article a JOIN user u ON a.article_writer = u.user_id
-    JOIN comment c ON a.id = c.article_id
-    WHERE c.article_id = #{id}
-    </select>
-    
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT article (board_id, article_title, article_content, article_writer)
-    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer})
+    INSERT article (board_id, article_title, article_content, article_writer, reply_count)
+    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer}, #{reply_count})
   	</insert>
     
 	<update id="update">
@@ -35,13 +28,13 @@
       	article_content = #{article_content}
     WHERE id = #{id}
   	</update>
-  	
+
   	<select id="selectHit" resultType="int">
     SELECT article_hit
     FROM article
     WHERE id = #{id}
     </select>
-  	
+    
   	<update id="updateHit">
     UPDATE article
     SET article_hit = #{article_hit}
