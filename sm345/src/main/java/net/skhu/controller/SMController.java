@@ -116,6 +116,7 @@ public class SMController {
 		String new_password = userService.encryptPasswd(user.getUser_password()); //암호화
 		user.setUser_password(new_password);
 		if(db_user.getLogin_record() == 1){ //로그인 기록이 있으면
+			user.setLogin_record(1);
 			userMapper.updateBeforelogin(user);
 			map.put("title", "비밀번호가 변경되었습니다");
 		}
@@ -379,10 +380,11 @@ public class SMController {
     */
 
   //파일업로드
-    @RequestMapping(value="fileupload/{r_id}", method = RequestMethod.POST)
-    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id ) throws IllegalStateException, IOException {
+    @RequestMapping(value="fileupload/{r_id}/{kind}", method = RequestMethod.POST)
+    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+    	String file_original = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
     	String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
     	PATH = mrequest.getSession().getServletContext().getRealPath("/upload/");
     	File file = new File(path);
@@ -390,83 +392,10 @@ public class SMController {
     	String relPath = "/upload/" + filename;
     	long size = uploadFile.getSize();
     	UploadFile uploadfile;
-    	uploadfile = uploadFileService.create(filename, size, r_id,null,relPath,1);
+    	uploadfile = uploadFileService.create(filename, size, r_id, null, relPath, kind, file_original);
     	uploadFileMapper.insert(uploadfile);
     }
-
-
     /*
-    //보고서 제출
-    @RequestMapping(value="fileupload/3", method = RequestMethod.POST, consumes = "multipart/form-data")
-    public @ResponseBody MultipartFile fileupload3(@RequestBody MultipartFile uploadFile, Model model, MultipartHttpServletRequest mrequest ) throws IllegalStateException, IOException {
-    	System.out.println("실행되니");
-    	System.out.println(uploadFile);
-    	Random random = new Random();
-    	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-    	//String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
-    	//PATH = mrequest.getSession().getServletContext().getRealPath("/upload/");
-    	File file = new File(path);
-    	uploadFile.transferTo(file);
-    	String relPath = "/upload/" + filename;
-    	long size = uploadFile.getSize();
-    	UploadFile uploadfile = new UploadFile();
-    	uploadfile.setFile_size(size);
-    	uploadfile.setFile_name(filename);
-    	uploadfile.setFile_data(null);
-    	uploadfile.setFile_path(relPath);
-    	uploadfile.setFile_kind(1);
-    	uploadfile.setMentoroom_id(27);
-    	uploadFileMapper.insert(uploadfile);
-
-    	mentoroomMapper.updateReportcheck1(27); //보고서 제출시 +1
-        if(mentoroomMapper.findMentoroom(27).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
-        	userMapper.updateReportcheck1(mentoroomMapper.findMentoroom(27).getMento_id()); //보고서 제출 멘토
-
-        return uploadFile;
-    }
-*/
-
-    //보고서 삭제
-    @RequestMapping("filedelete/{r_id}/{f_id}")
-    public String filedelete(@PathVariable("f_id") int f_id, @PathVariable("r_id") int r_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
-    	if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
-         	userMapper.updateReportcheck2(mentoroomMapper.findMentoroom(r_id).getMento_id()); //보고서 제출 멘토 삭제
-    	uploadFileMapper.delete(f_id);
-    	mentoroomMapper.updateReportcheck2(r_id);
-        return "보고서가 삭제되었습니다";
-    }
-
-    /*
-    //보고서 저장
-    @Transactional
-    @RequestMapping(value="mentoroom/{r_id}/{f_kind}/upload", method=RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("f_kind") int f_kind, Model model, HttpServletRequest request) throws IllegalStateException, IOException {
-            if (uploadFile.getSize() > 0){
-            String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-            UploadFile uploadedFile = new UploadFile();
-            uploadedFile.setFile_name(fileName);
-            uploadedFile.setFile_size((int)uploadFile.getSize());
-            //uploadedFile.setTimestamp(new Timestamp(0));
-            uploadedFile.setFile_data(uploadFile.getBytes());
-            uploadedFile.setFile_kind(f_kind);
-            uploadedFile.setMentoroom_id(r_id);
-            uploadFileMapper.insert(uploadedFile);
-
-        mentoroomMapper.updateReportcheck(r_id); //보고서 제출시 +1
-        //if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
-        	//userMapper.updateReportcheck(uploadFile.getMentoroom_id());//유저테이블 업데이트
-            }
-        return "보고서가 업로드 되었습니다";
-    }
-
-    //파일 삭제
-    @RequestMapping("mentoroom/{r_id}/{f_id}/delete")
-    public String filedelete(@PathVariable("f_id") int f_id, Model model, HttpServletRequest request) throws Exception {
-        uploadFileMapper.delete(f_id);
-        //reportcheck
-        return "보고서가 삭제되었습니다";
-    }
-
 
     //파일 다운로드
     @RequestMapping("mentoroom/{r_id}/{f_id}/download")

@@ -11,7 +11,9 @@ public class UploadFile {
 	byte[] file_data;
 	int file_kind;
 	int mentoroom_id;
+	String file_originalname;
 	Timestamp timestamp;
+
 
 	public int getId() {
 		return id;
@@ -61,6 +63,13 @@ public class UploadFile {
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
+	public String getFile_originalname() {
+		return file_originalname;
+	}
+	public void setFile_originalname(String file_originalname) {
+		this.file_originalname = file_originalname;
+	}
+
 
 
 }

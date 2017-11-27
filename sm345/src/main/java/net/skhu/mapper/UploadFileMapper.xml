@@ -5,10 +5,10 @@
 <mapper namespace="net.skhu.mapper.UploadFileMapper">
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT uploadFile (file_name, file_size, file_path, file_data, file_kind, mentoroom_id )
-    VALUES (#{file_name}, #{file_size}, #{file_path}, #{file_data}, #{file_kind}, #{mentoroom_id})
+    INSERT uploadFile (file_name, file_size, file_path, file_data, file_kind, mentoroom_id, file_originalname )
+    VALUES (#{file_name}, #{file_size}, #{file_path}, #{file_data}, #{file_kind}, #{mentoroom_id}, #{file_originalname})
   	</insert>
-    
+  
     <select id="findOne" resultType="UploadFile">
     SELECT *
     FROM uploadFile
