@@ -5,8 +5,8 @@
 <mapper namespace="net.skhu.mapper.MentiMapper">
 
 	<select id="findAll" resultType="Menti">
-    SELECT *
-    FROM menti
+    SELECT m.*, u.user_name
+    FROM menti m JOIN user u ON m.menti_id = u.uesr_id
     WHERE mento_id = #{mento_id}
     </select>
     
