@@ -363,24 +363,8 @@ public class SMController {
         userMapper.updateLeave(u_id);
     }
 
-    /*
-    @Transactional
-    @RequestMapping(value="fileupload/1", method=RequestMethod.POST)
-    public String upload(@RequestBody MultipartFile uploadFile) throws IOException {
-
-            String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-            UploadFile uploadedFile = new UploadFile();
-            uploadedFile.setFileName(fileName);
-            uploadedFile.setFileSize((int)uploadFile.getSize());
-            uploadedFile.setData(uploadFile.getBytes());
-            uploadFileMapper.insert(uploadedFile);
-
-        return "보고서 업로드 성공";
-    }
-    */
-
-  //파일업로드
-    @RequestMapping(value="fileupload/{r_id}/{kind}", method = RequestMethod.POST)
+    //파일업로드
+    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
     public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
@@ -395,22 +379,12 @@ public class SMController {
     	uploadfile = uploadFileService.create(filename, size, r_id, null, relPath, kind, file_original);
     	uploadFileMapper.insert(uploadfile);
     }
-    /*
 
-    //파일 다운로드
-    @RequestMapping("mentoroom/{r_id}/{f_id}/download")
-    public String download(@PathVariable("f_id") int f_id, HttpServletResponse response) throws Exception {
-        UploadFile uploadedfile = uploadFileMapper.findOne(f_id);
-       if (uploadedfile == null) return "파일이 없습니다";
-        String fileName = URLEncoder.encode(uploadedfile.getFile_name(),"UTF-8");
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ";");
-        try (BufferedOutputStream output = new BufferedOutputStream(response.getOutputStream())) {
-            output.write(uploadedfile.getFile_data());
-        }
-        return "파일이 다운로드되었습니다";
+    //보고서, 사진 목록
+    @RequestMapping(value="mentoroom/filelist/{r_id}")
+    public List<UploadFile> file_list(Model model, HttpServletRequest request, @PathVariable("r_id") int r_id) {
+        return uploadFileMapper.findByRoomId(r_id);
     }
-    */
 
     //앱 최초 실행시 user_auth 받아오기
     @RequestMapping("{u_id}/check_userauth")

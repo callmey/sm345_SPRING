@@ -1,15 +1,10 @@
 *API 명세서*
 
 ------- 수정사항 -------
-<멘티신청>
-api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
 
-api/mentoroom/:mid/:uid/menti_cancel - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
+api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] mentoroom_id와 kind(1.보고서 2.사진)을 받아오고, multipartfile 객체로 파일정보를 받아옴
 
-api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아서 멘티목록을 조회 (user_name 조인)
-
-api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
- 
+api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회. 멘토룸에서 kind로 구분해서 사용하면됨
 
 <url수정>
 api/comment/edit - 댓글수정[post] 
@@ -17,6 +12,8 @@ api/comment/edit - 댓글수정[post]
 
 api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
+
+api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
 
 ---------------------
 
@@ -58,8 +55,9 @@ api/mentoroom/:mid/:uid/menti_cancel - 멘티신청취소 [get] :mid- mento_id /
  
 api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아와 멘토목록을 조회
 
-api/mentoroom/:rid/upload - 보고서 제출
-api/mentoroom/:rid/download - 보고서 다운로드
+api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] mentoroom_id와 kind(1.보고서 2.사진)을 받아오고, multipartfile 객체로 파일정보를 받아옴
+
+api/mentoroom/file_list/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회. 멘토룸에서 kind로 구분해서 사용하면됨
 
 
 <관리자>

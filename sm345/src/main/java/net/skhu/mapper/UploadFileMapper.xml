@@ -18,5 +18,11 @@
     <delete id="delete">
     DELETE FROM uploadFile WHERE id = #{id}
   	</delete>
+  	
+  	<select id="findByRoomId" resultType="UploadFile">
+    SELECT *
+    FROM uploadFile
+    WHERE mentoroom_id = #{mentoroom_id}
+    </select>
 
 </mapper>
