@@ -25,15 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Article;
-import net.skhu.dto.Menti;
-import net.skhu.dto.MentoRoomInfo;
+import net.skhu.dto.Comment;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
-import net.skhu.dto.Comment;
-
 import net.skhu.mapper.ArticleMapper;
+import net.skhu.mapper.CommentMapper;
 import net.skhu.mapper.MentiMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
@@ -41,7 +39,6 @@ import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 import net.skhu.mapper.UserMapper;
-import net.skhu.mapper.CommentMapper;
 import net.skhu.service.UserService;
 
 @RestController
@@ -57,7 +54,7 @@ public class SMController {
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
 	@Autowired CommentMapper commentMapper;
-	
+
 	String PATH;
 
 	//로그인
@@ -133,7 +130,6 @@ public class SMController {
 	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
 	public Map<String, Object> mentoroom_create(Model model, @RequestBody Mentoroom mentoroom, HttpServletRequest request) throws UnsupportedEncodingException {
 
-		System.out.println("실행은되냐");
 		Date d = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    String date = sdf.format(d);
@@ -150,7 +146,6 @@ public class SMController {
 		mentoroom.setTeam_semester(semester);
 		String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
 		mentoroom.setMento_name(mento_name);
-		System.out.println("멘토이름"+mento_name);
 		mentoroomMapper.insert(mentoroom);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("title", "멘토신청이 완료되었습니다");
@@ -172,7 +167,6 @@ public class SMController {
 		String y = String.valueOf(year);
 		int yyyy = Integer.parseInt(y.substring(0,4));
 		int s =  Integer.parseInt(y.substring(4,5));
-		System.out.println(yyyy+" "+s);
 		Mentoroom mentoroom = new Mentoroom();
 		mentoroom.setTeam_year(yyyy);
 		mentoroom.setTeam_semester(s);
@@ -187,130 +181,58 @@ public class SMController {
 	}
 
 	//멘토방 승인
-	@RequestMapping(value="mentoroom/{r_id}/confirm", method = RequestMethod.POST)
-	public void mentoroom_confirm(HttpServletRequest request, Model model, @RequestBody Mentoroom mentoroom,  @PathVariable("r_id") int r_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
-		mentoroomMapper.updateTeamconfirm(mentoroom.getMentoroom_id()); //team_confirm 1로 업데이트
-		userMapper.updateUserauth(mentoroom.getMento_id()); //user_auth 1로 업데이트(멘토승격)
+	@RequestMapping("admin/mentoroom/{r_id}/{m_id}/confirm")
+	public void mentoroom_confirm(HttpServletRequest request, Model model, @PathVariable("r_id") int r_id, @PathVariable("m_id") int m_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+		mentoroomMapper.updateTeamconfirm(r_id); //team_confirm 1로 업데이트
+		userMapper.updateUserauth(m_id); //user_auth 1로 업데이트(멘토승격)
 	}
 
 	//멘토방 승인거절
-	@RequestMapping("mentoroom/{r_id}/reject")
+	@RequestMapping("admin/mentoroom/{r_id}/reject")
 	public void mentoroom_reject(HttpServletRequest request, Model model, @PathVariable("r_id") int r_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		mentoroomMapper.deleteMentoroom(r_id);
 	}
-	
-	 //멘토방 설정 데이터
-    @RequestMapping("admin/room_info")
-  	public MentoRoomInfo mentoRoomInfo(Model model, HttpServletRequest request) {
-        return mentoroominfoMapper.findMentoRoomInfo();
-  	}
-
-  	// 멘토방 설정 수정
-  	@RequestMapping(value="admin/room_info/edit", method = RequestMethod.POST)
-    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
-        mentoroominfoMapper.update(mentoroominfo);
-    }
-
-   	// 멘티신청
-   	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_join")
-   	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
-        userMapper.updateMentiauth(uid);
-        Menti menti = new Menti();
-        menti.setMenti_id(uid);
-        menti.setMento_id(mid);
-        mentiMapper.insert(menti);
-        mentoroomMapper.updatePersoncount1(mid);
-        return "멘티신청이 완료되었습니다";
-     }
-
-   	// 멘티신청취소
-   	@RequestMapping(value="mentoroom/{uid}/menti_canceal")
-   	public String menti_canceal(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("rid") int rid) {
-        userMapper.updateMentiCanceal(uid);
-        mentiMapper.delete(uid);
-        mentoroomMapper.updatePersoncount1(rid);
-        return "멘티신청이 취소되었습니다";
-     }
-
-   	//멘티목록
-   	@RequestMapping(value="mentoroom/{m_id}/menti_list")
-   	public List<Menti> menti_list(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
-        return mentiMapper.findAll(m_id);
-     }
 
 	//게시판 목록
-    @RequestMapping("list/{b_id}")
+    @RequestMapping("article/list/{b_id}")
     public List<Article> list(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id) {
         return articleMapper.findAll(b_id);
     }
 
     //게시글 보기
-    @RequestMapping("list/{b_id}/{a_id}")
-    public @ResponseBody Article article(Model model, HttpServletRequest request, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id) {
-        int hit = articleMapper.selectHit(a_id); //조회수 조회
-        int new_hit = hit+1;
-        Article article = new Article();
-        article.setId(a_id);
-        article.setArticle_hit(new_hit);
-    	articleMapper.updateHit(article); //조회수 증가
-    	return articleMapper.findArticle(a_id);
+    @RequestMapping("article/list/{a_id}/{u_id}")
+    public @ResponseBody Article article(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id, @PathVariable("a_id") int a_id) {
+        Article article = articleMapper.findArticle(a_id);
+        if(u_id != article.getArticle_writer())
+        	articleMapper.updateHit(article); //조회수 증가
+    	return article;
     }
 
     //게시글 생성
-    @RequestMapping(value="list/{b_id}/create", method = RequestMethod.POST)
-    public void list_create(@RequestBody Article article, @PathVariable("b_id") int b_id,  Model model, HttpServletRequest request ) {
+    @RequestMapping(value="article/create", method = RequestMethod.POST)
+    public void list_create(@RequestBody Article article, Model model, HttpServletRequest request ) {
         articleMapper.insert(article);
     }
 
     //게시글 수정
-    @RequestMapping(value="list/{b_id}/{a_id}/edit", method = RequestMethod.POST)
-    public String edit(@RequestBody Article article, @PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
+    @RequestMapping(value="article/edit", method = RequestMethod.POST)
+    public String edit(@RequestBody Article article, Model model, HttpServletRequest request ) {
         articleMapper.update(article);
         return "게시글이 수정되었습니다";
     }
 
     //게시글 삭제
-    @RequestMapping("list/{b_id}/{a_id}/delete")
-    public void delete(@PathVariable("b_id") int b_id, @PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
+    @RequestMapping("article/{a_id}/delete")
+    public void delete(@PathVariable("a_id") int a_id, Model model, HttpServletRequest request ) {
         articleMapper.delete(a_id);
     }
 
     //답변 완료
-    @RequestMapping(value="list/{b_id}/{a_id}/answer")
+    @RequestMapping(value="admin/{a_id}/answer")
     public void answer(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
         articleMapper.updateAnswer(a_id);
     }
-    
-    //댓글 생성
-    @RequestMapping(value="comment/create", method = RequestMethod.POST)
-    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request) {
-        commentMapper.insert(comment);
-    }
-    
-    //댓글 수정
-    @RequestMapping(value="comment/edit", method = RequestMethod.POST)
-    public void comment_update(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
-        commentMapper.update(comment);
-    }
-    
-    //댓글 삭제
-    @RequestMapping("comment/delete/{c_id}")
-    public void delete(Model model, @PathVariable("c_id") int c_id, HttpServletRequest request ) {
-        commentMapper.delete(c_id);
-    }
-    
-    //댓글 목록
-    @RequestMapping("comment/list/{a_id}")
-    public List<Comment> comment_list (Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
-    	return commentMapper.findComment(a_id);
-    }
-    
-    //댓글수 조회
-    @RequestMapping("list/CntComment/{a_id}")
-    public int replyCnt(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
-    	return commentMapper.CntComment(a_id);
-    }
-    
+
     //사용자 목록
     @RequestMapping("admin/user/{auth}")
     public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
@@ -322,6 +244,36 @@ public class SMController {
         return list;
     }
 
+    //댓글 생성
+    @RequestMapping(value="comment/create", method = RequestMethod.POST)
+    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request) {
+        commentMapper.insert(comment);
+    }
+
+    //댓글 수정
+    @RequestMapping(value="comment/edit", method = RequestMethod.POST)
+    public void comment_update(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
+        commentMapper.update(comment);
+    }
+
+    //댓글 삭제
+    @RequestMapping("comment/delete/{c_id}")
+    public void delete(Model model, @PathVariable("c_id") int c_id, HttpServletRequest request ) {
+        commentMapper.delete(c_id);
+    }
+
+    //댓글 목록
+    @RequestMapping("comment/list/{a_id}")
+    public List<Comment> comment_list (Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.findComment(a_id);
+    }
+
+    //댓글수 조회
+    @RequestMapping("list/CntComment/{a_id}")
+    public int replyCnt(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.CntComment(a_id);
+    }
+
    	//쪽지함 목록
     @RequestMapping("message/list/{u_id}")
     public List<Message> messagelist(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
@@ -330,12 +282,9 @@ public class SMController {
     }
 
     //쪽지 받는 사람 이름 불러오기
-    @RequestMapping(value = "message/username/{u_id}", method = RequestMethod.POST)
-	public Map<String, Object> to_name(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
-		String to_name = userMapper.selectByUserName(u_id);
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("user_name", to_name);
-		return map;
+    @RequestMapping("message/username/{u_id}")
+	public String to_name(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) throws UnsupportedEncodingException {
+		return userMapper.selectByUserName(u_id);
     }
 
     //쪽지 보내기
@@ -347,7 +296,7 @@ public class SMController {
 
     //쪽지 조회
     @RequestMapping("message/{m_id}")
-    public Message message_(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
+    public Message message(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
         messageMapper.updateReadcheck(m_id); //쪽지읽음으로 표시
     	return messageMapper.findMessage(m_id);
     }
@@ -364,7 +313,7 @@ public class SMController {
         userMapper.updateEmpower(u_id);
     }
 
-    //관리자 권한 해제 (user_auth == 4)
+    //관리자 권한 해제
     @RequestMapping(value="admin/leave/{u_id}")
     public void admin_leave(Model model, HttpServletRequest request, @PathVariable("u_id") int u_id) {
         userMapper.updateLeave(u_id);
@@ -373,6 +322,7 @@ public class SMController {
     //보고서 제출
     @RequestMapping(value="fileupload/{r_id}", method = RequestMethod.POST)
     public String fileupload(@RequestBody MultipartFile uploadFile,@PathVariable("r_id") int r_id, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
+    	System.out.println("실행되니");
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
     	String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
@@ -396,7 +346,7 @@ public class SMController {
         return "보고서가 업로드 되었습니다";
     }
 
-    //파일삭제
+    //보고서 삭제
     @RequestMapping("filedelete/{r_id}/{f_id}")
     public String filedelete(@PathVariable("f_id") int f_id, @PathVariable("r_id") int r_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
     	if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면

@@ -29,15 +29,9 @@
     WHERE id = #{id}
   	</update>
 
-  	<select id="selectHit" resultType="int">
-    SELECT article_hit
-    FROM article
-    WHERE id = #{id}
-    </select>
-    
   	<update id="updateHit">
     UPDATE article
-    SET article_hit = #{article_hit}
+    SET article_hit = #{article_hit} + 1
    	WHERE id = #{id}    
     </update>
 

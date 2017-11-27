@@ -1,17 +1,17 @@
-API 명세서
+*API 명세서*
 
--------수정사항-------
-api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
--> url수정 
+------- 수정사항 -------
+<멘티신청>
+api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
 
-api/mentoroom/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
--> url수정
+api/mentoroom/:mid/:uid/menti_canceal - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
 
-api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 보내주면 멘토목록을 조회
+api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아서 멘티목록을 조회
 
-api/:uid/check_userauth
- -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
+api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
+ 
 
+<url수정>
 -댓글(:c_id- comment의 id)
    api/comment/create - 댓글생성 [post] 
 -> comment([insert] article_id, comment_content, comment_writer)
@@ -28,26 +28,37 @@ api/comment/list/{a_id} - 댓글 목록 [get]
 api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
 
+api/article/create - 게시글 쓰기 [post] article객체를 받아와 insert
+
+api/article/list/:bid - 게시판 목록 [get] board_id를 받아와 리스트 리턴
+
+api/article/list/:aid/:uid - 게시글 보기 [get] article_id를 받아와 user_id를 받아와 article_writer와 비교후 조회수 증가
+   
+api/article/:aid/delete - 게시글 삭제 [get] article_id를 받아와 삭제
+   
+api/article/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
+   
+api/admin/mentoroom/:r_id/:m_id/confirm - 멘토신청승인. post방식에서 get방식으로 바꿈. mento_id와 mentoroom_id를 받아와 team_confirm을 1로 업데이트, user_auth를 1로 업데이트(멘토로승격) 
+
+api/admin/mentoroom/:rid/reject - 멘토승인거절 [get] 해당 mentoroom_id를 받아와 삭제
+
+api/message/username/:uid - 쪽지받는사람이름불러오기. post방식에서 get방식으로 바꿈. 이름(String) 리턴
+  
+
 ---------------------
 
 
+<게시판> (bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
 
--게시판(bid-보드아이디(1.설명소개서 2.공지사항 3.Q&A게시판), aid-게시글아이디, cid-댓글아이디)
-  api/list/:bid
-   -get방식. board_id를 받아와 모두 보내줌
+api/article/list/:bid - 게시판 목록 [get] board_id를 받아와 리스트 리턴
    
-  api/list/:bid/:aid
-   -get방식. board_id와 id를 받아와 모두 보내줌
+api/article/list/:a_id/:u_id - 게시글 보기 [get] article_id를 받아와 user_id를 받아와 article_writer와 비교후 조회수 증가
    
-  api/list/:bid/create
-   -post방식. article객체를 받아와 insert
+api/article/create - 게시글쓰기 [post] article객체를 받아와 insert
    
-  api/list/:bid/:aid/delete
-   -get방식. article_id를 받아와 삭제
+api/article/:aid/delete - 게시글 삭제 [get] article_id를 받아와 삭제
    
-  api/list/:bid/:aid/edit
-   -post방식. article객체(board_id, article_title, article_content, article_writer)를 받아와 update
-
+api/article/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
 
 
 -댓글(:c_id- comment의 id)
@@ -67,65 +78,64 @@ api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
     
 
--멘토방(rid->mentoroom_id)
+<멘토방> (rid->mentoroom_id)
   
- api/mentoroom - 멘토방목록 / 관리자페이지 멘토방목록
-  -get방식. mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
+api/mentoroom - 멘토방목록  [get] mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
  
- api/mentoroom/create - 멘토신청
-  -post방식. 입력폼에 입력된 데이터를 mentoroom객체로 받아옴. 학기와 년도는 date타입으로 현재 시간을 받아와서 저장함.
+api/mentoroom/create - 멘토신청 [post] 입력폼에 입력된 데이터를 mentoroom객체로 받아옴. 학기와 년도는 date타입으로 현재 시간을 받아와서 저장함.
  
- api/mentoroom/:rid - 멘토방 조회
-  -get방식. 해당 mentoroon_id를 받아와 조회 후 모두 리턴.
+api/mentoroom/:rid - 멘토방 조회 [get] 해당 mentoroon_id를 받아와 조회 후 모두 리턴.
   
- api/mentoroom/:rid/confirm - 멘토신청승인
-  -post방식. 해당  mentoroom객체로 mentoroom_id를 받아와 team_confirm을 1로 업데이트 / mentoroom객체로 mento_id를 받아와 user_auth를 1로 업데이트(멘토로승격) 
+api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
   
- api/mentoroom/:rid/reject - 멘토승인거절
-  -get방식. 해당 mentoroom_id를 받아와 db 삭제
+api/mentoroom/:mid/:uid/menti_canceal - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
+ 
+api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아와 멘토목록을 조회
+
+api/mentoroom/:rid/upload - 보고서 제출
+api/mentoroom/:rid/download - 보고서 다운로드
+
+
+<관리자>
+api/admin/user/:auth - 사용자목록  [get] :auth = 앱에서 value 값! (0.전체학생(일반학생+멘토+멘티) 1.멘토 2.멘티 3.관리자 4.보고서제출안한멘토)
+
+api/admin/room_info - 멘토방 설정목록 [get]
+
+api/admin/room_info/edit - 멘토방 설정 수정 [post]
+
+api/admin/mentoroom/:year - 멘토방 목록 [get] 해당년과월을합친숫자를 year로 받아와 목록 리턴
+
+api/admin/mentoroom/:r_id/:m_id/confirm - 멘토신청승인 [get] mento_id와 mentoroom_id를 받아와 team_confirm을 1로 업데이트, user_auth를 1로 업데이트(멘토로승격) 
   
- api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :rid- mentoroom_id / :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
-  
- api/mentoroom/:uid/menti_canceal - 멘티신청취소 [get] rid - mentoroom_id / uid - menti_id , return - 멘티신청이 취소되었습니다
+api/admin/mentoroom/:rid/reject - 멘토승인거절 [get] 해당 mentoroom_id를 받아와 삭제
 
- api/mentoroom/:rid/report/upload - 보고서 제출
- api/mentoroom/:rid/report/download - 보고서 다운로드
+admin/:aid/answer - Q&A 답변완료 [get] answer_complete 1로 업데이트
 
--관리자
- api/admin/user/:auth - 사용자목록  :auth = 앱에서 value 값! (0.전체학생(일반학생+멘토+멘티) 1.멘토 2.멘티 3.관리자 4.보고서제출안한멘토)
-  -get형식. user_auth로 findAll. 
+admin/empower/:uid - 관리자 권한 지정 [get] uid를받아와 user_auth를 3으로 업데이트
 
-api/admin/room_info - 멘토방 설정목록 get 형식
-api/admin/room_info/create - 멘토방 설정 생성 post형식
-api/admin/room_info/delete - 멘토방 설정 삭제 post형식
-
-api/admin/report - 보고서목록
-api/admin/survey - 설문조사
-
-api/admin/
-api/admin/
-
--쪽지함
-api/message/list/:uid - 쪽지함목록  get 형식.  messageMapper.selectByToTd(사용자아이디(u_id)) 리스트로 불러옴.
-api/message/username/:uid - 쪽지함 to_id -> user_name 설정  사용자아이디: uid post형식 
-api/message/create - 쪽지함 생성  post형식 
-api/message/:mid/delete - 쪽지 삭제. get방식. 메세지의 id를 받아와 삭제
-api/message/:mid - 쪽지 조회. get방식. 메세지의 id를 받아와 조회함
+admin/leave/:uid - 관리자 권한 지정 해제 [get] uid를 받아와 user_auth를 4로 업데이트
 
 
--기타
-api/updatepassword - 비밀번호변경
- -post방식. user객체에 변경할 비밀번호와 user_id를 받아옴.
+<쪽지함>
+api/message/list/:uid - 쪽지함목록  [get] user_id를 받아와 쪽지함 리스트 리턴
+
+api/message/username/:uid - 쪽지받는사람이름불러오기 [get] 이름(String) 리턴
+
+api/message/create - 쪽지 쓰기  [post] 
+
+api/message/:mid/delete - 쪽지 삭제 [get] 메세지의 id를 받아와 삭제
+
+api/message/:mid - 쪽지 조회 [get] 메세지의 id를 받아와 조회함
+
+
+<회원정보관련>
+api/updatepassword - 비밀번호변경 [post] user객체에 변경할 비밀번호와 user_id를 받아옴.
   login_record가 1이면 (로그인한적있음-메뉴에 비밀번호변경을 누른상태) 비밀번호를 변경하고,
   login_record가 0이면 (로그인한적없음-최초로그인) 비밀번호 변경 후 user_id, user_auth, user_name을 담아서 보내줌
   
-api/login - 로그인
- -post방식. user객체에 비밀번호와 아이디를 받아옴. 저장되어있는 비밀번호와 입력한 비밀번호가 맞는지 확인 후 user_id, user_auth, user_name을 담아서 보내줌
-  user_auth - 1.멘토 2.멘티 3.관리자
+api/login - 로그인 [post] user객체에 비밀번호와 아이디를 받아옴. 저장되어있는 비밀번호와 입력한 비밀번호가 맞는지 확인 후 user_id, user_auth, user_name을 담아서 보내줌
 
-api/login_record/:uid - 로그인기록조회
- -post방식. user_id를 받아와서 로그인기록을 조회함. + service 내용 추가. 로그인 에러 수정.
+api/login_record - 로그인기록조회 [post] user_id를 받아와서 로그인기록을 조회함. + service 내용 추가
  
-api/:uid/check_userauth
- -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기)
+api/:uid/check_userauth - auth 확인 [get] 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기)
  
