@@ -18,8 +18,8 @@
     </select>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT article (board_id, article_title, article_content, article_writer, reply_count)
-    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer}, #{reply_count})
+    INSERT article (board_id, article_title, article_content, article_writer)
+    VALUES (#{board_id}, #{article_title}, #{article_content}, #{article_writer})
   	</insert>
     
 	<update id="update">

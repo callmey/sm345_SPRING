@@ -53,7 +53,7 @@
     WHERE user_id = #{user_id}
   	</update>
   	
-  	<update id="updateMentiCanceal">
+  	<update id="updateMentiCancel">
   	UPDATE user
   	SET user_auth = 0 
   	WHERE user_id = #{user_id}
