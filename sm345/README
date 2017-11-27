@@ -19,7 +19,7 @@ api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와�
 api/comment/edit - 댓글수정[post] 
 -> comment([update] article_id, comment_content, comment_writer)
 
-api/delete/:c_id - 댓글 삭제[get]
+api/comment/delete/:c_id - 댓글 삭제[get]
 -> comment의 id를 받아와 delete. 
 
 api/comment/list/{a_id} - 댓글 목록 [get]
@@ -68,7 +68,7 @@ api/article/edit - 게시글 수정 [post] article객체(board_id, article_title
 api/comment/edit - 댓글수정[post] 
 -> comment([update] article_id, comment_content, comment_writer)
 
-api/delete/:c_id - 댓글 삭제[get]
+api/comment/delete/:c_id - 댓글 삭제[get]
 -> comment의 id를 받아와 delete. 
 
 api/comment/list/{a_id} - 댓글 목록 [get]

@@ -6,9 +6,9 @@ public class Comment {
 	int id;
 	int article_id;
 	String comment_content;
-	String comment_writer;
+	int comment_writer;
 	Timestamp timestamp;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -21,17 +21,17 @@ public class Comment {
 	public void setArticle_id(int article_id) {
 		this.article_id = article_id;
 	}
-	
+
 	public String getComment_content() {
 		return comment_content;
 	}
 	public void setComment_content(String comment_content) {
 		this.comment_content = comment_content;
 	}
-	public String getComment_writer() {
+	public int getComment_writer() {
 		return comment_writer;
 	}
-	public void setComment_writer(String comment_writer) {
+	public void setComment_writer(int comment_writer) {
 		this.comment_writer = comment_writer;
 	}
 	public Timestamp getTimestamp() {

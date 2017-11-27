@@ -320,8 +320,8 @@ public class SMController {
     }
 
     //보고서 제출
-    @RequestMapping(value="fileupload/{r_id}", method = RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile,@PathVariable("r_id") int r_id, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
+    @RequestMapping(value="fileupload", method = RequestMethod.POST)
+    public String fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
     	System.out.println("실행되니");
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
@@ -337,12 +337,12 @@ public class SMController {
     	uploadfile.setFile_data(null);
     	uploadfile.setFile_path(relPath);
     	uploadfile.setFile_kind(1);
-    	uploadfile.setMentoroom_id(r_id);
+    	uploadfile.setMentoroom_id(27);
     	uploadFileMapper.insert(uploadfile);
 
-    	mentoroomMapper.updateReportcheck1(r_id); //보고서 제출시 +1
-        if(mentoroomMapper.findMentoroom(r_id).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
-        	userMapper.updateReportcheck1(mentoroomMapper.findMentoroom(r_id).getMento_id()); //보고서 제출 멘토
+    	mentoroomMapper.updateReportcheck1(27); //보고서 제출시 +1
+        if(mentoroomMapper.findMentoroom(27).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
+        	userMapper.updateReportcheck1(mentoroomMapper.findMentoroom(27).getMento_id()); //보고서 제출 멘토
         return "보고서가 업로드 되었습니다";
     }
 
