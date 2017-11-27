@@ -2,9 +2,11 @@
 
 ------- 수정사항 -------
 
-api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] mentoroom_id와 kind(1.보고서 2.사진)을 받아오고, multipartfile 객체로 파일정보를 받아옴
+api/mentoroom/fileupload - 파일 업로드 [post] uploadFile객체(file_name, file_content, mentoroom_id, file_kind)를 받아와 insert
 
-api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회. 멘토룸에서 kind로 구분해서 사용하면됨
+api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회
+
+api/mentoroom/filedelete/:f_id - 파일 삭제 [get] fild_id를 받아와 삭제
 
 <url수정>
 api/comment/edit - 댓글수정[post] 
@@ -55,9 +57,11 @@ api/mentoroom/:mid/:uid/menti_cancel - 멘티신청취소 [get] :mid- mento_id /
  
 api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아와 멘토목록을 조회
 
-api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] mentoroom_id와 kind(1.보고서 2.사진)을 받아오고, multipartfile 객체로 파일정보를 받아옴
+api/mentoroom/fileupload - 파일 업로드 [post] uploadFile객체(file_name, file_content, mentoroom_id, file_kind)를 받아와 insert
 
-api/mentoroom/file_list/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회. 멘토룸에서 kind로 구분해서 사용하면됨
+api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회. 멘토룸에서 kind로 구분해서 사용하면됨
+
+api/mentoroom/filedelete/:f_id - 파일 삭제 [get] fild_id를 받아와 삭제
 
 
 <관리자>

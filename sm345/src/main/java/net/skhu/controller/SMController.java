@@ -1,15 +1,12 @@
 package net.skhu.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Comment;
@@ -41,7 +36,6 @@ import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 import net.skhu.mapper.UserMapper;
-import net.skhu.service.UploadFileService;
 import net.skhu.service.UserService;
 
 @RestController
@@ -57,9 +51,6 @@ public class SMController {
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
 	@Autowired CommentMapper commentMapper;
-	@Autowired UploadFileService uploadFileService;
-
-	String PATH;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -363,6 +354,7 @@ public class SMController {
         userMapper.updateLeave(u_id);
     }
 
+    /*
     //파일업로드
     @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
     public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
@@ -378,6 +370,30 @@ public class SMController {
     	UploadFile uploadfile;
     	uploadfile = uploadFileService.create(filename, size, r_id, null, relPath, kind, file_original);
     	uploadFileMapper.insert(uploadfile);
+
+    	mentoroomMapper.updateReportcheck1(r_id);
+    	if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
+    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
+
+    	//목록별로볼수있도록 등록하기
+    }
+    */
+
+  //파일업로드
+    @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
+    public String fileupload(@RequestBody UploadFile uploadFile, Model model,HttpServletRequest request) throws IllegalStateException, IOException {
+    	UploadFile uploadfile = new UploadFile();
+    	uploadfile.setFile_name(uploadFile.getFile_name());
+    	uploadfile.setFile_content(uploadFile.getFile_content());
+    	uploadfile.setFile_kind(uploadFile.getFile_kind());
+    	uploadfile.setMentoroom_id(uploadFile.getMentoroom_id());
+    	uploadfile.setFile_type(uploadFile.getFile_type());
+    	uploadFileMapper.insert(uploadfile);
+    	mentoroomMapper.updateReportcheck1(uploadFile.getMentoroom_id());
+    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
+
+    	//목록별로볼수있도록 등록하기
+    	return "파일이 업로드 되었습니다";
     }
 
     //보고서, 사진 목록
@@ -386,6 +402,27 @@ public class SMController {
         return uploadFileMapper.findByRoomId(r_id);
     }
 
+    //파일 삭제
+    @RequestMapping(value="mentoroom/filedelete/{f_id}", method = RequestMethod.POST)
+    public String filedelete(@PathVariable("f_id") int f_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
+    	uploadFileMapper.delete(f_id);
+    	return "파일이 삭제되었습니다";
+   }
+
+    /*
+    //파일 다운로드
+    @RequestMapping("file/download")
+    public void download(@RequestParam("id") int id, HttpServletResponse response) throws Exception {
+        UploadedFile uploadedfile = uploadedFileRepository.findOne(id);
+       if (uploadedfile == null) return;
+        String fileName = URLEncoder.encode(uploadedfile.getFileName(),"UTF-8");
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ";");
+        try (BufferedOutputStream output = new BufferedOutputStream(response.getOutputStream())) {
+            output.write(uploadedfile.getData());
+        }
+    }
+*/
     //앱 최초 실행시 user_auth 받아오기
     @RequestMapping("{u_id}/check_userauth")
     public int check_userauth(@PathVariable("u_id") int u_id, Model model, HttpServletRequest request) throws Exception {
