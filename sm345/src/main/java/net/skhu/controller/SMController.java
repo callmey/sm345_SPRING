@@ -403,7 +403,7 @@ public class SMController {
     }
 
     //파일 삭제
-    @RequestMapping(value="mentoroom/filedelete/{f_id}", method = RequestMethod.POST)
+    @RequestMapping(value="mentoroom/filedelete/{f_id}")
     public String filedelete(@PathVariable("f_id") int f_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
     	uploadFileMapper.delete(f_id);
     	return "파일이 삭제되었습니다";

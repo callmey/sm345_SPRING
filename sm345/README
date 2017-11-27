@@ -2,11 +2,11 @@
 
 ------- 수정사항 -------
 
-api/mentoroom/fileupload - 파일 업로드 [post] uploadFile객체(file_name, file_content, mentoroom_id, file_kind)를 받아와 insert
+api/mentoroom/fileupload - 파일 업로드 [post] uploadFile객체(file_name, file_content, mentoroom_id, file_kind, file_type)를 받아와 insert
 
 api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회
 
-api/mentoroom/filedelete/:f_id - 파일 삭제 [get] fild_id를 받아와 삭제
+api/mentoroom/filedelete/:f_id - 파일 삭제 [get] file_id를 받아와 삭제
 
 <url수정>
 api/comment/edit - 댓글수정[post] 
