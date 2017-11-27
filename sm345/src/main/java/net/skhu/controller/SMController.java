@@ -379,8 +379,8 @@ public class SMController {
     */
 
   //파일업로드
-    @RequestMapping(value="fileupload", method = RequestMethod.POST)
-    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
+    @RequestMapping(value="fileupload/{r_id}", method = RequestMethod.POST)
+    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id ) throws IllegalStateException, IOException {
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
     	String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
@@ -390,7 +390,7 @@ public class SMController {
     	String relPath = "/upload/" + filename;
     	long size = uploadFile.getSize();
     	UploadFile uploadfile;
-    	uploadfile = uploadFileService.create(filename, size, 27,null,relPath,1);
+    	uploadfile = uploadFileService.create(filename, size, r_id,null,relPath,1);
     	uploadFileMapper.insert(uploadfile);
     }
 
