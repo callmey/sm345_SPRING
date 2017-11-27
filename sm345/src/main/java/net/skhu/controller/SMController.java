@@ -25,13 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Article;
-import net.skhu.dto.Menti;
-import net.skhu.dto.MentoRoomInfo;
+import net.skhu.dto.Comment;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
+import net.skhu.mapper.CommentMapper;
 import net.skhu.mapper.MentiMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
@@ -53,6 +53,7 @@ public class SMController {
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
+	@Autowired CommentMapper commentMapper;
 
 	String PATH;
 
@@ -243,44 +244,35 @@ public class SMController {
         return list;
     }
 
-    //멘토방 설정 데이터
-    @RequestMapping("admin/room_info")
-  	public MentoRoomInfo mentoRoomInfo(Model model, HttpServletRequest request) {
-        return mentoroominfoMapper.findMentoRoomInfo();
-  	}
-
-  	// 멘토방 설정 수정
-  	@RequestMapping(value="admin/room_info/edit", method = RequestMethod.POST)
-    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
-        mentoroominfoMapper.update(mentoroominfo);
+    //댓글 생성
+    @RequestMapping(value="list/{b_id}/{a_id}/comment/create", method = RequestMethod.POST)
+    public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request) {
+        commentMapper.insert(comment);
     }
 
-   	// 멘티신청
-   	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_join")
-   	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
-        userMapper.updateMentiauth(uid);
-        Menti menti = new Menti();
-        menti.setMenti_id(uid);
-        menti.setMento_id(mid);
-        mentiMapper.insert(menti);
-        mentoroomMapper.updatePersoncount1(mid);
-        return "멘티신청이 완료되었습니다";
-     }
+    //댓글 수정
+    @RequestMapping(value="list/{b_id}/{a_id}/{c_id}/edit", method = RequestMethod.POST)
+    public void comment_update(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
+        commentMapper.update(comment);
+    }
 
-   	// 멘티신청취소
-   	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_canceal")
-   	public String menti_canceal(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("mid") int mid) {
-        userMapper.updateMentiCanceal(uid);
-        mentiMapper.delete(uid);
-        mentoroomMapper.updatePersoncount2(mid);
-        return "멘티신청이 취소되었습니다";
-     }
+    //댓글 삭제
+    @RequestMapping("list/{b_id}/{a_id}/{c_id}/delete")
+    public void delete(Model model, @PathVariable("c_id") int c_id, HttpServletRequest request ) {
+        commentMapper.delete(c_id);
+    }
 
-   	//멘티목록
-   	@RequestMapping(value="mentoroom/{m_id}/menti_list")
-   	public List<Menti> menti_list(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
-        return mentiMapper.findAll(m_id);
-     }
+    //댓글 목록
+    @RequestMapping("list/{a_id}/comment")
+    public List<Comment> comment_list (Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.findComment(a_id);
+    }
+
+    //댓글수 조회
+    @RequestMapping("list/{a_id}/CntComment")
+    public int replyCnt(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
+    	return commentMapper.CntComment(a_id);
+    }
 
    	//쪽지함 목록
     @RequestMapping("message/list/{u_id}")

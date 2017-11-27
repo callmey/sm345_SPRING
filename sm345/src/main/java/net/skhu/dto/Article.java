@@ -75,7 +75,4 @@ public class Article {
 	public void setAnswer_complete(int answer_complete) {
 		this.answer_complete = answer_complete;
 	}
-
-
-
 }
