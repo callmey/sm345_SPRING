@@ -41,6 +41,7 @@ import net.skhu.mapper.MessageMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 import net.skhu.mapper.UserMapper;
+import net.skhu.service.UploadFileService;
 import net.skhu.service.UserService;
 
 @RestController
@@ -56,6 +57,7 @@ public class SMController {
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
 	@Autowired CommentMapper commentMapper;
+	@Autowired UploadFileService uploadFileService;
 
 	String PATH;
 
@@ -203,14 +205,16 @@ public class SMController {
 	menti.setMenti_id(uid);
 	menti.setMento_id(mid);
 	mentiMapper.insert(menti);
+	mentoroomMapper.updatePersoncount1(mid);
 	return "멘티신청이 완료되었습니다";
 	}
 
 	// 멘티신청취소
-	@RequestMapping(value="mentoroom/{rid}/{uid}/menti_cancel")
-	public String menti_cancel(Model model, HttpServletRequest request, @PathVariable("uid") int uid) {
+	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_cancel")
+	public String menti_cancel(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("mid") int mid) {
 	userMapper.updateMentiCancel(uid);
 	mentiMapper.delete(uid);
+	mentoroomMapper.updatePersoncount2(mid);
 	return "멘티신청이 취소되었습니다";
 	}
 
@@ -358,14 +362,49 @@ public class SMController {
         userMapper.updateLeave(u_id);
     }
 
-    //보고서 제출
+    /*
+    @Transactional
+    @RequestMapping(value="fileupload/1", method=RequestMethod.POST)
+    public String upload(@RequestBody MultipartFile uploadFile) throws IOException {
+
+            String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+            UploadFile uploadedFile = new UploadFile();
+            uploadedFile.setFileName(fileName);
+            uploadedFile.setFileSize((int)uploadFile.getSize());
+            uploadedFile.setData(uploadFile.getBytes());
+            uploadFileMapper.insert(uploadedFile);
+
+        return "보고서 업로드 성공";
+    }
+    */
+
+  //파일업로드
     @RequestMapping(value="fileupload", method = RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
-    	System.out.println("실행되니");
+    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request ) throws IllegalStateException, IOException {
     	Random random = new Random();
     	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
     	String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
     	PATH = mrequest.getSession().getServletContext().getRealPath("/upload/");
+    	File file = new File(path);
+    	uploadFile.transferTo(file);
+    	String relPath = "/upload/" + filename;
+    	long size = uploadFile.getSize();
+    	UploadFile uploadfile;
+    	uploadfile = uploadFileService.create(filename, size, 27,null,relPath,1);
+    	uploadFileMapper.insert(uploadfile);
+    }
+
+
+    /*
+    //보고서 제출
+    @RequestMapping(value="fileupload/3", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public @ResponseBody MultipartFile fileupload3(@RequestBody MultipartFile uploadFile, Model model, MultipartHttpServletRequest mrequest ) throws IllegalStateException, IOException {
+    	System.out.println("실행되니");
+    	System.out.println(uploadFile);
+    	Random random = new Random();
+    	String filename=random.nextInt()+Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+    	//String path = mrequest.getSession().getServletContext().getRealPath("/upload/")+filename;
+    	//PATH = mrequest.getSession().getServletContext().getRealPath("/upload/");
     	File file = new File(path);
     	uploadFile.transferTo(file);
     	String relPath = "/upload/" + filename;
@@ -382,8 +421,10 @@ public class SMController {
     	mentoroomMapper.updateReportcheck1(27); //보고서 제출시 +1
         if(mentoroomMapper.findMentoroom(27).getReport_check() == Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number())) //보고서제출횟수와 모임횟수가 같다면
         	userMapper.updateReportcheck1(mentoroomMapper.findMentoroom(27).getMento_id()); //보고서 제출 멘토
-        return "보고서가 업로드 되었습니다";
+
+        return uploadFile;
     }
+*/
 
     //보고서 삭제
     @RequestMapping("filedelete/{r_id}/{f_id}")
