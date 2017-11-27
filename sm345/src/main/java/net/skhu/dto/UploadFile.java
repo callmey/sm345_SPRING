@@ -1,12 +1,13 @@
 package net.skhu.dto;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 public class UploadFile {
 
 	int id;
 	String file_name; //중복처리방지를 위한 파일 이름
-	byte[] file_content;
+	Blob file_content;
 	int file_kind;
 	int mentoroom_id;
 	int file_state;
@@ -25,10 +26,10 @@ public class UploadFile {
 	public void setFile_name(String file_name) {
 		this.file_name = file_name;
 	}
-	public byte[] getFile_content() {
+	public Blob getFile_content() {
 		return file_content;
 	}
-	public void setFile_content(byte[] file_content) {
+	public void setFile_content(Blob file_content) {
 		this.file_content = file_content;
 	}
 	public int getFile_kind() {
