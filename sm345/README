@@ -12,19 +12,20 @@ api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 보내주면 멘
 api/:uid/check_userauth
  -get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
 
-api/list/:b_id/:a_id/comment/create - 댓글생성 [post] :bid- board_id / a_id- article_id 
+-댓글(:c_id- comment의 id)
+   api/comment/create - 댓글생성 [post] 
 -> comment([insert] article_id, comment_content, comment_writer)
 
-api/list/:b_id/:a_id/c_id/edit - 댓글수정[post] :cid- comment의 id
+api/comment/edit - 댓글수정[post] 
 -> comment([update] article_id, comment_content, comment_writer)
 
-api/list/:b_id/:a_id/c_id/delete - 댓글 삭제[get]
+api/delete/:c_id - 댓글 삭제[get]
 -> comment의 id를 받아와 delete. 
 
-api/list/:a_id/comment - 댓글 목록 [get]
+api/comment/list/{a_id} - 댓글 목록 [get]
 -> article_id로 List 반환
 
-api/list/:b_id/:a_id/CntComment - 댓글수 조회
+api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
 
 ---------------------
@@ -49,20 +50,20 @@ api/list/:b_id/:a_id/CntComment - 댓글수 조회
 
 
 
--댓글(:b_id- board_id / :a_id- articled의 id, :c_id- comment의 id)
-   api/list/:b_id/:a_id/comment/create - 댓글생성 [post] 
+-댓글(:c_id- comment의 id)
+   api/comment/create - 댓글생성 [post] 
 -> comment([insert] article_id, comment_content, comment_writer)
 
-api/list/:b_id/:a_id/c_id/edit - 댓글수정[post] 
+api/comment/edit - 댓글수정[post] 
 -> comment([update] article_id, comment_content, comment_writer)
 
-api/list/:b_id/:a_id/c_id/delete - 댓글 삭제[get]
+api/delete/:c_id - 댓글 삭제[get]
 -> comment의 id를 받아와 delete. 
 
-api/list/:a_id/comment - 댓글 목록 [get]
+api/comment/list/{a_id} - 댓글 목록 [get]
 -> article_id로 List 반환
 
-api/list/:b_id/:a_id/CntComment - 댓글수 조회
+api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
     
 

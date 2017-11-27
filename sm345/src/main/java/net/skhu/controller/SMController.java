@@ -282,31 +282,31 @@ public class SMController {
     }
     
     //댓글 생성
-    @RequestMapping(value="list/{b_id}/{a_id}/comment/create", method = RequestMethod.POST)
+    @RequestMapping(value="comment/create", method = RequestMethod.POST)
     public void comment_create(@RequestBody Comment comment, Model model, HttpServletRequest request) {
         commentMapper.insert(comment);
     }
     
     //댓글 수정
-    @RequestMapping(value="list/{b_id}/{a_id}/{c_id}/edit", method = RequestMethod.POST)
+    @RequestMapping(value="comment/edit", method = RequestMethod.POST)
     public void comment_update(@RequestBody Comment comment, Model model, HttpServletRequest request ) {
         commentMapper.update(comment);
     }
     
     //댓글 삭제
-    @RequestMapping("list/{b_id}/{a_id}/{c_id}/delete")
+    @RequestMapping("comment/delete/{c_id}")
     public void delete(Model model, @PathVariable("c_id") int c_id, HttpServletRequest request ) {
         commentMapper.delete(c_id);
     }
     
     //댓글 목록
-    @RequestMapping("list/{a_id}/comment")
+    @RequestMapping("comment/list/{a_id}")
     public List<Comment> comment_list (Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
     	return commentMapper.findComment(a_id);
     }
     
     //댓글수 조회
-    @RequestMapping("list/{a_id}/CntComment")
+    @RequestMapping("list/CntComment/{a_id}")
     public int replyCnt(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
     	return commentMapper.CntComment(a_id);
     }
