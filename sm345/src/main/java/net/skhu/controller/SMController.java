@@ -382,16 +382,9 @@ public class SMController {
   //파일업로드
     @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
     public String fileupload(@RequestBody UploadFile uploadFile, Model model,HttpServletRequest request) throws IllegalStateException, IOException {
-    	UploadFile uploadfile = new UploadFile();
-    	uploadfile.setFile_name(uploadFile.getFile_name());
-    	uploadfile.setFile_content(uploadFile.getFile_content());
-    	uploadfile.setFile_kind(uploadFile.getFile_kind());
-    	uploadfile.setMentoroom_id(uploadFile.getMentoroom_id());
-    	uploadfile.setFile_type(uploadFile.getFile_type());
-    	uploadFileMapper.insert(uploadfile);
+    	uploadFileMapper.insert(uploadFile);
     	mentoroomMapper.updateReportcheck1(uploadFile.getMentoroom_id());
     	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
-
     	//목록별로볼수있도록 등록하기
     	return "파일이 업로드 되었습니다";
     }
