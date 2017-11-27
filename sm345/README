@@ -1,6 +1,7 @@
 *API 명세서*
 
 ------- 수정사항 -------
+<멘티신청>
 api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
 
 api/mentoroom/:mid/:uid/menti_canceal - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
@@ -19,7 +20,7 @@ api/article/list/:aid/:uid - 게시글 보기 [get] article_id를 받아와 user
    
 api/article/:aid/delete - 게시글 삭제 [get] article_id를 받아와 삭제
    
-api/aritcle/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
+api/article/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
    
 api/admin/mentoroom/:r_id/:m_id/confirm - 멘토신청승인. post방식에서 get방식으로 바꿈. mento_id와 mentoroom_id를 받아와 team_confirm을 1로 업데이트, user_auth를 1로 업데이트(멘토로승격) 
 
@@ -65,7 +66,7 @@ api/list/:a_id/comment - 댓글 목록 [get] -> article_id로 List 반환
 api/list/:b_id/:a_id/CntComment - 댓글수 조회 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
     
 
--멘토방(rid->mentoroom_id)
+<멘토방> (rid->mentoroom_id)
   
 api/mentoroom - 멘토방목록  [get] mentoroom의 모든 디비를 리스트 형식으로 긁어옴.
  
