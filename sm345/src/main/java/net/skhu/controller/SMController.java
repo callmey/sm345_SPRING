@@ -196,7 +196,7 @@ public class SMController {
 	}
 
 	// 멘티신청
-	@RequestMapping(value="mentoroom/{rid}/{mid}/{uid}/menti_join")
+	@RequestMapping(value="mentoroom/{mid}/{uid}/menti_join")
 	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
 	userMapper.updateMentiauth(uid);
 	Menti menti = new Menti();
