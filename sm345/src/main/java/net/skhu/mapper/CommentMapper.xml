@@ -22,9 +22,7 @@
 	
 	<update id="update">
     UPDATE comment
-    SET article_id = #{article_id}, 
-      	comment_content = #{comment_content},
-      	comment_writer = #{comment_writer}
+    SET comment_content = #{comment_content}
     WHERE id = #{id}
   	</update>
   	
