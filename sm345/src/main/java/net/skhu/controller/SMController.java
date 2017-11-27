@@ -30,6 +30,7 @@ import net.skhu.dto.Mentoroom;
 import net.skhu.dto.Message;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
+import net.skhu.dto.Menti;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.CommentMapper;
 import net.skhu.mapper.MentiMapper;
@@ -191,6 +192,31 @@ public class SMController {
 	@RequestMapping("admin/mentoroom/{r_id}/reject")
 	public void mentoroom_reject(HttpServletRequest request, Model model, @PathVariable("r_id") int r_id) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException {
 		mentoroomMapper.deleteMentoroom(r_id);
+	}
+	
+	// 멘티신청
+	@RequestMapping(value="mentoroom/{rid}/{mid}/{uid}/menti_join")
+	public String menti_join(Model model, HttpServletRequest request, @PathVariable("mid") int mid, @PathVariable("uid") int uid) {
+	userMapper.updateMentiauth(uid);
+	Menti menti = new Menti();
+	menti.setMenti_id(uid);
+	menti.setMento_id(mid);
+	mentiMapper.insert(menti);
+	return "멘티신청이 완료되었습니다";
+	}
+
+	// 멘티신청취소
+	@RequestMapping(value="mentoroom/{rid}/{uid}/menti_cancel")
+	public String menti_cancel(Model model, HttpServletRequest request, @PathVariable("uid") int uid) {
+	userMapper.updateMentiCancel(uid);
+	mentiMapper.delete(uid);
+	return "멘티신청이 취소되었습니다";
+	}
+	
+	//멘티목록
+	@RequestMapping(value="mentoroom/{m_id}/menti_list")
+	public List<Menti> menti_list(Model model, HttpServletRequest request, @PathVariable("m_id") int m_id) {
+	return mentiMapper.findAll(m_id);
 	}
 
 	//게시판 목록
