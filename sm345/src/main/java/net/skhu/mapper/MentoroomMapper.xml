@@ -60,7 +60,7 @@
   	<update id="updatePersoncount2">
     UPDATE mentoroom
     SET person_count = person_count - 1
-    WHERE mentoroom_id = #{mentoroom_id}
+    WHERE mento_id = #{mento_id}
   	</update>
     
 </mapper>
