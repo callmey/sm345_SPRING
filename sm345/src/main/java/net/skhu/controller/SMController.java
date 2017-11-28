@@ -2,6 +2,7 @@ package net.skhu.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Comment;
@@ -379,7 +382,7 @@ public class SMController {
     	//목록별로볼수있도록 등록하기
     }
     */
-
+/*
   //파일업로드
     @Transactional
     @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
@@ -402,6 +405,26 @@ public class SMController {
     	//목록별로볼수있도록 등록하기
     	return "파일이 업로드 되었습니다";
     }
+*/
+    //파일 업로드
+    @Transactional
+    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
+    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
+    	String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+    	UploadFile uf = new UploadFile();
+
+    	uf.setFile_name(file_name);
+    	uf.setFile_data(uploadFile.getBytes());
+    	uf.setFile_type(uploadFile.getContentType());
+    	uf.setFile_kind(kind);
+    	uf.setMentoroom_id(r_id);
+    	uploadFileMapper.insert(uf);
+
+    	mentoroomMapper.updateReportcheck1(r_id);
+    	//if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
+    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
+    	//목록별로볼수있도록 등록하기
+    }
 
     //보고서, 사진 목록
     @RequestMapping(value="mentoroom/filelist/{r_id}")
@@ -410,9 +433,10 @@ public class SMController {
     }
 
     //파일 삭제
-    @RequestMapping(value="mentoroom/filedelete/{f_id}")
-    public String filedelete(@PathVariable("f_id") int f_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
+    @RequestMapping(value="mentoroom/filedelete/{r_id}/{f_id}")
+    public String filedelete(@PathVariable("r_id") int r_id, @PathVariable("f_id") int f_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
     	uploadFileMapper.delete(f_id);
+    	mentoroomMapper.updateReportcheck2(r_id);
     	return "파일이 삭제되었습니다";
    }
 
