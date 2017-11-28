@@ -6,7 +6,7 @@ public class UploadFile {
 
 	int id;
 	String file_name; //중복처리방지를 위한 파일 이름
-	byte[] file_content;
+	//byte[] file_content;
 	int file_kind;
 	int mentoroom_id;
 	int file_state;
@@ -55,12 +55,12 @@ public class UploadFile {
 	public void setFile_type(String file_type) {
 		this.file_type = file_type;
 	}
-	public byte[] getFile_content() {
-		return file_content;
-	}
-	public void setFile_content(byte[] file_content) {
-		this.file_content = file_content;
-	}
+//	public byte[] getFile_content() {
+//		return file_content;
+//	}
+//	public void setFile_content(byte[] file_content) {
+//		this.file_content = file_content;
+//	}
 
 
 

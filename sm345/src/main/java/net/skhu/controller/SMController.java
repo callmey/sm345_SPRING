@@ -2,7 +2,6 @@ package net.skhu.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import net.skhu.dto.Article;
 import net.skhu.dto.Comment;
@@ -385,21 +383,20 @@ public class SMController {
   //파일업로드
     @Transactional
     @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile) throws IOException {
-    	if(uploadFile == null)
-    		return "실패";
-    	if(uploadFile.getBytes() == null)
-    		return "바이트널";
-    	if(uploadFile.getOriginalFilename() == null)
-    		return "이름널";
-    	String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-        UploadFile uploadedFile = new UploadFile();
-        uploadedFile.setFile_name(fileName);
-        uploadedFile.setFile_content(uploadFile.getBytes());
-        uploadedFile.setFile_kind(1);
-    	uploadedFile.setMentoroom_id(26);
-    	uploadedFile.setFile_type("html");
-    	uploadFileMapper.insert(uploadedFile);
+    public String fileupload(@RequestBody UploadFile uploadFile) throws IOException {
+//    	if(uploadFile == null)
+//    		return "실패";
+//    	if(uploadFile.getFile_content() == null)
+//    		return "바이트널";
+//    	if(uploadFile.getFile_name() == null)
+//    		return "이름널";
+//
+    	UploadFile f = new UploadFile();
+        f.setFile_name(uploadFile.getFile_name());
+        f.setFile_kind(1);
+    	f.setMentoroom_id(26);
+    	f.setFile_type("html");
+    	uploadFileMapper.insert(f);
     	//mentoroomMapper.updateReportcheck1(uploadFile.getMentoroom_id());
     	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
     	//목록별로볼수있도록 등록하기
