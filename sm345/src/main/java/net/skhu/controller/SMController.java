@@ -386,6 +386,12 @@ public class SMController {
     @Transactional
     @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
     public String fileupload(@RequestBody MultipartFile uploadFile) throws IOException {
+    	if(uploadFile == null)
+    		return "실패";
+    	if(uploadFile.getBytes() == null)
+    		return "바이트널";
+    	if(uploadFile.getOriginalFilename() == null)
+    		return "이름널";
     	String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
         UploadFile uploadedFile = new UploadFile();
         uploadedFile.setFile_name(fileName);
