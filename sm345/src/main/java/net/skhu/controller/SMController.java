@@ -385,7 +385,7 @@ public class SMController {
   //파일업로드
     @Transactional
     @RequestMapping(value="mentoroom/fileupload", method = RequestMethod.POST)
-    public String fileupload(@RequestBody MultipartFile uploadFile) throws IllegalStateException, IOException {
+    public String fileupload(@RequestBody MultipartFile uploadFile) throws IOException {
     	String fileName = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
         UploadFile uploadedFile = new UploadFile();
         uploadedFile.setFile_name(fileName);
