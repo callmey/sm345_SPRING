@@ -1,49 +1,21 @@
 *API 명세서*
 
 ------- 수정사항 -------
-<멘티신청>
-api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
 
-api/mentoroom/:mid/:uid/menti_canceal - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
+api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] MultipartFile를 받아와(file_name, file_data(file_content에서 수정함), file_type)를 받아와 insert / url로 mentoroom_id와 file_kind를 받아옴
 
-api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아서 멘티목록을 조회
+api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회
 
-api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
- 
+api/mentoroom/filedelete/:r_id/:f_id - 파일 삭제 [get] file_id를 받아와 삭제, mentoroom_id를 받아와 report_check를 -1
 
 <url수정>
--댓글(:c_id- comment의 id)
-   api/comment/create - 댓글생성 [post] 
--> comment([insert] article_id, comment_content, comment_writer)
-
 api/comment/edit - 댓글수정[post] 
 -> comment([update] article_id, comment_content, comment_writer)
-
-api/delete/:c_id - 댓글 삭제[get]
--> comment의 id를 받아와 delete. 
-
-api/comment/list/{a_id} - 댓글 목록 [get]
--> article_id로 List 반환
 
 api/CntComment/{a_id} - 댓글수 조회
 -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
 
-api/article/create - 게시글 쓰기 [post] article객체를 받아와 insert
-
-api/article/list/:bid - 게시판 목록 [get] board_id를 받아와 리스트 리턴
-
-api/article/list/:aid/:uid - 게시글 보기 [get] article_id를 받아와 user_id를 받아와 article_writer와 비교후 조회수 증가
-   
-api/article/:aid/delete - 게시글 삭제 [get] article_id를 받아와 삭제
-   
-api/article/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
-   
-api/admin/mentoroom/:r_id/:m_id/confirm - 멘토신청승인. post방식에서 get방식으로 바꿈. mento_id와 mentoroom_id를 받아와 team_confirm을 1로 업데이트, user_auth를 1로 업데이트(멘토로승격) 
-
-api/admin/mentoroom/:rid/reject - 멘토승인거절 [get] 해당 mentoroom_id를 받아와 삭제
-
-api/message/username/:uid - 쪽지받는사람이름불러오기. post방식에서 get방식으로 바꿈. 이름(String) 리턴
-  
+api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
 
 ---------------------
 
@@ -60,22 +32,15 @@ api/article/:aid/delete - 게시글 삭제 [get] article_id를 받아와 삭제
    
 api/article/edit - 게시글 수정 [post] article객체(board_id, article_title, article_content, article_writer)를 받아와 update
 
+api/comment/create - 댓글생성 [post] -> comment([insert] id, comment_content)
 
--댓글(:c_id- comment의 id)
-   api/comment/create - 댓글생성 [post] 
--> comment([insert] article_id, comment_content, comment_writer)
+api/comment/edit - 댓글수정[post] -> comment([update] id, comment_content)
 
-api/comment/edit - 댓글수정[post] 
--> comment([update] article_id, comment_content, comment_writer)
+api/comment/delete/:c_id - 댓글 삭제[get] -> comment의 id를 받아와 delete. 
 
-api/delete/:c_id - 댓글 삭제[get]
--> comment의 id를 받아와 delete. 
+api/comment/list/{a_id} - 댓글 목록 [get] -> article_id로 List 반환
 
-api/comment/list/{a_id} - 댓글 목록 [get]
--> article_id로 List 반환
-
-api/CntComment/{a_id} - 댓글수 조회
--> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
+api/CntComment/{a_id} - 댓글수 조회 [get] -> commentMapper.CntComment에서 article_id로 댓글수조회에서 int로 반환 
     
 
 <멘토방> (rid->mentoroom_id)
@@ -88,12 +53,15 @@ api/mentoroom/:rid - 멘토방 조회 [get] 해당 mentoroon_id를 받아와 조
   
 api/mentoroom/:mid/:uid/menti_join - 멘티신청 [get] :mid- mento_id / :uid - menti_id , return: 멘티신청이 완료되었습니다
   
-api/mentoroom/:mid/:uid/menti_canceal - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
+api/mentoroom/:mid/:uid/menti_cancel - 멘티신청취소 [get] :mid- mento_id / :uid - menti_id, return - 멘티신청이 취소되었습니다
  
 api/mentoroom/:m_id/menti_list - 멘티목록 [get] mento_id를 받아와 멘토목록을 조회
 
-api/mentoroom/:rid/upload - 보고서 제출
-api/mentoroom/:rid/download - 보고서 다운로드
+api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] MultipartFile를 받아와(file_name, file_data(file_content에서 수정함), file_type)를 받아와 insert / url로 mentoroom_id와 file_kind를 받아옴
+
+api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회
+
+api/mentoroom/filedelete/:r_id/:f_id - 파일 삭제 [get] file_id를 받아와 삭제, mentoroom_id를 받아와 report_check를 -1
 
 
 <관리자>
@@ -109,11 +77,11 @@ api/admin/mentoroom/:r_id/:m_id/confirm - 멘토신청승인 [get] mento_id와 m
   
 api/admin/mentoroom/:rid/reject - 멘토승인거절 [get] 해당 mentoroom_id를 받아와 삭제
 
-admin/:aid/answer - Q&A 답변완료 [get] answer_complete 1로 업데이트
+api/admin/:aid/answer - Q&A 답변완료 [get] answer_complete 1로 업데이트
 
-admin/empower/:uid - 관리자 권한 지정 [get] uid를받아와 user_auth를 3으로 업데이트
+api/admin/empower/:uid - 관리자 권한 지정 [get] uid를받아와 user_auth를 3으로 업데이트
 
-admin/leave/:uid - 관리자 권한 지정 해제 [get] uid를 받아와 user_auth를 4로 업데이트
+api/admin/leave/:uid - 관리자 권한 지정 해제 [get] uid를 받아와 user_auth를 4로 업데이트
 
 
 <쪽지함>

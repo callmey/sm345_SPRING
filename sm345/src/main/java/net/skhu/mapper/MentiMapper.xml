@@ -6,7 +6,7 @@
 
 	<select id="findAll" resultType="Menti">
     SELECT m.*, u.user_name
-    FROM menti m JOIN user u ON m.menti_id = u.uesr_id
+    FROM menti m LEFT JOIN user u ON m.menti_id = u.user_id
     WHERE mento_id = #{mento_id}
     </select>
     
