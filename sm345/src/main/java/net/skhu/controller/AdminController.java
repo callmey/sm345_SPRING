@@ -159,4 +159,19 @@ public class AdminController {
 	        userMapper.updateLeave(u_id);
 	    }
 
+	    //보고서 승인
+	    @RequestMapping(value="admin/report_confirm/{f_id}")
+	    public String report_confirm(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
+	        uploadFileMapper.updateConfirm(f_id);
+	        return "보고서가 승인되었습니다";
+	    }
+
+	    //보고서 반려
+	    @RequestMapping(value="admin/report_reject/{f_id}")
+	    public String report_reject(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
+	        uploadFileMapper.updateReject(f_id);
+	        return "보고서가 반려되었습니다";
+	    }
+
+
 }

@@ -15,4 +15,6 @@ public interface UploadFileMapper {
     List<UploadFile> findByRoomId(int mentoroom_id);
     List<UploadFile> findAll();
     List<UploadFile> findAllByYear(Mentoroom mentoroom);
+    void updateConfirm(int id);
+    void updateReject(int id);
 }

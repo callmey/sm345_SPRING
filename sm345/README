@@ -6,13 +6,9 @@ api/admin/report/:year - 관리자 페이지 보고서 목록 [get] year에 년�
 
 api/admin/filedelete/:f_id - 관리자 페이지 보고서 삭제 [get] 파일의 id를 받아와 삭제
 
-api/mentoroom/fileupload/:r_id/:kind - 파일 업로드 [post] MultipartFile를 받아와(file_name, file_data(file_content에서 수정함), file_type)를 받아와 insert / url로 mentoroom_id와 file_kind를 받아옴
+api/admin/report_confirm/:f_id - 보고서 승인 [get] 파일의 id를 받아와 file_state를 1로 업데이트 / return : 보고서가 승인되었습니다
 
-api/mentoroom/filelist/:r_id - 파일 리스트 [get] mentoroom_id를 받아와 파일 조회
-
-api/mentoroom/filedelete/:r_id/:f_id - 파일 삭제 [get] file_id를 받아와 삭제, mentoroom_id를 받아와 report_check를 -1
-
-api/:uid/check_userauth - get방식. 앱 최초 실행시 user_id를 받아와서 user_auth를 조회함. (localstroage에 저장되어있는 user_auth와 다를시 로그아웃 시키기) 
+api/admin/report_reject/:f_id - 보고서 반려 [get] 파일의 id를 받아와 file_state를 2로 업데이트 / return : 보고서가 반려되었습니다
 
 ---------------------
 
@@ -87,6 +83,11 @@ api/admin/report_date/:year/:semester - -보고서 제출날짜 데이터 [get] 
 api/admin/report/:year - 관리자 페이지 보고서 목록 [get] year에 년도와학기를 합쳐서 받은 후 목록 리턴. year = 0 (모든학기목록) year=20172 (2017-2학기목록)
 
 api/admin/filedelete/:f_id - 관리자 페이지 보고서 삭제 [get] 파일의 id를 받아와 삭제
+
+api/admin/report_confirm/:f_id - 보고서 승인 [get] 파일의 id를 받아와 file_state를 1로 업데이트
+
+api/admin/report_reject/:f_id - 보고서 반려 [get] 파일의 id를 받아와 file_state를 2로 업데이트
+
 
 <쪽지함>
 api/message/list/:uid - 쪽지함목록  [get] user_id를 받아와 쪽지함 리스트 리턴

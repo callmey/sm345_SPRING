@@ -31,10 +31,23 @@
     WHERE f.file_kind = 1
     </select>
     
-     <select id="findAllByYear" resultType="UploadFile">
+    <select id="findAllByYear" resultType="UploadFile">
     SELECT f.*, m.mento_name
     FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
     WHERE f.file_kind = 1 AND m.team_year = #{team_year} AND m.team_semester = #{team_semester} 
     </select>
+    
+    <update id="updateConfirm">
+    UPDATE uploadFile
+    SET file_state = 1
+    WHERE id = #{id}
+  	</update>
+  	
+  	<update id="updateReject">
+    UPDATE uploadFile
+    SET file_state = 2
+    WHERE id = #{id}
+  	</update>
+    
   
 </mapper>
