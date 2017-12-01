@@ -25,5 +25,16 @@
     WHERE mentoroom_id = #{mentoroom_id}
     </select>
     
+    <select id="findAll" resultType="UploadFile">
+    SELECT f.*, m.mento_name
+    FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
+    WHERE f.file_kind = 1
+    </select>
+    
+     <select id="findAllByYear" resultType="UploadFile">
+    SELECT f.*, m.mento_name
+    FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
+    WHERE f.file_kind = 1 AND m.team_year = #{team_year} AND m.team_semester = #{team_semester} 
+    </select>
   
 </mapper>
