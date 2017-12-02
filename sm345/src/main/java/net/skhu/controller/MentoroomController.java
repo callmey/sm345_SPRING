@@ -42,8 +42,9 @@ public class MentoroomController {
 	@Autowired UploadFileMapper uploadFileMapper;
 
 	//멘토신청
-		@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
-		public Map<String, Object> mentoroom_create(Model model, @RequestBody Mentoroom mentoroom, HttpServletRequest request) throws UnsupportedEncodingException {
+	 	@Transactional
+		@RequestMapping(value = "mentoroom/create/{kind1}/{kind2}", method = RequestMethod.POST)
+		public Map<String, Object> mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 
 			Date d = new Date();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,6 +67,27 @@ public class MentoroomController {
 			map.put("title", "멘토신청이 완료되었습니다");
 			return map;
 		}
+		/*
+		 //파일 업로드
+	    @Transactional
+	    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
+	    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
+	    	String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+	    	UploadFile uf = new UploadFile();
+
+	    	uf.setFile_name(file_name);
+	    	uf.setFile_data(uploadFile.getBytes());
+	    	uf.setFile_type(uploadFile.getContentType());
+	    	uf.setFile_kind(kind);
+	    	uf.setMentoroom_id(r_id);
+	    	uploadFileMapper.insert(uf);
+
+	    	mentoroomMapper.updateReportcheck1(r_id);
+	    	//if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
+	    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
+	    	//목록별로볼수있도록 등록하기
+	    }
+	    */
 
 		//멘토방 목록
 		@RequestMapping("mentoroom")
@@ -106,17 +128,17 @@ public class MentoroomController {
 		return mentiMapper.findAll(m_id);
 		}
 
-		 //파일 업로드
+		//보고서 업로드
 	    @Transactional
-	    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
-	    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
+	    @RequestMapping(value="mentoroom/fileupload/{r_id}", method = RequestMethod.POST)
+	    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id ) throws IllegalStateException, IOException {
 	    	String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
 	    	UploadFile uf = new UploadFile();
 
 	    	uf.setFile_name(file_name);
 	    	uf.setFile_data(uploadFile.getBytes());
 	    	uf.setFile_type(uploadFile.getContentType());
-	    	uf.setFile_kind(kind);
+	    	uf.setFile_kind(1);
 	    	uf.setMentoroom_id(r_id);
 	    	uploadFileMapper.insert(uf);
 

@@ -9,7 +9,6 @@ public class MentoRoomInfo {
 	String max_mento;
 	String max_menti;
 	String meeting_number;
-	String meeting_period;
 	String survey_start;
 	String survey_end;
 
@@ -54,12 +53,6 @@ public class MentoRoomInfo {
 	}
 	public void setMeeting_number(String meeting_number) {
 		this.meeting_number = meeting_number;
-	}
-	public String getMeeting_period() {
-		return meeting_period;
-	}
-	public void setMeeting_period(String meeting_period) {
-		this.meeting_period = meeting_period;
 	}
 	public String getSurvey_start() {
 		return survey_start;

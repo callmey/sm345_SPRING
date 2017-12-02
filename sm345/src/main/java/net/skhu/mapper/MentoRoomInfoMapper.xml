@@ -18,7 +18,6 @@
     	max_mento = #{max_mento},
     	max_menti = #{max_menti},
     	meeting_number = #{meeting_number},
-    	meeting_period = #{meeting_period},
     	survey_start = #{survey_start},
     	survey_end = #{survey_end}
     WHERE id = 1
