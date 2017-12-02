@@ -48,6 +48,12 @@
     SET file_state = 2
     WHERE id = #{id}
   	</update>
+  	
+  	<select id="selectPicture" resultType="UploadFile">
+    SELECT f.*, m.mento_name
+    FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
+    WHERE f.file_kind = 2 AND m.team_year = #{team_year} AND m.team_semester = #{team_semester} 
+    </select>
     
   
 </mapper>

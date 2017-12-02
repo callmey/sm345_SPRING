@@ -72,9 +72,9 @@
   	</update>
   	
   	<select id="selectReportNotYet" resultType="User">
-    SELECT u.*, s.report_check
-    FROM user u LEFT JOIN student s ON u.user_id = s.student_id
-    WHERE u.user_auth = 1 AND s.report_check = 0
+    SELECT u.*
+    FROM user u LEFT JOIN mentoroom m ON u.user_id = m.mento_id
+    WHERE u.user_auth = 1 AND m.report_count != #{meeting_number}
     </select>
     
     <update id="updateReportcheck1">

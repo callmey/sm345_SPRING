@@ -26,6 +26,7 @@ import net.skhu.dto.Menti;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.UploadFile;
 import net.skhu.mapper.MentiMapper;
+import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
@@ -40,6 +41,7 @@ public class MentoroomController {
 	@Autowired StudentMapper studentMapper;
 	@Autowired MentiMapper mentiMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
+	@Autowired MentoRoomInfoMapper mentoroomInfoMapper;
 
 	//멘토신청
 	 	@Transactional
@@ -109,7 +111,6 @@ public class MentoroomController {
 		menti.setMenti_id(uid);
 		menti.setMento_id(mid);
 		mentiMapper.insert(menti);
-		mentoroomMapper.updatePersoncount1(mid);
 		return "멘티신청이 완료되었습니다";
 		}
 
@@ -118,7 +119,6 @@ public class MentoroomController {
 		public String menti_cancel(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("mid") int mid) {
 		userMapper.updateMentiCancel(uid);
 		mentiMapper.delete(uid);
-		mentoroomMapper.updatePersoncount2(mid);
 		return "멘티신청이 취소되었습니다";
 		}
 
@@ -142,10 +142,8 @@ public class MentoroomController {
 	    	uf.setMentoroom_id(r_id);
 	    	uploadFileMapper.insert(uf);
 
-	    	mentoroomMapper.updateReportcheck1(r_id);
-	    	//if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
-	    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
-	    	//목록별로볼수있도록 등록하기
+	    	mentoroomMapper.updateReportcount1(r_id);
+
 	    }
 
 	    //보고서, 사진 목록
@@ -158,8 +156,46 @@ public class MentoroomController {
 	    @RequestMapping(value="mentoroom/filedelete/{r_id}/{f_id}")
 	    public String filedelete(@PathVariable("r_id") int r_id, @PathVariable("f_id") int f_id, HttpServletRequest request, Model model ) throws UnsupportedEncodingException {
 	    	uploadFileMapper.delete(f_id);
-	    	mentoroomMapper.updateReportcheck2(r_id);
+	    	mentoroomMapper.updateReportcount2(r_id);
 	    	return "파일이 삭제되었습니다";
 	   }
+
+	   //사진목록(홈화면)
+	    @RequestMapping(value="home/filelist")
+	    public List<UploadFile> filelist(Model model, HttpServletRequest request) {
+	    	Date d = new Date();
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    String date = sdf.format(d);
+		    String year = date.substring(0,4);
+		    String month = date.substring(5,7);
+		    int y = Integer.parseInt(year);
+		    int m = Integer.parseInt(month);
+		    Mentoroom mentoroom = new Mentoroom();
+			mentoroom.setTeam_year(y);
+			int semester=0;
+			if(m>=3 && m<=7)
+				semester=1;
+			if(m>=9 && m<=12)
+				semester=2;
+			mentoroom.setTeam_semester(semester);
+	        return uploadFileMapper.selectPicture(mentoroom);
+	    }
+
+	    /*
+	    //신입생 엑셀등록
+	    @RequestMapping(value="admin/excel", method = RequestMethod.POST)
+	    public void execel(@RequestBody Student[] student, Model model,HttpServletRequest request) {
+			for(int i=0; i<student.length; i++){
+				//student[i].getStudent_major(student[i].getStudent_major()); //객체를 하나 더 만들어서 student_major를 글씨로 가져옴
+
+				student[i].getStudent_minor();
+				studentMapper.insert(student[i]);
+
+			}
+
+
+	    }
+	    */
+
 
 }

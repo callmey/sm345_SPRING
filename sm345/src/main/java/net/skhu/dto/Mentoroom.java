@@ -12,7 +12,6 @@ public class Mentoroom {
 	int mento_id;
 	String mento_name;
 	int team_confirm;
-	int report_check;
 	int person_count;
 
 	public int getMentoroom_id() {
@@ -87,11 +86,6 @@ public class Mentoroom {
 	public void setPerson_count(int person_count) {
 		this.person_count = person_count;
 	}
-	public int getReport_check() {
-		return report_check;
-	}
-	public void setReport_check(int report_check) {
-		this.report_check = report_check;
-	}
+
 
 }

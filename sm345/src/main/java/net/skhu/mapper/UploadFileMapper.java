@@ -17,4 +17,5 @@ public interface UploadFileMapper {
     List<UploadFile> findAllByYear(Mentoroom mentoroom);
     void updateConfirm(int id);
     void updateReject(int id);
+    List<UploadFile> selectPicture(Mentoroom mentoroom);
 }

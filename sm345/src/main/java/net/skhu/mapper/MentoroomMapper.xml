@@ -12,6 +12,7 @@
   	<select id="findAll" resultType="Mentoroom">
     SELECT *
     FROM mentoroom
+    WHERE team_confirm != 2
     ORDER BY mentoroom_id DESC
     </select>
        
@@ -39,18 +40,6 @@
     WHERE mentoroom_id = #{mentoroom_id}
   	</delete>
   	
-  	<update id="updateReportcheck1">
-    UPDATE mentoroom
-    SET report_check = report_check + 1
-    WHERE mentoroom_id = #{mentoroom_id}
-  	</update>
-  	
-  	<update id="updateReportcheck2">
-    UPDATE mentoroom
-    SET report_check = report_check - 1
-    WHERE mentoroom_id = #{mentoroom_id}
-  	</update>
-  	
   	<update id="updatePersoncount1">
     UPDATE mentoroom
     SET person_count = person_count + 1
@@ -62,5 +51,23 @@
     SET person_count = person_count - 1
     WHERE mento_id = #{mento_id}
   	</update>
-    
+  	
+  	<update id="updateReportcount1">
+    UPDATE mentoroom
+    SET report_count = report_count + 1
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
+  	<update id="updateReportcount2">
+    UPDATE mentoroom
+    SET report_count = report_count - 1
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
+  	<update id="updateClose">
+    UPDATE mentoroom
+    SET team_confirm = 2
+    WHERE mentoroom_id = #{mentoroom_id}
+  	</update>
+  	
 </mapper>
