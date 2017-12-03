@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.skhu.dto.Menti;
+import net.skhu.dto.MentoCreate;
 import net.skhu.dto.Mentoroom;
 import net.skhu.dto.UploadFile;
 import net.skhu.mapper.MentiMapper;
@@ -46,8 +47,9 @@ public class MentoroomController {
 	//멘토신청
  	@Transactional
 	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
-	public String mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom,  MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
+	public String mentoroom_create(@RequestBody MentoCreate mc,  MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
 
+ 		Mentoroom mentoroom = mc.getMentoroom();
 		Date d = new Date();
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	    String date = sdf.format(d);
@@ -66,6 +68,7 @@ public class MentoroomController {
 		mentoroom.setMento_name(mento_name);
 		mentoroomMapper.insert(mentoroom);
 
+		MultipartFile picture = mc.getPicture();
 		String file_name1 = Paths.get(picture.getOriginalFilename()).getFileName().toString();
     	UploadFile p = new UploadFile();
 
@@ -76,6 +79,7 @@ public class MentoroomController {
     	p.setMentoroom_id(mentoroom.getMentoroom_id());
     	uploadFileMapper.insert(p);
 
+    	MultipartFile file = mc.getFile();
     	String file_name2 = Paths.get(file.getOriginalFilename()).getFileName().toString();
     	UploadFile f = new UploadFile();
 

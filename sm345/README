@@ -12,7 +12,13 @@ api/admin/report_reject/:f_id - 보고서 반려 [get] 파일의 id를 받아와
 
 api/admin/excel - 신입생 엑셀등록 [post] student를 배열로 받아와 삽입
 
-api/mentoroom/create - 멘토 신청 [post] multipartfile형 객체 picture, file / mentoroom객체 를 받아와 insert한다. return형을 String으로 바꾸었음!!!!!!!!!!!return - 멘토신청이 완료되었습니다
+api/mentoroom/create - 멘토 신청 [post] MentoCreate 객체 안에 세가지 바디를 받아온다 return형을 String으로 바꾸었음!!!!!!!!!!!return - 멘토신청이 완료되었습니다
+	
+	-MentoCreate 클래스 필드
+	MultipartFile picture;
+	MultipartFile file;
+	Mentoroom mentoroom;
+
 
 api/:u_id/survey_check - 설문조사 참여 여부 [get] user_id를 받아와 설문조사 참여 여부를 리턴. 0이면 설문조사 안한것, 1이면 한것. 멘토방에서 이미 설문조사에 참여한 학생에게 설문조사가 뜨지않도록 하기 위해 사용
 
