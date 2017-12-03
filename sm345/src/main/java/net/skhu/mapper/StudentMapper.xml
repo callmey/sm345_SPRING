@@ -10,6 +10,9 @@
     WHERE student_id = #{student_id}
     </select>
     
-    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="student_id">
+    INSERT student (student_id, student_name, student_address, student_phone, student_major, student_minor, survey_check)
+    VALUES (#{student_id}, #{student_name}, #{student_address}, #{student_phone}, #{student_major}, #{student_minor}, #{survey_check})
+  	</insert>
 
 </mapper>

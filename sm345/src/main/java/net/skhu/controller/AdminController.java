@@ -87,6 +87,12 @@ public class AdminController {
 			mentoroomMapper.deleteMentoroom(r_id);
 		}
 
+		//멘토방 폐설
+	    @RequestMapping(value="admin/mentoroom/{r_id}/close")
+	    public void mentoroom_close(Model model, HttpServletRequest request, @PathVariable("r_id") int r_id) {
+	        mentoroomMapper.updateClose(r_id);
+	    }
+
 		//멘토방 설정 데이터
 	    @RequestMapping("admin/room_info")
 	  	public MentoRoomInfo mentoRoomInfo(Model model, HttpServletRequest request) {
@@ -139,8 +145,10 @@ public class AdminController {
 	    //사용자 목록
 	    @RequestMapping("admin/user/{auth}")
 	    public List<User> user_list(Model model, HttpServletRequest request, @PathVariable("auth") int auth) {
-	        if(auth == 4) //보고서 미제출멘토
-	        	return userMapper.selectReportNotYet();
+	        if(auth == 4) {//보고서 미제출멘토
+	        	int meeting_number = Integer.parseInt(mentoroominfoMapper.findMentoRoomInfo().getMeeting_number());
+	        	return userMapper.selectReportNotYet(meeting_number);
+	    	}
 	        if(auth == 0) //전체 학생 목록
 	        	return userMapper.selectStudent();
 	    	List<User> list = userMapper.findAll(auth);
@@ -161,17 +169,18 @@ public class AdminController {
 
 	    //보고서 승인
 	    @RequestMapping(value="admin/report_confirm/{f_id}")
-	    public String report_confirm(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
+	    public void report_confirm(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
 	        uploadFileMapper.updateConfirm(f_id);
-	        return "보고서가 승인되었습니다";
 	    }
 
 	    //보고서 반려
 	    @RequestMapping(value="admin/report_reject/{f_id}")
-	    public String report_reject(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
+	    public void report_reject(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
 	        uploadFileMapper.updateReject(f_id);
-	        return "보고서가 반려되었습니다";
 	    }
+
+
+
 
 
 }
