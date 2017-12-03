@@ -7,7 +7,6 @@ public class User {
 	int user_auth;
 	String user_name;
 	int login_record;
-	int report_check;
 
 	public int getUser_id() {
 		return user_id;
@@ -39,11 +38,6 @@ public class User {
 	public void setLogin_record(int login_record) {
 		this.login_record = login_record;
 	}
-	public int getReport_check() {
-		return report_check;
-	}
-	public void setReport_check(int report_check) {
-		this.report_check = report_check;
-	}
+	
 
 }

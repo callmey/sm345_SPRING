@@ -3,4 +3,8 @@
              "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.skhu.mapper.SurveySCMapper">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT surveySubjectQuestion(question_id, survey_answer)
+    VALUES (#{question_id}, #{survey_answer})
+  	</insert>
 </mapper>

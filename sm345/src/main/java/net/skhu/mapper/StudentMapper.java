@@ -8,5 +8,6 @@ import net.skhu.dto.Student;
 public interface StudentMapper {
     String selectStudentname(int student_id);
     void insert(Student student);
+    int selectSurveycheck(int student_id);
 
 }

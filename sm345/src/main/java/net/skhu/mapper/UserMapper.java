@@ -20,4 +20,6 @@ public interface UserMapper {
     void updateLeave(int user_id);
     List<User> selectReportNotYet(int meeting_number);
     List<User> selectStudent();
+    void insert(User user);
+    void updateAuth();
 }

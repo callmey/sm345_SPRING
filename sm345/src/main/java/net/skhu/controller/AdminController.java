@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.MentoRoomInfo;
 import net.skhu.dto.Mentoroom;
+import net.skhu.dto.Student;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
+import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 //import net.skhu.mapper.ReportDateMapper;
 import net.skhu.mapper.UserMapper;
@@ -34,6 +36,8 @@ public class AdminController {
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
 	//@Autowired ReportDateMapper reportdateMapper;
+	@Autowired StudentMapper studentMapper;
+
 
 		//멘토방 목록 (관리자)
 		@RequestMapping("admin/mentoroom/{year}")
@@ -178,7 +182,22 @@ public class AdminController {
 	    public void report_reject(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
 	        uploadFileMapper.updateReject(f_id);
 	    }
+	    
+	    //신입생 엑셀등록
+	    @RequestMapping(value="admin/excel", method = RequestMethod.POST)
+	    public void execel(@RequestBody Student[] student, Model model,HttpServletRequest request) {
+			for(int i=0; i<student.length; i++) {
+				studentMapper.insert(student[i]);
+				User user = new User();
+				user.setUser_id(student[i].getStudent_id());
+				user.setUser_name(student[i].getStudent_name());
+				userMapper.insert(user);
+			}
+			//userMapper.updateAuth();
 
+	    }
+
+	    
 
 
 

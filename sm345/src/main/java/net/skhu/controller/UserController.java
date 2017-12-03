@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.User;
+import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UserMapper;
 import net.skhu.service.UserService;
 
@@ -24,6 +25,7 @@ public class UserController {
 
 	@Autowired UserService userService;
 	@Autowired UserMapper userMapper;
+	@Autowired StudentMapper studentMapper;
 
 	//로그인
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -95,11 +97,10 @@ public class UserController {
 		return map;
 	}
 
-    //앱 최초 실행시 user_auth 받아오기
-    @RequestMapping("{u_id}/check_userauth")
-    public int check_userauth(@PathVariable("u_id") int u_id, Model model, HttpServletRequest request) throws Exception {
-        int user_auth = userMapper.selectByUserId(u_id).getUser_auth();
-        return user_auth;
+	//survey_check 받아오기
+    @RequestMapping("{u_id}/survey_check")
+    public int check(@PathVariable("u_id") int u_id, Model model, HttpServletRequest request) throws Exception {
+    	return studentMapper.selectSurveycheck(u_id);
     }
 
 }

@@ -44,6 +44,52 @@ public class MentoroomController {
 	@Autowired MentoRoomInfoMapper mentoroomInfoMapper;
 
 	//멘토신청
+ 	@Transactional
+	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
+	public String mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom,  MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
+
+		Date d = new Date();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    String date = sdf.format(d);
+	    String year = date.substring(0,4);
+	    String month = date.substring(5,7);
+	    int y = Integer.parseInt(year);
+	    int m = Integer.parseInt(month);
+		mentoroom.setTeam_year(y);
+		int semester=0;
+		if(m>=3 && m<=7)
+			semester=1;
+		if(m>=9 && m<=12)
+			semester=2;
+		mentoroom.setTeam_semester(semester);
+		String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
+		mentoroom.setMento_name(mento_name);
+		mentoroomMapper.insert(mentoroom);
+
+		String file_name1 = Paths.get(picture.getOriginalFilename()).getFileName().toString();
+    	UploadFile p = new UploadFile();
+
+    	p.setFile_name(file_name1);
+    	p.setFile_data(picture.getBytes());
+    	p.setFile_type(picture.getContentType());
+    	p.setFile_kind(2);
+    	p.setMentoroom_id(mentoroom.getMentoroom_id());
+    	uploadFileMapper.insert(p);
+
+    	String file_name2 = Paths.get(file.getOriginalFilename()).getFileName().toString();
+    	UploadFile f = new UploadFile();
+
+    	f.setFile_name(file_name2);
+    	f.setFile_data(file.getBytes());
+    	f.setFile_type(file.getContentType());
+    	f.setFile_kind(3);
+    	f.setMentoroom_id(mentoroom.getMentoroom_id());
+    	uploadFileMapper.insert(f);
+
+		return "멘토신청이 완료되었습니다";
+	}
+ 	/*
+	//멘토신청
 	 	@Transactional
 		@RequestMapping(value = "mentoroom/create/{kind1}/{kind2}", method = RequestMethod.POST)
 		public Map<String, Object> mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
@@ -69,7 +115,8 @@ public class MentoroomController {
 			map.put("title", "멘토신청이 완료되었습니다");
 			return map;
 		}
-		/*
+		
+		
 		 //파일 업로드
 	    @Transactional
 	    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
@@ -111,6 +158,7 @@ public class MentoroomController {
 		menti.setMenti_id(uid);
 		menti.setMento_id(mid);
 		mentiMapper.insert(menti);
+		mentoroomMapper.updatePersoncount1(mid);
 		return "멘티신청이 완료되었습니다";
 		}
 
@@ -119,6 +167,7 @@ public class MentoroomController {
 		public String menti_cancel(Model model, HttpServletRequest request, @PathVariable("uid") int uid, @PathVariable("mid") int mid) {
 		userMapper.updateMentiCancel(uid);
 		mentiMapper.delete(uid);
+		mentoroomMapper.updatePersoncount2(mid);
 		return "멘티신청이 취소되었습니다";
 		}
 
@@ -181,21 +230,6 @@ public class MentoroomController {
 	        return uploadFileMapper.selectPicture(mentoroom);
 	    }
 
-	    /*
-	    //신입생 엑셀등록
-	    @RequestMapping(value="admin/excel", method = RequestMethod.POST)
-	    public void execel(@RequestBody Student[] student, Model model,HttpServletRequest request) {
-			for(int i=0; i<student.length; i++){
-				//student[i].getStudent_major(student[i].getStudent_major()); //객체를 하나 더 만들어서 student_major를 글씨로 가져옴
-
-				student[i].getStudent_minor();
-				studentMapper.insert(student[i]);
-
-			}
-
-
-	    }
-	    */
 
 
 }
