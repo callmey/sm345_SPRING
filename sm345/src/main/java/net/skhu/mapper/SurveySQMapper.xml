@@ -7,4 +7,10 @@
     INSERT surveySubjectQuestion(subject_question1, subject_question2, survey_year, survey_semester)
     VALUES (#{subject_question1}, #{subject_question2}, #{survey_year}, #{survey_semester})
   	</insert>
+  	
+  	<select id="findByYear" resultType="SurveySubjectQuestion">
+  		SELECT *
+  		FROM surveySubjectQuestion
+  		WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester};
+  	</select>
 </mapper>

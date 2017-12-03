@@ -86,4 +86,16 @@ public class SurveyController {
 			surveyOQ.setSurvey_semester(s);
 			return surveyoqMapper.findByYear(surveyOQ);
 	    }
+		
+		//객관식 설문조사 목록
+				@RequestMapping("surveySQ/list/{year}")
+			    public List<SurveySubjectQuestion> surveySQ_list (Model model, HttpServletRequest request, @PathVariable("year") int year) {
+					String y = String.valueOf(year);
+					int yyyy = Integer.parseInt(y.substring(0,4));
+					int s =  Integer.parseInt(y.substring(4,5));
+					SurveySubjectQuestion surveySQ = new SurveySubjectQuestion();
+					surveySQ.setSurvey_year(yyyy);
+					surveySQ.setSurvey_semester(s);
+					return surveysqMapper.findByYear(surveySQ);
+			    }
 }
