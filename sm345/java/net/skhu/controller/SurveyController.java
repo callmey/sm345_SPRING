@@ -239,18 +239,26 @@ public class SurveyController {
          List<SurveyObject> so = surveyobMapper.findObjectSurvey(surveyOb);
          for(int i=0; i<so.size(); i++){
             int all = so.get(i).getObject_answer1()+so.get(i).getObject_answer2()+so.get(i).getObject_answer3()+so.get(i).getObject_answer4()+so.get(i).getObject_answer5();
-            double d1 = ((double)so.get(i).getObject_answer1()/(double)all)*100;
-            double d2 = ((double)so.get(i).getObject_answer2()/(double)all)*100;
-            double d3 = ((double)so.get(i).getObject_answer3()/(double)all)*100;
-            double d4 = ((double)so.get(i).getObject_answer4()/(double)all)*100;
-            double d5 = ((double)so.get(i).getObject_answer5()/(double)all)*100;
+            if(all == 0) {
+            	so.get(i).setObject_answer1(0);
+                so.get(i).setObject_answer2(0);
+                so.get(i).setObject_answer3(0);
+                so.get(i).setObject_answer4(0);
+                so.get(i).setObject_answer5(0); 
+            }
+            else {
+            double d1 = (double)((double)so.get(i).getObject_answer1()/(double)all)*100;
+            double d2 = (double)((double)so.get(i).getObject_answer2()/(double)all)*100;
+            double d3 = (double)((double)so.get(i).getObject_answer3()/(double)all)*100;
+            double d4 = (double)((double)so.get(i).getObject_answer4()/(double)all)*100;
+            double d5 = (double)((double)so.get(i).getObject_answer5()/(double)all)*100;
 
             int a1 = (int)d1;
             int a2 = (int)d2;
             int a3 = (int)d3;
             int a4 = (int)d4;
             int a5 = (int)d5;
-            
+            System.out.println("all"+all);
             System.out.println(d1);
             
             so.get(i).setObject_answer1(a1);
@@ -258,7 +266,7 @@ public class SurveyController {
             so.get(i).setObject_answer3(a3);
             so.get(i).setObject_answer4(a4);
             so.get(i).setObject_answer5(a5);   
-            
+            }
          }
          return so;
       }

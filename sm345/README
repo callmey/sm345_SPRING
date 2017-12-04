@@ -12,6 +12,8 @@ api/surveyOB/list - [get] 객관식설문항목 목록 surveyobMapper.findByYear
 api/surveySQ/list - [get] 객관식설문항목 목록 surveysqMapper.findByYear(surveySQ)로 반환
 api/surveyOB/insert/{u_id} - [post] 객관식 설문조사 답변 등록 u_id: 사용자id
 api/surveySC/insert/{u_id} - [post] 주관식 설문조사 답변 등록 u_id는 user테이블에서 가져와 student 테이블에서 해당 u_id의 surveycheck를 1로 바꿔줌
+api/survey/object/result - [get] 객관식 설문 결과 해당년도, 해당학기의 객관식 설문을 so라는 이름의 List객체로 받아 object_answer을 차례대로 퍼센트 계산 so List 객체 리턴.
+api/survey/subject/result -[get] 해당년도, 해당학기로 받은 주관식 설문 항목을  답변의 List 객체를 만들어 설문항목의 id를 넣어주고 답변list객체 리턴.
 
 api/mentoroom/create - 멘토방 insert [post] return으로 mentoroom_id를 받는다
 
@@ -22,6 +24,8 @@ api/survey/object/result - 객관식 결과 -> 설문조사 질문과 퍼센티�
 api/admin/report_date/create - 보고서 제출 기간 등록 [post] reportDate(report_start, report_end)를 배열로 받아와서 삽입한다.
 
 api/admin/report_date - 보고서 제출 기간 데이터 [get] - list로 리턴
+
+
 ---------------------
 
 
