@@ -50,15 +50,19 @@ public class MentoroomController {
    @RequestMapping(value = "mentoroom/create/{r_id}/{kind}", method = RequestMethod.POST)
    public void mentoroom_create2(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind, MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws IllegalStateException, IOException {
 
-   String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-       UploadFile p = new UploadFile();
+//   String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+//       UploadFile p = new UploadFile();
+//       
+       System.out.println("업로드파일"+uploadFile);
+       System.out.println("룸아이디"+r_id);
+       System.out.println("카인드"+kind);
 
-       p.setFile_name(file_name);
-       p.setFile_data(uploadFile.getBytes());
-       p.setFile_type(uploadFile.getContentType());
-       p.setFile_kind(kind);
-       p.setMentoroom_id(r_id);
-       uploadFileMapper.insert(p);
+//       p.setFile_name(file_name);
+//       p.setFile_data(uploadFile.getBytes());
+//       p.setFile_type(uploadFile.getContentType());
+//       p.setFile_kind(kind);
+//       p.setMentoroom_id(r_id);
+//       uploadFileMapper.insert(p);
 
    }
     
