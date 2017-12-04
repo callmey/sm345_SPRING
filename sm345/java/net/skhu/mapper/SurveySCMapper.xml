@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.skhu.mapper.SurveySCMapper">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT surveySubjectContent(question_id, survey_answer)
+    VALUES (#{question_id}, #{survey_answer})
+  	</insert>
+  	
+  	<update id="SurveyCheck">
+  	UPDATE student
+  	SET survey_check = 1
+  	WHERE student_id = #{user_id}
+  	</update>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.skhu.mapper.SurveySQMapper">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT surveySubjectQuestion(question_id, subject_question, survey_year, survey_semester)
+    VALUES (#{question_id}, #{subject_question}, #{survey_year}, #{survey_semester})
+  	</insert>
+  	
+  	<select id="findByYear" resultType="SurveySubjectQuestion">
+  		SELECT *
+  		FROM surveySubjectQuestion
+  		WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester};
+  	</select>
+</mapper>

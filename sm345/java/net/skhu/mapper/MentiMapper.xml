@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.skhu.mapper.MentiMapper">
+
+	<select id="findAll" resultType="Menti">
+    SELECT m.*, u.user_name
+    FROM menti m LEFT JOIN user u ON m.menti_id = u.user_id
+    WHERE mento_id = #{mento_id}
+    </select>
+    
+    <insert id="insert">
+    INSERT menti (mento_id, menti_id)
+    VALUES (#{mento_id}, #{menti_id})
+    </insert>
+    
+    <delete id="delete">
+    DELETE FROM menti
+    WHERE menti_id = #{menti_id}
+    </delete>
+    
+</mapper>

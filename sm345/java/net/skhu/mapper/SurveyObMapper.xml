@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+             "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.skhu.mapper.SurveyObMapper">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT surveyObject(question_id, object_question, survey_year, survey_semester)
+    VALUES (#{question_id}, #{object_question}, #{survey_year}, #{survey_semester})
+  	</insert>
+  	
+  	<select id="findSum" resultType="int">
+  	COUNT (object_anwser1, object_anwser2, object_answer3, object_answer4, object_answer5)
+  	FROM surveyObject
+  	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
+  	</select>
+  	
+  	<select id="findByYear" resultType="SurveyObject">
+	SELECT *
+	FROM surveyObject
+	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
+  	</select>
+  	
+  	<select id="findByQuestion" resultType="SurveyObject">
+	SELECT object_question
+	FROM surveyObject
+	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
+  	</select>
+  	
+  	<update id="updateCount">
+  	UPDATE surveyObject
+  	SET object_answer1 = object_answer1 + 1
+	WHERE question_id = #{question_id}  	
+  	</update>
+  	
+  	<update id="updateCount2">
+  	UPDATE surveyObject
+  	SET object_answer2 = object_answer2 + 1
+	WHERE question_id = #{question_id}
+	</update>
+	
+	<update id="updateCount3">
+  	UPDATE surveyObject
+  	SET object_answer3 = object_answer3 + 1
+	WHERE question_id = #{question_id}
+	</update>
+	
+	<update id="updateCount4">
+  	UPDATE surveyObject
+  	SET object_answer4 = object_answer4 + 1
+	WHERE question_id = #{question_id}
+	</update>
+	
+	<update id="updateCount5">
+  	UPDATE surveyObject
+  	SET object_answer5 = object_answer5 + 1
+	WHERE question_id = #{question_id}
+  	</update>
+</mapper>

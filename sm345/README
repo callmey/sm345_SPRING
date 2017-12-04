@@ -22,6 +22,13 @@ api/mentoroom/create - 멘토 신청 [post] MentoCreate 객체 안에 세가지 
 
 api/:u_id/survey_check - 설문조사 참여 여부 [get] user_id를 받아와 설문조사 참여 여부를 리턴. 0이면 설문조사 안한것, 1이면 한것. 멘토방에서 이미 설문조사에 참여한 학생에게 설문조사가 뜨지않도록 하기 위해 사용
 
+api/surveyOB/insert - [post] 객관식설문조사 항목 등록 string 배열 변수 q로 설문조사 항목 받음
+api/surveySQ/insert - [post] 주관식설문조사 항목 등록 string 배열 변수 SQ로 설문조사 항목 받음
+api/surveyOB/list - [get] 객관식설문항목 목록 surveyobMapper.findByYear(surveyOb)로 반환
+api/surveySQ/list - [get] 객관식설문항목 목록 surveysqMapper.findByYear(surveySQ)로 반환
+api/surveyOB/insert/{u_id} - [post] 객관식 설문조사 답변 등록 u_id: 사용자id
+api/surveySC/insert/{u_id} - [post] 주관식 설문조사 답변 등록 u_id는 user테이블에서 가져와 student 테이블에서 해당 u_id의 surveycheck를 1로 바꿔줌
+api/survey/result - 미완성
 ---------------------
 
 
