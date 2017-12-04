@@ -13,6 +13,7 @@ public class UploadFile {
 	String file_type;
 	Timestamp timestamp;
 	String mento_name;
+	String team_name;
 
 	public int getId() {
 		return id;
@@ -68,5 +69,11 @@ public class UploadFile {
 	public void setMento_name(String mento_name) {
 		this.mento_name = mento_name;
 	}
-
+	public String getTeam_name() {
+		return team_name;
+	}
+	public void setTeam_name(String team_name) {
+		this.team_name = team_name;
+	}
+	
 }

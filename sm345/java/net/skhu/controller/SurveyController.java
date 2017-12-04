@@ -61,7 +61,7 @@ public class SurveyController {
 	}
 	
 	// 주관식설문항목 등록
-		@RequestMapping(value="surveySQ /insert" , method = RequestMethod.POST)
+		@RequestMapping(value="surveySQ/insert" , method = RequestMethod.POST)
 		public String surveySQ_insert(Model model, HttpServletRequest request, @RequestBody String[] SQ) {
 			Date d = new Date();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -150,12 +150,28 @@ public class SurveyController {
 		//주관식 설문조사 답변 등록
 		@RequestMapping(value="surveySC/insert/{u_id}", method = RequestMethod.POST)
 		public void surveySC_insert(Model model, HttpServletRequest request, @RequestBody String[] a,  @PathVariable("u_id") int  uid, @PathVariable("u_id") int  qid) {
-		
-			for(int i = 0; i<a.length; i++) {
-				SurveySubjectContent surveySC= new SurveySubjectContent();
-				surveyscMapper.findByYear(i+1);
-				surveySC.setQuestion_id(i+1);
-				surveyscMapper.insert(surveySC);
+			Date d = new Date();
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		    String date = sdf.format(d);
+		    String year = date.substring(0,4);
+		    String month = date.substring(5,7);
+		    int y = Integer.parseInt(year);
+		    int m = Integer.parseInt(month);
+			int semester=0;
+			if(m>=3 && m<=7)
+				semester=1;
+			if(m>=9 && m<=12)
+				semester=2;
+			SurveySubjectQuestion surveySQ = new SurveySubjectQuestion();
+			surveySQ.setSurvey_year(y);
+			surveySQ.setSurvey_semester(semester);
+			List<SurveySubjectQuestion> sq = surveysqMapper.findByYear(surveySQ);
+			for(int i = 0; i< sq.size(); i++) {
+				int id = sq.get(i).getId();
+				SurveySubjectContent sc = new SurveySubjectContent();
+				sc.setQuestion_id(id);
+				sc.setSurvey_answer(a[i]);
+				surveyscMapper.insert(sc);						
 			}
 			surveyscMapper.SurveyCheck(uid);
 		}

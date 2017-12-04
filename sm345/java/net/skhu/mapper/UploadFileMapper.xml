@@ -26,13 +26,13 @@
     </select>
     
     <select id="findAll" resultType="UploadFile">
-    SELECT f.*, m.mento_name
+    SELECT f.*, m.mento_name, m.team_name
     FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
     WHERE f.file_kind = 1
     </select>
     
     <select id="findAllByYear" resultType="UploadFile">
-    SELECT f.*, m.mento_name
+    SELECT f.*, m.mento_name, m.team_name
     FROM uploadFile f LEFT JOIN mentoroom m ON f.mentoroom_id = m.mentoroom_id
     WHERE f.file_kind = 1 AND m.team_year = #{team_year} AND m.team_semester = #{team_semester} 
     </select>
