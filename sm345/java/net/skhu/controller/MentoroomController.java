@@ -48,7 +48,7 @@ public class MentoroomController {
 	//멘토방 사진, 자격증명파일 업로드
     @Transactional
    @RequestMapping(value = "mentoroom/create/{r_id}/{kind}", method = RequestMethod.POST)
-   public void mentoroom_create2(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind, MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
+   public void mentoroom_create2(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind, MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws IllegalStateException, IOException {
 
    String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
        UploadFile p = new UploadFile();
@@ -61,8 +61,7 @@ public class MentoroomController {
        uploadFileMapper.insert(p);
 
    }
-
-
+    
     //멘토신청
    @RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
    public int mentoroom_create(@RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {

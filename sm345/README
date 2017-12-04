@@ -18,6 +18,10 @@ api/mentoroom/create - 멘토방 insert [post] return으로 mentoroom_id를 받�
 api/mentoroom/create/{r_id}/{kind} - 사진, 자격증명파일 업로드 [post] - r_id:룸아이디, kind: 2(사진), 3(자격증명파일) / return값 없음
 
 api/survey/object/result - 객관식 결과 -> 설문조사 질문과 퍼센티지를 같이 보내줌
+
+api/admin/report_date/create - 보고서 제출 기간 등록 [post] reportDate(report_start, report_end)를 배열로 받아와서 삽입한다.
+
+api/admin/report_date - 보고서 제출 기간 데이터 [get] - list로 리턴
 ---------------------
 
 

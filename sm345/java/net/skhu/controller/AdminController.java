@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.skhu.dto.MentoRoomInfo;
 import net.skhu.dto.Mentoroom;
+import net.skhu.dto.ReportDate;
 import net.skhu.dto.Student;
 import net.skhu.dto.UploadFile;
 import net.skhu.dto.User;
 import net.skhu.mapper.ArticleMapper;
 import net.skhu.mapper.MentoRoomInfoMapper;
 import net.skhu.mapper.MentoroomMapper;
+import net.skhu.mapper.ReportDateMapper;
 import net.skhu.mapper.StudentMapper;
 import net.skhu.mapper.UploadFileMapper;
 //import net.skhu.mapper.ReportDateMapper;
@@ -35,7 +37,7 @@ public class AdminController {
 	@Autowired MentoroomMapper mentoroomMapper;
 	@Autowired MentoRoomInfoMapper mentoroominfoMapper;
 	@Autowired UploadFileMapper uploadFileMapper;
-	//@Autowired ReportDateMapper reportdateMapper;
+	@Autowired ReportDateMapper reportdateMapper;
 	@Autowired StudentMapper studentMapper;
 
 
@@ -108,38 +110,22 @@ public class AdminController {
 	    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
 	        mentoroominfoMapper.update(mentoroominfo);
 	    }
-/*
-	  	// 보고서 제출 날짜 삽입
-	  	@RequestMapping(value="admin/report_date/create", method = RequestMethod.POST)
-	    public void reportdate_create(@RequestBody ReportDate[] reportdate, Model model, HttpServletRequest request ) {
-	  		Date d = new Date();
-		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		    String date = sdf.format(d);
-		    String year = date.substring(0,4);
-		    String month = date.substring(5,7);
-		    int y = Integer.parseInt(year);
-		    int m = Integer.parseInt(month);
-			int semester=0;
-			if(m>=3 && m<=7)
-				semester=1;
-			if(m>=9 && m<=12)
-				semester=2;
-	  		for(int i=0; i<reportdate.length; i++){
-	        	reportdate[i].setReport_year(y);
-	        	reportdate[i].setReport_semester(semester);
-	        	reportdateMapper.insert(reportdate[i]);
-	        }
-	    }
+	  	
+	 // 보고서 제출 날짜 삽입
+        @RequestMapping(value="admin/report_date/create", method = RequestMethod.POST)
+       public void reportdate_create(@RequestBody ReportDate[] reportdate, Model model, HttpServletRequest request ) {
+         reportdateMapper.delete();
+           for(int i=0; i<reportdate.length; i++){
+              reportdateMapper.insert(reportdate[i]);
+           }
+       }
 
-	  	//멘토방 설정 데이터
-	    @RequestMapping("admin/report_date/{year}/{semester}")
-	  	public ReportDate reportdate(@PathVariable("year") int year, @PathVariable("semester") int semester, Model model, HttpServletRequest request) {
-	        ReportDate rd = new ReportDate();
-	        rd.setReport_year(year);
-	        rd.setReport_semester(semester);
-	    	return reportdateMapper.findAll(rd);
-	  	}
-*/
+        //보고서 제출 날짜 데이터
+       @RequestMapping("admin/report_date")
+        public List<ReportDate> reportdate(Model model, HttpServletRequest request) {
+          return reportdateMapper.findAll();
+        }
+       
 	    //답변 완료
 	    @RequestMapping(value="admin/{a_id}/answer")
 	    public void answer(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {

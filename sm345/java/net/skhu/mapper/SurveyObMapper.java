@@ -18,4 +18,5 @@ public interface SurveyObMapper {
 	void updateCount3(int question_id);
 	void updateCount4(int question_id);
 	void updateCount5(int question_id);
+	void SurveyCheck(int id);
 }

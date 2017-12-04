@@ -1,6 +1,7 @@
 package net.skhu.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class SurveyController {
 		
 		//객관식 설문조사 답변 등록
 		@RequestMapping(value="surveyOB/insert/{u_id}", method = RequestMethod.POST)
-		public void surveyOb_insert(Model model, HttpServletRequest request, @RequestBody int[] a) {
+		public void surveyOb_insert(Model model, HttpServletRequest request, @RequestBody int[] a, @PathVariable("u_id") int  uid) {
 		
 			for(int i=0; i<a.length; i++) {
 				if(a[i] == 1)
@@ -145,11 +146,12 @@ public class SurveyController {
 				if(a[i] == 5)
 					surveyobMapper.updateCount5(i);
 			}
+			surveyobMapper.SurveyCheck(uid);
 		}
 		
 		//주관식 설문조사 답변 등록
 		@RequestMapping(value="surveySC/insert/{u_id}", method = RequestMethod.POST)
-		public void surveySC_insert(Model model, HttpServletRequest request, @RequestBody String[] a,  @PathVariable("u_id") int  uid, @PathVariable("u_id") int  qid) {
+		public void surveySC_insert(Model model, HttpServletRequest request, @RequestBody String[] a) {
 			Date d = new Date();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		    String date = sdf.format(d);
@@ -173,7 +175,6 @@ public class SurveyController {
 				sc.setSurvey_answer(a[i]);
 				surveyscMapper.insert(sc);						
 			}
-			surveyscMapper.SurveyCheck(uid);
 		}
 		
 		
@@ -238,13 +239,19 @@ public class SurveyController {
          List<SurveyObject> so = surveyobMapper.findObjectSurvey(surveyOb);
          for(int i=0; i<so.size(); i++){
             int all = so.get(i).getObject_answer1()+so.get(i).getObject_answer2()+so.get(i).getObject_answer3()+so.get(i).getObject_answer4()+so.get(i).getObject_answer5();
-            int a1 = (int)((so.get(i).getObject_answer1()/all)*100);
-            int a2 = (int)((so.get(i).getObject_answer2()/all)*100);
-            int a3 = (int)((so.get(i).getObject_answer3()/all)*100);
-            int a4 = (int)((so.get(i).getObject_answer4()/all)*100);
-            int a5 = (int)((so.get(i).getObject_answer5()/all)*100);
+            double d1 = ((double)so.get(i).getObject_answer1()/(double)all)*100;
+            double d2 = ((double)so.get(i).getObject_answer2()/(double)all)*100;
+            double d3 = ((double)so.get(i).getObject_answer3()/(double)all)*100;
+            double d4 = ((double)so.get(i).getObject_answer4()/(double)all)*100;
+            double d5 = ((double)so.get(i).getObject_answer5()/(double)all)*100;
+
+            int a1 = (int)d1;
+            int a2 = (int)d2;
+            int a3 = (int)d3;
+            int a4 = (int)d4;
+            int a5 = (int)d5;
             
-            System.out.println((double)so.get(i).getObject_answer1()/all);
+            System.out.println(d1);
             
             so.get(i).setObject_answer1(a1);
             so.get(i).setObject_answer2(a2);
@@ -253,9 +260,35 @@ public class SurveyController {
             so.get(i).setObject_answer5(a5);   
             
          }
-         
          return so;
       }
-		
+      //주관식 설문 결과
+      @RequestMapping("survey/subject/result")
+	  public List<SurveySubjectContent> surveySub_result(Model model, HttpServletRequest request) {
+	         Date d = new Date();
+	          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	          String date = sdf.format(d);
+	          String year = date.substring(0,4);
+	          String month = date.substring(5,7);
+	          int y = Integer.parseInt(year);
+	          int m = Integer.parseInt(month);
+	         int semester=0;
+	         if(m>=3 && m<=7)
+	            semester=1;
+	         if(m>=9 && m<=12)
+	            semester=2;
+	         SurveySubjectQuestion surveySQ = new SurveySubjectQuestion();
+	         surveySQ.setSurvey_year(y);
+	         surveySQ.setSurvey_semester(semester);
+	         List<SurveySubjectQuestion> sq = surveysqMapper.findByYear(surveySQ);
+	         List<SurveySubjectContent> s = new ArrayList();
+	         for(int i = 0; i < sq.size(); i++) {
+	        	 int id = sq.get(i).getId();
+	        	 List<SurveySubjectContent> sc = surveyscMapper.findById(id);
+	        	 s.addAll(sc);
+	         }
+	        
+	         return s;
+  }     
 }
 

@@ -54,4 +54,10 @@
   	SET object_answer5 = object_answer5 + 1
 	WHERE question_id = #{question_id}
   	</update>
+  	
+  	<update id="SurveyCheck">
+  	UPDATE student
+  	SET survey_check = 1
+  	WHERE student_id = #{user_id}
+  	</update>
 </mapper>
