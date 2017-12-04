@@ -136,15 +136,15 @@ public class SurveyController {
 		
 			for(int i=0; i<a.length; i++) {
 				if(a[i] == 1)
-					surveyobMapper.updateCount(i);
+					surveyobMapper.updateCount(i+1);
 				if(a[i] == 2)
-					surveyobMapper.updateCount2(i);
+					surveyobMapper.updateCount2(i+1);
 				if(a[i] == 3)
-					surveyobMapper.updateCount3(i);
+					surveyobMapper.updateCount3(i+1);
 				if(a[i] == 4)
-					surveyobMapper.updateCount4(i);
+					surveyobMapper.updateCount4(i+1);
 				if(a[i] == 5)
-					surveyobMapper.updateCount5(i);
+					surveyobMapper.updateCount5(i+1);
 			}
 			surveyobMapper.SurveyCheck(uid);
 		}
