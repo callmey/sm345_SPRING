@@ -8,6 +8,12 @@
     VALUES (#{question_id}, #{survey_answer})
   	</insert>
   	
+  	<select id="findByYear" resultType="SurveySubjectQuestion">
+  		SELECT *
+  		FROM surveySubjectQuestion
+  		WHERE question_id = #{question_id};
+  	</select>
+  	
   	<update id="SurveyCheck">
   	UPDATE student
   	SET survey_check = 1

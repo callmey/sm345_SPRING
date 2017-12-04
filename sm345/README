@@ -2,24 +2,8 @@
 
 ------- 수정사항 -------
 
-api/admin/report/:year - 관리자 페이지 보고서 목록 [get] year에 년도와학기를 합쳐서 받은 후 목록 리턴. year = 0 (모든학기목록) year=20172 (2017-2학기목록)
-
 api/admin/filedelete/:f_id - 관리자 페이지 보고서 삭제 [get] 파일의 id를 받아와 삭제
-
-api/admin/report_confirm/:f_id - 보고서 승인 [get] 파일의 id를 받아와 file_state를 1로 업데이트  -> return void로 수정
-
-api/admin/report_reject/:f_id - 보고서 반려 [get] 파일의 id를 받아와 file_state를 2로 업데이트 -> return void로 수정
-
-api/admin/excel - 신입생 엑셀등록 [post] student를 배열로 받아와 삽입
-
-api/mentoroom/create - 멘토 신청 [post] MentoCreate 객체 안에 세가지 바디를 받아온다 return형을 String으로 바꾸었음!!!!!!!!!!!return - 멘토신청이 완료되었습니다
 	
-	-MentoCreate 클래스 필드
-	MultipartFile picture;
-	MultipartFile file;
-	Mentoroom mentoroom;
-
-
 api/:u_id/survey_check - 설문조사 참여 여부 [get] user_id를 받아와 설문조사 참여 여부를 리턴. 0이면 설문조사 안한것, 1이면 한것. 멘토방에서 이미 설문조사에 참여한 학생에게 설문조사가 뜨지않도록 하기 위해 사용
 
 api/surveyOB/insert - [post] 객관식설문조사 항목 등록 string 배열 변수 q로 설문조사 항목 받음
@@ -28,7 +12,12 @@ api/surveyOB/list - [get] 객관식설문항목 목록 surveyobMapper.findByYear
 api/surveySQ/list - [get] 객관식설문항목 목록 surveysqMapper.findByYear(surveySQ)로 반환
 api/surveyOB/insert/{u_id} - [post] 객관식 설문조사 답변 등록 u_id: 사용자id
 api/surveySC/insert/{u_id} - [post] 주관식 설문조사 답변 등록 u_id는 user테이블에서 가져와 student 테이블에서 해당 u_id의 surveycheck를 1로 바꿔줌
-api/survey/result - 미완성
+
+api/mentoroom/create - 멘토방 insert [post] return으로 mentoroom_id를 받는다
+
+api/mentoroom/create/{r_id}/{kind} - 사진, 자격증명파일 업로드 [post] - r_id:룸아이디, kind: 2(사진), 3(자격증명파일) / return값 없음
+
+api/survey/object/result - 객관식 결과 -> 설문조사 질문과 퍼센티지를 같이 보내줌
 ---------------------
 
 

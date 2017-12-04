@@ -44,103 +44,101 @@ public class MentoroomController {
 	@Autowired UploadFileMapper uploadFileMapper;
 	@Autowired MentoRoomInfoMapper mentoroomInfoMapper;
 
-	//멘토신청
- 	@Transactional
-	@RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
-	public String mentoroom_create(@RequestBody MentoCreate mc,  MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
+	
+	//멘토방 사진, 자격증명파일 업로드
+    @Transactional
+   @RequestMapping(value = "mentoroom/create/{r_id}/{kind}", method = RequestMethod.POST)
+   public void mentoroom_create2(@RequestBody MultipartFile uploadFile, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind, MultipartHttpServletRequest mrequest, Model model, HttpServletRequest request) throws UnsupportedEncodingException, IOException {
 
- 		Mentoroom mentoroom = mc.getMentoroom();
-		Date d = new Date();
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	    String date = sdf.format(d);
-	    String year = date.substring(0,4);
-	    String month = date.substring(5,7);
-	    int y = Integer.parseInt(year);
-	    int m = Integer.parseInt(month);
-		mentoroom.setTeam_year(y);
-		int semester=0;
-		if(m>=3 && m<=7)
-			semester=1;
-		if(m>=9 && m<=12)
-			semester=2;
-		mentoroom.setTeam_semester(semester);
-		String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
-		mentoroom.setMento_name(mento_name);
-		mentoroomMapper.insert(mentoroom);
+   String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+       UploadFile p = new UploadFile();
 
-		MultipartFile picture = mc.getPicture();
-		String file_name1 = Paths.get(picture.getOriginalFilename()).getFileName().toString();
-    	UploadFile p = new UploadFile();
+       p.setFile_name(file_name);
+       p.setFile_data(uploadFile.getBytes());
+       p.setFile_type(uploadFile.getContentType());
+       p.setFile_kind(kind);
+       p.setMentoroom_id(r_id);
+       uploadFileMapper.insert(p);
 
-    	p.setFile_name(file_name1);
-    	p.setFile_data(picture.getBytes());
-    	p.setFile_type(picture.getContentType());
-    	p.setFile_kind(2);
-    	p.setMentoroom_id(mentoroom.getMentoroom_id());
-    	uploadFileMapper.insert(p);
+   }
 
-    	MultipartFile file = mc.getFile();
-    	String file_name2 = Paths.get(file.getOriginalFilename()).getFileName().toString();
-    	UploadFile f = new UploadFile();
 
-    	f.setFile_name(file_name2);
-    	f.setFile_data(file.getBytes());
-    	f.setFile_type(file.getContentType());
-    	f.setFile_kind(3);
-    	f.setMentoroom_id(mentoroom.getMentoroom_id());
-    	uploadFileMapper.insert(f);
+    //멘토신청
+   @RequestMapping(value = "mentoroom/create", method = RequestMethod.POST)
+   public int mentoroom_create(@RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 
-		return "멘토신청이 완료되었습니다";
-	}
- 	/*
-	//멘토신청
-	 	@Transactional
-		@RequestMapping(value = "mentoroom/create/{kind1}/{kind2}", method = RequestMethod.POST)
-		public Map<String, Object> mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
+    
+      Date d = new Date();
+       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+       String date = sdf.format(d);
+       String year = date.substring(0,4);
+       String month = date.substring(5,7);
+       int y = Integer.parseInt(year);
+       int m = Integer.parseInt(month);
+      mentoroom.setTeam_year(y);
+      int semester=0;
+      if(m>=3 && m<=7)
+         semester=1;
+      if(m>=9 && m<=12)
+         semester=2;
+      mentoroom.setTeam_semester(semester);
+      String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
+      mentoroom.setMento_name(mento_name);
+      mentoroomMapper.insert(mentoroom);
 
-			Date d = new Date();
-		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		    String date = sdf.format(d);
-		    String year = date.substring(0,4);
-		    String month = date.substring(5,7);
-		    int y = Integer.parseInt(year);
-		    int m = Integer.parseInt(month);
-			mentoroom.setTeam_year(y);
-			int semester=0;
-			if(m>=3 && m<=7)
-				semester=1;
-			if(m>=9 && m<=12)
-				semester=2;
-			mentoroom.setTeam_semester(semester);
-			String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
-			mentoroom.setMento_name(mento_name);
-			mentoroomMapper.insert(mentoroom);
-			HashMap<String, Object> map = new HashMap<>();
-			map.put("title", "멘토신청이 완료되었습니다");
-			return map;
-		}
-		
-		
-		 //파일 업로드
-	    @Transactional
-	    @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
-	    public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
-	    	String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
-	    	UploadFile uf = new UploadFile();
+      return mentoroom.getMentoroom_id();
+   }
+   
+   /*
+   //멘토신청
+       @Transactional
+      @RequestMapping(value = "mentoroom/create/{kind1}/{kind2}", method = RequestMethod.POST)
+      public Map<String, Object> mentoroom_create(@RequestBody MultipartFile picture, @RequestBody MultipartFile file, @RequestBody Mentoroom mentoroom, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 
-	    	uf.setFile_name(file_name);
-	    	uf.setFile_data(uploadFile.getBytes());
-	    	uf.setFile_type(uploadFile.getContentType());
-	    	uf.setFile_kind(kind);
-	    	uf.setMentoroom_id(r_id);
-	    	uploadFileMapper.insert(uf);
+         Date d = new Date();
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          String date = sdf.format(d);
+          String year = date.substring(0,4);
+          String month = date.substring(5,7);
+          int y = Integer.parseInt(year);
+          int m = Integer.parseInt(month);
+         mentoroom.setTeam_year(y);
+         int semester=0;
+         if(m>=3 && m<=7)
+            semester=1;
+         if(m>=9 && m<=12)
+            semester=2;
+         mentoroom.setTeam_semester(semester);
+         String mento_name = studentMapper.selectStudentname(mentoroom.getMento_id());
+         mentoroom.setMento_name(mento_name);
+         mentoroomMapper.insert(mentoroom);
+         HashMap<String, Object> map = new HashMap<>();
+         map.put("title", "멘토신청이 완료되었습니다");
+         return map;
+      }
+      
+      
+       //파일 업로드
+       @Transactional
+       @RequestMapping(value="mentoroom/fileupload/{r_id}/{kind}", method = RequestMethod.POST)
+       public void fileupload(@RequestBody MultipartFile uploadFile, MultipartHttpServletRequest mrequest, Model model,HttpServletRequest request, @PathVariable("r_id") int r_id, @PathVariable("kind") int kind ) throws IllegalStateException, IOException {
+          String file_name = Paths.get(uploadFile.getOriginalFilename()).getFileName().toString();
+          UploadFile uf = new UploadFile();
 
-	    	mentoroomMapper.updateReportcheck1(r_id);
-	    	//if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
-	    	//보고서등록+1하고, user에서 보고서 등록 유저로 하기.
-	    	//목록별로볼수있도록 등록하기
-	    }
-	    */
+          uf.setFile_name(file_name);
+          uf.setFile_data(uploadFile.getBytes());
+          uf.setFile_type(uploadFile.getContentType());
+          uf.setFile_kind(kind);
+          uf.setMentoroom_id(r_id);
+          uploadFileMapper.insert(uf);
+
+          mentoroomMapper.updateReportcheck1(r_id);
+          //if(mentoroomMapper.findMentoroom(r_id).getReport_check() == mentoroominfoMapper.findMentoRoomInfo().get)
+          //보고서등록+1하고, user에서 보고서 등록 유저로 하기.
+          //목록별로볼수있도록 등록하기
+       }
+       */
+	    
 
 		//멘토방 목록
 		@RequestMapping("mentoroom")

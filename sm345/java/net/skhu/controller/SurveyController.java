@@ -132,7 +132,7 @@ public class SurveyController {
 		//객관식 설문조사 답변 등록
 		@RequestMapping(value="surveyOB/insert/{u_id}", method = RequestMethod.POST)
 		public void surveyOb_insert(Model model, HttpServletRequest request, @RequestBody int[] a) {
-//			
+		
 			for(int i=0; i<a.length; i++) {
 				if(a[i] == 1)
 					surveyobMapper.updateCount(i);
@@ -149,19 +149,20 @@ public class SurveyController {
 		
 		//주관식 설문조사 답변 등록
 		@RequestMapping(value="surveySC/insert/{u_id}", method = RequestMethod.POST)
-		public void surveySC_insert(Model model, HttpServletRequest request, @RequestBody String[] a,  @PathVariable("u_id") int  uid) {
-			for(int i=0; i<a.length; i++ ) {
+		public void surveySC_insert(Model model, HttpServletRequest request, @RequestBody String[] a,  @PathVariable("u_id") int  uid, @PathVariable("u_id") int  qid) {
+		
+			for(int i = 0; i<a.length; i++) {
 				SurveySubjectContent surveySC= new SurveySubjectContent();
+				surveyscMapper.findByYear(i+1);
 				surveySC.setQuestion_id(i+1);
-				surveySC.setSurvey_answer(a[i]);
 				surveyscMapper.insert(surveySC);
 			}
 			surveyscMapper.SurveyCheck(uid);
 		}
 		
-		/*
+		
 		//설문 결과
-		@RequestMapping("survey/result")
+		/*@RequestMapping("survey/result")
 	    public List<SurveyObject> survey_result(Model model, HttpServletRequest request) {
 			Date d = new Date();
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -178,15 +179,67 @@ public class SurveyController {
 			SurveyObject surveyOb = new SurveyObject();
 			surveyOb.setSurvey_year(y);
 			surveyOb.setSurvey_semester(semester);
-			int sum = surveyobMapper.findSum(surveyOb);
-			surveyOb.setObject_answer1((surveyOb.getObject_answer1()/sum)*100);
-			surveyOb.setObject_answer2((surveyOb.getObject_answer2()/sum)*100);
-			surveyOb.setObject_answer3((surveyOb.getObject_answer3()/sum)*100);
-			surveyOb.setObject_answer4((surveyOb.getObject_answer4()/sum)*100);
-			surveyOb.setObject_answer5((surveyOb.getObject_answer5()/sum)*100);
-			surveyobMapper.insert(surveyOb);	
+			int a1 = surveyOb.getObject_answer1();
+			int b1 = surveyOb.getObject_answer2();
+			int c1 = surveyOb.getObject_answer3();
+			int d1 = surveyOb.getObject_answer4();
+			int e1 = surveyOb.getObject_answer5();
+			int sum = a1+b1+c1+d1+e1;
+			int a2 = (int)((double)a1/(double)sum*100);
+			int b2 = (int)((double)b1/(double)sum*100);
+			int c2 = (int)((double)c1/(double)sum*100);
+			int d2 = (int)((double)d1/(double)sum*100);
+			int e2 = (int)((double)e1/(double)sum*100);
+			surveyOb.setSurvey_year(y);; 
+			surveyOb.setSurvey_semester(semester);
+			surveyOb.setObject_answer1(a2);
+			surveyOb.setObject_answer2(b2);
+			surveyOb.setObject_answer3(c2);
+			surveyOb.setObject_answer4(d2);
+			surveyOb.setObject_answer5(e2);
+			surveyobMapper.update(surveyOb);	
 			return surveyobMapper.findByYear(surveyOb);
-		}
-		*/
+		}*/
+			
+		//객관식 설문 결과
+      @RequestMapping("survey/object/result")
+          public List<SurveyObject> survey_result(Model model, HttpServletRequest request) {
+         Date d = new Date();
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+          String date = sdf.format(d);
+          String year = date.substring(0,4);
+          String month = date.substring(5,7);
+          int y = Integer.parseInt(year);
+          int m = Integer.parseInt(month);
+         int semester=0;
+         if(m>=3 && m<=7)
+            semester=1;
+         if(m>=9 && m<=12)
+            semester=2;
+         SurveyObject surveyOb = new SurveyObject();
+         surveyOb.setSurvey_year(y);
+         surveyOb.setSurvey_semester(semester);
+         List<SurveyObject> so = surveyobMapper.findObjectSurvey(surveyOb);
+         for(int i=0; i<so.size(); i++){
+            int all = so.get(i).getObject_answer1()+so.get(i).getObject_answer2()+so.get(i).getObject_answer3()+so.get(i).getObject_answer4()+so.get(i).getObject_answer5();
+            int a1 = (int)((so.get(i).getObject_answer1()/all)*100);
+            int a2 = (int)((so.get(i).getObject_answer2()/all)*100);
+            int a3 = (int)((so.get(i).getObject_answer3()/all)*100);
+            int a4 = (int)((so.get(i).getObject_answer4()/all)*100);
+            int a5 = (int)((so.get(i).getObject_answer5()/all)*100);
+            
+            System.out.println((double)so.get(i).getObject_answer1()/all);
+            
+            so.get(i).setObject_answer1(a1);
+            so.get(i).setObject_answer2(a2);
+            so.get(i).setObject_answer3(a3);
+            so.get(i).setObject_answer4(a4);
+            so.get(i).setObject_answer5(a5);   
+            
+         }
+         
+         return so;
+      }
+		
 }
 

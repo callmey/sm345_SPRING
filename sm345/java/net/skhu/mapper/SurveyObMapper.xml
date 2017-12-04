@@ -8,20 +8,19 @@
     VALUES (#{question_id}, #{object_question}, #{survey_year}, #{survey_semester})
   	</insert>
   	
-  	<select id="findSum" resultType="int">
-  	COUNT (object_anwser1, object_anwser2, object_answer3, object_answer4, object_answer5)
-  	FROM surveyObject
-  	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
-  	</select>
+  	<update id="update">
+    UPDATE surveyObject(object_answer1, object_answer2, object_answer3, object_answer4, object_answer5)
+    VALUES (#{object_answer1}, #{object_answer2}, #{object_answer3},#{object_answer4},#{object_answer5})
+  	</update>
+  	
+  	<select id="findObjectSurvey" resultType="SurveyObject">
+   	SELECT *
+   	FROM surveyObject
+   	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
+     </select>
   	
   	<select id="findByYear" resultType="SurveyObject">
 	SELECT *
-	FROM surveyObject
-	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
-  	</select>
-  	
-  	<select id="findByQuestion" resultType="SurveyObject">
-	SELECT object_question
 	FROM surveyObject
 	WHERE survey_year = #{survey_year} AND survey_semester = #{survey_semester}
   	</select>
