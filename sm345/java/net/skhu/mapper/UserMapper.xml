@@ -91,7 +91,7 @@
   	
   	<insert id="insert">
     INSERT user (user_id, user_password, user_auth, user_name)
-    VALUES (#{user_id}, 0000, 0, #{user_name})
+    VALUES (#{user_id}, #{user_password}, 0, #{user_name})
   	</insert>
 
 	<update id="updateAuth">

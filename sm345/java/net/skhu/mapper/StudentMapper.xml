@@ -11,8 +11,8 @@
     </select>
     
   	<insert id="insert">
-    INSERT student (student_id, student_name, student_address, student_phone, student_major, student_minor)
-    VALUES (#{student_id}, #{student_name}, #{student_address}, #{student_phone}, #{student_major}, #{student_minor})
+    INSERT student (student_id, student_name, student_email, student_phone, student_major, student_minor, student_number)
+    VALUES (#{student_id}, #{student_name}, #{student_email}, #{student_phone}, #{student_major}, #{student_minor}, #{student_number})
   	</insert>
   	
   	<select id="selectSurveycheck" resultType="int">

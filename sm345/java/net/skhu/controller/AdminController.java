@@ -110,7 +110,7 @@ public class AdminController {
 	    public void mentoRoomInfo_edit(@RequestBody MentoRoomInfo mentoroominfo, Model model, HttpServletRequest request ) {
 	        mentoroominfoMapper.update(mentoroominfo);
 	    }
-	  	
+
 	 // 보고서 제출 날짜 삽입
         @RequestMapping(value="admin/report_date/create", method = RequestMethod.POST)
        public void reportdate_create(@RequestBody ReportDate[] reportdate, Model model, HttpServletRequest request ) {
@@ -125,7 +125,7 @@ public class AdminController {
         public List<ReportDate> reportdate(Model model, HttpServletRequest request) {
           return reportdateMapper.findAll();
         }
-       
+
 	    //답변 완료
 	    @RequestMapping(value="admin/{a_id}/answer")
 	    public void answer(Model model, HttpServletRequest request, @PathVariable("a_id") int a_id) {
@@ -168,7 +168,7 @@ public class AdminController {
 	    public void report_reject(Model model, HttpServletRequest request, @PathVariable("f_id") int f_id) {
 	        uploadFileMapper.updateReject(f_id);
 	    }
-	    
+
 	    //신입생 엑셀등록
 	    @RequestMapping(value="admin/excel", method = RequestMethod.POST)
 	    public void execel(@RequestBody Student[] student, Model model,HttpServletRequest request) {
@@ -177,13 +177,14 @@ public class AdminController {
 				User user = new User();
 				user.setUser_id(student[i].getStudent_id());
 				user.setUser_name(student[i].getStudent_name());
+				user.setUser_password(student[i].getStudent_number().substring(7,14));
 				userMapper.insert(user);
 			}
 			//userMapper.updateAuth();
 
 	    }
 
-	    
+
 
 
 

@@ -2,20 +2,9 @@
 
 ------- 수정사항 -------
 
-!!!!!!!!!!!사진, 증명파일 업로드 부분 원래 대로 돌려놓고 푸시함
 
-api/admin/filedelete/:f_id - 관리자 페이지 보고서 삭제 [get] 파일의 id를 받아와 삭제
-	
-api/:u_id/survey_check - 설문조사 참여 여부 [get] user_id를 받아와 설문조사 참여 여부를 리턴. 0이면 설문조사 안한것, 1이면 한것. 멘토방에서 이미 설문조사에 참여한 학생에게 설문조사가 뜨지않도록 하기 위해 사용
-
-api/surveyOB/insert - [post] 객관식설문조사 항목 등록 string 배열 변수 q로 설문조사 항목 받음
-api/surveySQ/insert - [post] 주관식설문조사 항목 등록 string 배열 변수 SQ로 설문조사 항목 받음
 api/surveyOB/list - [get] 객관식설문항목 목록 surveyobMapper.findByYear(surveyOb)로 반환
 api/surveySQ/list - [get] 객관식설문항목 목록 surveysqMapper.findByYear(surveySQ)로 반환
-api/surveyOB/insert/{u_id} - [post] 객관식 설문조사 답변 등록 u_id: 사용자id
-api/surveySC/insert/{u_id} - [post] 주관식 설문조사 답변 등록 u_id는 user테이블에서 가져와 student 테이블에서 해당 u_id의 surveycheck를 1로 바꿔줌
-api/survey/object/result - [get] 객관식 설문 결과 해당년도, 해당학기의 객관식 설문을 so라는 이름의 List객체로 받아 object_answer을 차례대로 퍼센트 계산 so List 객체 리턴.
-api/survey/subject/result -[get] 해당년도, 해당학기로 받은 주관식 설문 항목을  답변의 List 객체를 만들어 설문항목의 id를 넣어주고 답변list객체 리턴.
 
 api/mentoroom/create - 멘토방 insert [post] return으로 mentoroom_id를 받는다
 
