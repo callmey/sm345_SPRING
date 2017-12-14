@@ -90,8 +90,8 @@
   	</update>
   	
   	<insert id="insert">
-    INSERT user (user_id, user_password, user_auth, user_name)
-    VALUES (#{user_id}, #{user_password}, 0, #{user_name})
+    INSERT user (user_id, user_password, user_auth, user_name, user_major, user_minor, user_email, user_identitiy, user_phone)
+    VALUES (#{user_id}, #{user_password}, 0, #{user_name}, #{user_major}, #{user_minor}, #{user_email}, #{user_identity}, #{user_phone})
   	</insert>
 
 	<update id="updateAuth">

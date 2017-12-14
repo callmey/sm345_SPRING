@@ -7,6 +7,13 @@ public class User {
 	int user_auth;
 	String user_name;
 	int Login_record;
+	String user_major;
+	String user_minor;
+	String user_email;
+	String user_identity;
+	String user_phone;
+
+
 
 	public int getUser_id() {
 		return user_id;
@@ -38,6 +45,34 @@ public class User {
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
-
-
+	public String getUser_major() {
+		return user_major;
+	}
+	public void setUser_major(String user_major) {
+		this.user_major = user_major;
+	}
+	public String getUser_minor() {
+		return user_minor;
+	}
+	public void setUser_minor(String user_minor) {
+		this.user_minor = user_minor;
+	}
+	public String getUser_email() {
+		return user_email;
+	}
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+	public String getUser_identity() {
+		return user_identity;
+	}
+	public void setUser_identity(String user_identity) {
+		this.user_identity = user_identity;
+	}
+	public String getUser_phone() {
+		return user_phone;
+	}
+	public void setUser_phone(String user_phone) {
+		this.user_phone = user_phone;
+	}
 }

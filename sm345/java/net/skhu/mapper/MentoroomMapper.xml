@@ -10,9 +10,9 @@
   	</insert>
   	
   	<select id="findAll" resultType="Mentoroom">
-    SELECT *
-    FROM mentoroom
-    WHERE team_confirm != 2
+    SELECT m.*, f.file_data
+    FROM mentoroom m JOIN uploadFile f ON m.mentoroom_id = f.mentoroom_id
+    WHERE team_confirm != 2 AND f.file_kind = 2
     ORDER BY mentoroom_id DESC
     </select>
        

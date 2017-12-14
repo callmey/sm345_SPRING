@@ -120,7 +120,8 @@ public class MentoroomController {
 	    	uf.setMentoroom_id(r_id);
 	    	uploadFileMapper.insert(uf);
 
-	    	mentoroomMapper.updateReportcount1(r_id);
+	    	if(kind == 3)
+	    		mentoroomMapper.updateReportcount1(r_id);
 
 	    }
 

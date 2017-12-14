@@ -103,4 +103,11 @@ public class UserController {
     	return studentMapper.selectSurveycheck(u_id);
     }
 
+    //엑셀 등록
+    @RequestMapping(value="excel", method = RequestMethod.POST)
+    public void excel(@RequestBody User[] user, Model model,HttpServletRequest request) {
+      for(int i=0; i<user.length; i++)
+         userMapper.insert(user[i]);
+    }
+
 }

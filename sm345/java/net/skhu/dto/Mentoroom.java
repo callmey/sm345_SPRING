@@ -14,6 +14,7 @@ public class Mentoroom {
 	int team_confirm;
 	int person_count;
 	int report_count;
+	byte[] file_data;
 
 	public int getMentoroom_id() {
 		return mentoroom_id;
@@ -93,7 +94,14 @@ public class Mentoroom {
 	public void setReport_count(int report_count) {
 		this.report_count = report_count;
 	}
-	
+	public byte[] getFile_data() {
+		return file_data;
+	}
+	public void setFile_data(byte[] file_data) {
+		this.file_data = file_data;
+	}
+
+
 
 
 }
